@@ -1,0 +1,241 @@
+Unique code,Diet,Parasites,Clone,Rep,Block,DateEmerged,DateDied,Lifespan,Censored,Status,Include_Lifespan,Infection,InfectionStatus,Treatment,Babies_7,Babies_8,Babies_10,Babies_12,Babies_14,Babies_15,Babies_16,Babies_19,Babies_21,Babies_22,Babies_23,Babies_24,Total Babies,Notes
+S Uninf MID 1,S,Uninfected,Mid37,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,1,,0,2,0,,5,0,10,
+S Uninf MID 2,S,Uninfected,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,3,1,3,0,1,0,,4,5,17,
+S Uninf MID 3,S,Uninfected,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,0,0,2,1,2,0,,3,4,12,
+S Uninf MID 4,S,Uninfected,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,0,,4,2,3,,0,0,11,"missing animal, not in beaker on 1/24; Found on 1/25 in S Met MID Rep 5 beaker. Used bodysize measurements to determine who was who. Rep 4 did not get put in feeding rate, but bodysize was measured on 1/25, (day 22); animal not saved at end of experiment accidentally."
+S Uninf MID 5,S,Uninfected,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,0,,3,2,0,,6,0,13,
+S Uninf MID 6,S,Uninfected,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,,0,3,2,,0,5,0,12,
+S Uninf MID 7,S,Uninfected,Mid37,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,4,,0,4,2,,0,3,4,17,
+S Uninf MID 8,S,Uninfected,Mid37,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,3,0,0,2,,0,3,3,13,
+S Uninf MID 9,S,Uninfected,Mid37,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,2,1,0,0,3,,0,7,0,13,
+S Uninf MID 10,S,Uninfected,Mid37,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,1,0,0,0,1,,0,3,2,,0,5,0,11,"1/10 - 2 animals found in the beaker, 1 was male and was removed"
+S:M Uninf MID 1,SM,Uninfected,Mid37,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,0,,0,0,2,,0,2,4,
+S:M Uninf MID 2,SM,Uninfected,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,0,,1,0,0,,3,0,4,
+S:M Uninf MID 3,SM,Uninfected,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,0,,1,0,0,,0,2,3,
+S:M Uninf MID 4,SM,Uninfected,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,0,,1,1,0,,2,0,4,
+S:M Uninf MID 5,SM,Uninfected,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,0,,2,0,0,,2,0,4,
+S:M Uninf MID 6,SM,Uninfected,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,,0,1,0,,0,0,0,1,
+S:M Uninf MID 7,SM,Uninfected,Mid37,7,4,1/4/2022,1/15/2022,11,,1,Y,Uninfected,NA,2,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+S:M Uninf MID 8,SM,Uninfected,Mid37,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,,0,1,1,,0,2,2,6,
+S:M Uninf MID 9,SM,Uninfected,Mid37,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,,0,1,0,,0,1,0,2,
+S:M Uninf MID 10,SM,Uninfected,Mid37,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,2,0,0,0,0,,0,2,1,,0,4,0,7,
+M Uninf MID 1,M,Uninfected,Mid37,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,0,,0,0,0,,0,1,1,
+M Uninf MID 2,M,Uninfected,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,0,,1,1,0,,4,0,6,
+M Uninf MID 3,M,Uninfected,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,0,,0,1,0,,2,2,5,
+M Uninf MID 4,M,Uninfected,Mid37,4,3,1/4/2022,1/21/2022,17,,1,Y,Uninfected,0,3,0,0,0,0,0,,1,NA,NA,NA,NA,NA,1,
+M Uninf MID 5,M,Uninfected,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,0,,1,0,0,,2,1,4,
+M Uninf MID 6,M,Uninfected,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,,0,0,1,,0,2,0,3,
+M Uninf MID 7,M,Uninfected,Mid37,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,,0,0,0,,0,1,0,1,
+M Uninf MID 8,M,Uninfected,Mid37,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,,0,1,1,,0,2,0,4,
+M Uninf MID 9,M,Uninfected,Mid37,9,4,1/4/2022,1/10/2022,6,censored,0,N,Uninfected,NA,3,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,found smashed after respiration
+M Uninf MID 10,M,Uninfected,Mid37,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,3,0,0,0,0,,0,0,0,,0,0,0,0,
+M+ Uninf MID 1,M+,Uninfected,Mid37,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,0,,0,0,0,,1,0,1,
+M+ Uninf MID 2,M+,Uninfected,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,0,,0,1,0,,2,0,3,
+M+ Uninf MID 3,M+,Uninfected,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,0,,1,0,0,,4,0,5,
+M+ Uninf MID 4,M+,Uninfected,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,0,,1,0,0,,2,0,3,
+M+ Uninf MID 5,M+,Uninfected,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,0,,0,0,0,,2,0,2,
+M+ Uninf MID 6,M+,Uninfected,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,,0,0,0,,0,2,0,2,
+M+ Uninf MID 7,M+,Uninfected,Mid37,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,,0,1,0,,0,2,0,3,
+M+ Uninf MID 8,M+,Uninfected,Mid37,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,,0,0,1,,1,0,0,2,
+M+ Uninf MID 9,M+,Uninfected,Mid37,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,,0,0,2,,0,1,0,3,
+M+ Uninf MID 10,M+,Uninfected,Mid37,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,4,0,0,0,0,,0,0,1,,0,0,0,1,
+S Met MID 1,S,Metsch,Mid37,1,3,1/4/2022,1/22/2022,18,,1,Y,Infected,1,5,0,0,0,2,0,,3,2,NA,NA,NA,NA,7,
+S Met MID 2,S,Metsch,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,6,0,0,0,0,0,,3,4,0,3,0,0,10,
+S Met MID 3,S,Metsch,Mid37,3,3,1/4/2022,1/22/2022,18,,1,Y,Infected,1,5,0,0,0,1,0,,2,1,NA,NA,NA,NA,4,1/18 - slow moving after respiration
+S Met MID 4,S,Metsch,Mid37,4,3,1/4/2022,1/19/2022,15,,1,Y,Infected,1,5,0,0,0,1,0,,3,NA,NA,NA,NA,NA,4,
+S Met MID 5,S,Metsch,Mid37,5,3,1/4/2022,1/23/2022,19,,1,Y,Infected,1,5,0,0,0,0,0,,3,0,NA,NA,NA,NA,3,
+S Met MID 6,S,Metsch,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,6,0,0,0,0,,0,6,3,,0,2,0,11,
+S Met MID 7,S,Metsch,Mid37,7,4,1/4/2022,1/20/2022,16,,1,Y,Infected,1,5,0,0,0,1,,0,3,NA,NA,NA,NA,NA,4,
+S Met MID 8,S,Metsch,Mid37,8,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,5,0,0,0,3,,0,4,0,NA,NA,NA,NA,7,
+S Met MID 9,S,Metsch,Mid37,9,4,1/4/2022,1/15/2022,11,,1,N,Exposed,NA,6,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,"died, likely due tp beaker drop. heart stopped and in the middle of molting."
+S Met MID 10,S,Metsch,Mid37,10,4,1/4/2022,1/25/2022,21,,1,Y,Infected,1,5,0,0,0,NA,,0,5,0,,0,NA,NA,5,"barely alive during water change, died before putting tote away"
+S:M Met MID 1,SM,Metsch,Mid37,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,0,,0,2,0,,2,0,4,
+S:M Met MID 2,SM,Metsch,Mid37,2,3,1/4/2022,1/17/2022,13,,1,Y,Exposed,NA,7,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,0,
+S:M Met MID 3,SM,Metsch,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,0,,0,1,0,,3,0,4,
+S:M Met MID 4,SM,Metsch,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,0,,1,2,0,,2,0,5,
+S:M Met MID 5,SM,Metsch,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,0,,2,1,0,,1,0,4,
+S:M Met MID 6,SM,Metsch,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Infected,1,,0,0,0,0,,0,0,0,,0,0,0,0,
+S:M Met MID 7,SM,Metsch,Mid37,7,4,1/4/2022,1/20/2022,16,,1,Y,Exposed,0,7,0,0,0,0,,0,0,NA,NA,NA,NA,NA,0,1/17 - molt attached during respiration
+S:M Met MID 8,SM,Metsch,Mid37,8,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,7,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died overnight
+S:M Met MID 9,SM,Metsch,Mid37,9,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,7,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during feeding rate protocol
+S:M Met MID 10,SM,Metsch,Mid37,10,4,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,7,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Met MID 1,M,Metsch,Mid37,1,3,1/4/2022,1/24/2022,20,,1,Y,Exposed,0,8,0,0,0,0,0,,0,0,0,NA,NA,NA,0,
+M Met MID 2,M,Metsch,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,0,,0,0,0,,3,0,3,
+M Met MID 3,M,Metsch,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,0,,1,0,3,,0,2,6,
+M Met MID 4,M,Metsch,Mid37,4,3,1/4/2022,1/23/2022,19,,1,Y,Exposed,0,8,0,0,0,0,0,,0,0,NA,NA,NA,NA,0,
+M Met MID 5,M,Metsch,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,0,,0,0,0,,0,0,0,
+M Met MID 6,M,Metsch,Mid37,6,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,8,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during feeding rate
+M Met MID 7,M,Metsch,Mid37,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,0,0,0,,0,2,0,2,
+M Met MID 8,M,Metsch,Mid37,8,4,1/4/2022,1/16/2022,12,,1,Y,Exposed,NA,8,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,died naturally
+M Met MID 9,M,Metsch,Mid37,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,0,0,0,,0,1,0,1,
+M Met MID 10,M,Metsch,Mid37,10,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,8,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during feeding rate
+M+ Met MID 1,M+,Metsch,Mid37,1,3,1/4/2022,1/16/2022,12,,1,Y,Exposed,NA,9,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,died naturally
+M+ Met MID 2,M+,Metsch,Mid37,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,0,,0,0,0,,1,0,1,
+M+ Met MID 3,M+,Metsch,Mid37,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,0,,0,0,0,,0,0,0,
+M+ Met MID 4,M+,Metsch,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,0,,0,0,0,,0,0,0,
+M+ Met MID 5,M+,Metsch,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,0,,0,0,0,,1,0,1,
+M+ Met MID 6,M+,Metsch,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,0,0,0,,0,1,0,1,
+M+ Met MID 7,M+,Metsch,Mid37,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,0,0,0,,0,1,0,1,
+M+ Met MID 8,M+,Metsch,Mid37,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,0,0,0,,0,2,0,2,
+M+ Met MID 9,M+,Metsch,Mid37,9,4,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,9,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,"died with some kind of hyphae in the body, I don't think it was metsch though..."
+M+ Met MID 10,M+,Metsch,Mid37,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,0,0,0,,0,0,1,1,
+S Uninf STD 1,S,Uninfected,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,5,4,,0,4,0,,10,0,23,
+S Uninf STD 2,S,Uninfected,Standard,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,3,0,,5,5,0,,4,0,17,
+S Uninf STD 3,S,Uninfected,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,2,0,,7,3,0,,2,0,14,
+S Uninf STD 4,S,Uninfected,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,4,0,,9,8,0,,2,9,32,
+S Uninf STD 5,S,Uninfected,Standard,5,3,1/4/2022,1/15/2022,11,,1,Y,Uninfected,NA,10,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,"1/13 - caught in thread and removed, died 1/15"
+S Uninf STD 6,S,Uninfected,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,0,,0,8,6,2,0,0,5,21,
+S Uninf STD 7,S,Uninfected,Standard,7,4,1/4/2022,1/10/2022,6,censored,0,N,Uninfected,NA,10,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,MLF smashed :( 
+S Uninf STD 8,S,Uninfected,Standard,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,3,,0,9,5,,0,2,0,19,
+S Uninf STD 9,S,Uninfected,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,10,0,0,0,4,,0,12,4,,0,5,9,34,
+S Uninf STD 10,S,Uninfected,Standard,10,4,1/4/2022,1/19/2022,15,,1,Y,Uninfected,0,10,0,0,0,0,,2,6,NA,NA,NA,NA,NA,8,
+S:M Uninf STD 1,SM,Uninfected,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,3,0,,1,5,0,,7,0,16,
+S:M Uninf STD 2,SM,Uninfected,Standard,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,0,,7,3,0,,5,4,19,
+S:M Uninf STD 3,SM,Uninfected,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,0,1,4,5,0,,4,6,20,
+S:M Uninf STD 4,SM,Uninfected,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,4,0,,2,4,0,,10,0,20,
+S:M Uninf STD 5,SM,Uninfected,Standard,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,0,,5,4,0,,6,8,23,
+S:M Uninf STD 6,SM,Uninfected,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,,0,7,3,,0,12,0,22,
+S:M Uninf STD 7,SM,Uninfected,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,,1,3,4,,1,11,0,20,
+S:M Uninf STD 8,SM,Uninfected,Standard,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,2,,1,3,4,,0,6,0,16,
+S:M Uninf STD 9,SM,Uninfected,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,,1,3,4,,0,6,8,22,
+S:M Uninf STD 10,SM,Uninfected,Standard,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,,0,6,4,,0,6,6,22,
+M Uninf STD 1,M,Uninfected,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,0,,1,1,1,,4,7,14,extra baby found after babies were cleared on 1/27
+M Uninf STD 2,M,Uninfected,Standard,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,0,,3,1,0,,4,6,14,
+M Uninf STD 3,M,Uninfected,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,2,0,,1,2,0,,7,0,12,
+M Uninf STD 4,M,Uninfected,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,0,,0,0,0,,2,0,2,1/19 - 1 dead baby
+M Uninf STD 5,M,Uninfected,Standard,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,0,,2,3,1,1,3,6,16,
+M Uninf STD 6,M,Uninfected,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,,0,3,3,,0,7,7,20,
+M Uninf STD 7,M,Uninfected,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,1,,0,4,4,,0,5,8,22,
+M Uninf STD 8,M,Uninfected,Standard,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,,0,3,4,,0,4,4,15,
+M Uninf STD 9,M,Uninfected,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,,0,2,3,,0,6,6,17,
+M Uninf STD 10,M,Uninfected,Standard,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,1,,0,1,1,,0,8,0,11,
+M+ Uninf STD 1,M+,Uninfected,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,0,,1,1,0,,4,6,13,1/22 - 1 dead baby
+M+ Uninf STD 2,M+,Uninfected,Standard,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,0,0,,3,2,4,,0,7,16,
+M+ Uninf STD 3,M+,Uninfected,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,0,0,,2,3,0,,11,0,16,
+M+ Uninf STD 4,M+,Uninfected,Standard,4,3,1/4/2022,1/15/2022,11,,1,Y,Uninfected,NA,13,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,
+M+ Uninf STD 5,M+,Uninfected,Standard,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,0,,2,2,0,,4,0,9,1/19 - 1 dead baby
+M+ Uninf STD 6,M+,Uninfected,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,,0,1,1,,0,4,4,11,
+M+ Uninf STD 7,M+,Uninfected,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,,0,1,3,,0,3,7,15,
+M+ Uninf STD 8,M+,Uninfected,Standard,8,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,,0,2,5,,0,4,0,12,
+M+ Uninf STD 9,M+,Uninfected,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,0,,0,3,2,,0,4,7,16,extra baby found after babies cleared on 1/27
+M+ Uninf STD 10,M+,Uninfected,Standard,10,4,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,1,,0,2,3,,0,6,7,19,
+S Met STD 1,S,Metsch,Standard,1,3,1/4/2022,1/20/2022,16,,1,Y,Infected,1,14,0,0,0,2,0,,9,NA,NA,NA,NA,NA,11,
+S Met STD 2,S,Metsch,Standard,2,3,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,"died naturally, spores puncturing gut wall"
+S Met STD 3,S,Metsch,Standard,3,3,1/4/2022,1/20/2022,16,,1,Y,Infected,1,14,0,0,2,0,0,,7,NA,NA,NA,NA,NA,9,
+S Met STD 4,S,Metsch,Standard,4,3,1/4/2022,1/21/2022,17,,1,Y,Infected,1,14,0,0,0,2,0,,10,NA,NA,NA,NA,NA,12,
+S Met STD 5,S,Metsch,Standard,5,3,1/4/2022,1/24/2022,20,,1,Y,Infected,1,14,0,0,0,3,0,,7,0,1,NA,NA,NA,11,
+S Met STD 6,S,Metsch,Standard,6,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,14,0,0,0,2,,0,6,0,NA,NA,NA,NA,8,
+S Met STD 7,S,Metsch,Standard,7,4,1/4/2022,1/20/2022,16,,1,Y,Infected,1,14,0,0,0,0,,0,9,NA,NA,NA,NA,NA,9,
+S Met STD 8,S,Metsch,Standard,8,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,14,0,0,0,1,,0,4,0,NA,NA,NA,NA,5,"collected very nearly dead, not swimming anymore"
+S Met STD 9,S,Metsch,Standard,9,4,1/4/2022,1/23/2022,19,,1,Y,Infected,1,14,0,0,0,1,,0,5,1,NA,NA,NA,NA,7,
+S Met STD 10,S,Metsch,Standard,10,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,14,0,0,0,4,,0,12,0,NA,NA,NA,NA,16,
+S:M Met STD 1,SM,Metsch,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,0,0,,3,4,0,,2,0,9,
+S:M Met STD 2,SM,Metsch,Standard,2,3,1/4/2022,1/26/2022,22,,1,Y,Exposed,0,15,0,0,0,1,1,,2,5,0,,2,NA,11,1/26 - 1 dead baby
+S:M Met STD 3,SM,Metsch,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,1,0,,2,4,0,,5,7,19,
+S:M Met STD 4,SM,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,2,0,2,1,5,0,,11,0,21,1/26 - 1 dead baby
+S:M Met STD 5,SM,Metsch,Standard,5,3,1/4/2022,1/16/2022,12,,1,Y,Exposed,NA,15,0,0,0,2,NA,NA,NA,NA,NA,NA,NA,NA,2,died naturally
+S:M Met STD 6,SM,Metsch,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,0,,0,5,4,,0,6,8,23,"1/13 - caught in thread, removed; 1/15 - caught in molt, empty gut, seems unhealthy but alive. aborted embryos"
+S:M Met STD 7,SM,Metsch,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,0,,2,3,4,,0,8,0,17,
+S:M Met STD 8,SM,Metsch,Standard,8,4,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,15,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+S:M Met STD 9,SM,Metsch,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,0,,0,4,4,,0,6,6,20,
+S:M Met STD 10,SM,Metsch,Standard,10,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,16,0,0,0,0,,0,4,2,NA,NA,NA,NA,6,
+M Met STD 1,M,Metsch,Standard,1,3,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Met STD 2,M,Metsch,Standard,2,3,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Met STD 3,M,Metsch,Standard,3,3,1/4/2022,1/17/2022,13,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,died overnight
+M Met STD 4,M,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,1,,0,1,0,5,3,1,11,
+M Met STD 5,M,Metsch,Standard,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,0,,2,2,3,,0,6,13,
+M Met STD 6,M,Metsch,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,1,,0,1,6,,0,6,0,14,
+M Met STD 7,M,Metsch,Standard,7,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during the feeding rate protocol
+M Met STD 8,M,Metsch,Standard,8,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during the feeding rate protocol
+M Met STD 9,M,Metsch,Standard,9,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during the feeding rate protocol
+M Met STD 10,M,Metsch,Standard,10,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during the feeding rate protocol
+M+ Met STD 1,M+,Metsch,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,0,,2,2,0,6,4,0,14,
+M+ Met STD 2,M+,Metsch,Standard,2,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,0,,1,3,5,,0,5,14,
+M+ Met STD 3,M+,Metsch,Standard,3,3,1/4/2022,1/20/2022,16,,1,Y,Exposed,0,18,0,0,0,0,0,,2,NA,NA,NA,NA,NA,2,"1/19 - unhealthy looking, brood chamger looks weird"
+M+ Met STD 4,M+,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,0,,1,3,0,,7,0,11,1/26 - 1 dead baby
+M+ Met STD 5,M+,Metsch,Standard,5,3,1/4/2022,1/26/2022,22,,1,Y,Exposed,0,18,0,0,0,0,0,,3,3,0,,5,NA,11,"alive but dying, body is kicked out from carapace."
+M+ Met STD 6,M+,Metsch,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,0,3,4,,0,4,4,15,
+M+ Met STD 7,M+,Metsch,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,1,,0,1,3,,0,6,7,18,
+M+ Met STD 8,M+,Metsch,Standard,8,4,1/4/2022,1/24/2022,20,censored,0,N,Exposed,0,18,0,0,0,0,,0,2,2,4,NA,NA,NA,8,MLF smashed after respiration
+M+ Met STD 9,M+,Metsch,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,0,2,2,,0,5,6,15,
+M+ Met STD 10,M+,Metsch,Standard,10,4,1/4/2022,1/19/2022,15,,1,Y,Exposed,0,18,0,0,0,0,,0,1,NA,NA,NA,NA,NA,1,
+S Met MID 11,S,Metsch,Mid37,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met MID 12,S,Metsch,Mid37,12,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met MID 13,S,Metsch,Mid37,13,5,1/4/2022,1/18/2022,14,,1,Y,Exposed,NA,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,1/16 looks unhealthy
+S Met MID 14,S,Metsch,Mid37,14,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met MID 15,S,Metsch,Mid37,15,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met MID 16,S,Metsch,Mid37,16,5,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,
+S Met MID 17,S,Metsch,Mid37,17,5,1/4/2022,1/19/2022,15,,1,Y,Infected,1,5,0,0,0,2,,,3,NA,NA,NA,NA,NA,5,
+S Met MID 18,S,Metsch,Mid37,18,5,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,alive but unhealthy on 1/13
+S Met MID 19,S,Metsch,Mid37,19,5,1/4/2022,1/26/2022,22,,1,Y,Infected,1,5,0,0,0,3,,,2,3,,,0,NA,8,
+S Met MID 20,S,Metsch,Mid37,20,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met MID 11,SM,Metsch,Mid37,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,7,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met MID 12,SM,Metsch,Mid37,12,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,7,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met MID 13,SM,Metsch,Mid37,13,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,1,,,1,1,,,4,0,7,
+S:M Met MID 14,SM,Metsch,Mid37,14,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,,,2,2,,,3,0,7,
+S:M Met MID 15,SM,Metsch,Mid37,15,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,,,0,2,,,1,2,5,"not saved, lost accidentally after final measurements"
+S:M Met MID 16,SM,Metsch,Mid37,16,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,7,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met MID 17,SM,Metsch,Mid37,17,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,7,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met MID 18,SM,Metsch,Mid37,18,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,,,1,1,,,3,0,5,
+S:M Met MID 19,SM,Metsch,Mid37,19,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,,,1,1,,,3,0,5,
+S:M Met MID 20,SM,Metsch,Mid37,20,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,7,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M Met MID 11,M,Metsch,Mid37,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,8,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,dried on side of beaker
+M Met MID 12,M,Metsch,Mid37,12,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,1,,,2,3,6,
+M Met MID 13,M,Metsch,Mid37,13,5,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,8,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Met MID 14,M,Metsch,Mid37,14,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,1,,,3,2,6,
+M Met MID 15,M,Metsch,Mid37,15,5,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,8,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Met MID 16,M,Metsch,Mid37,16,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,1,,,2,0,3,
+M Met MID 17,M,Metsch,Mid37,17,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,0,,,7,0,7,
+M Met MID 18,M,Metsch,Mid37,18,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,0,,,3,2,5,
+M Met MID 19,M,Metsch,Mid37,19,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,1,,,3,3,7,
+M Met MID 20,M,Metsch,Mid37,20,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,8,0,0,0,0,,,0,0,,,1,4,5,
+M+ Met MID 11,M+,Metsch,Mid37,11,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,0,,,2,4,6,
+M+ Met MID 12,M+,Metsch,Mid37,12,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,1,0,,,3,4,8,extra baby found later in beaker
+M+ Met MID 13,M+,Metsch,Mid37,13,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,1,,,2,4,7,
+M+ Met MID 14,M+,Metsch,Mid37,14,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,0,,,2,0,2,
+M+ Met MID 15,M+,Metsch,Mid37,15,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,2,,,3,0,5,
+M+ Met MID 16,M+,Metsch,Mid37,16,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,2,,,3,3,8,
+M+ Met MID 17,M+,Metsch,Mid37,17,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,1,1,,,1,4,7,
+M+ Met MID 18,M+,Metsch,Mid37,18,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,9,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M+ Met MID 19,M+,Metsch,Mid37,19,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,9,0,0,0,0,,,0,0,,,2,3,5,
+M+ Met MID 20,M+,Metsch,Mid37,20,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,9,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 11,S,Metsch,Standard,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 12,S,Metsch,Standard,12,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 13,S,Metsch,Standard,13,5,1/4/2022,1/19/2022,15,,1,Y,Infected,1,14,0,0,0,2,,,5,NA,NA,NA,NA,NA,7,unhealthy and slow on 1/18
+S Met STD 14,S,Metsch,Standard,14,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 15,S,Metsch,Standard,15,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 16,S,Metsch,Standard,16,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 17,S,Metsch,Standard,17,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 18,S,Metsch,Standard,18,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S Met STD 19,S,Metsch,Standard,19,5,1/4/2022,1/20/2022,16,,1,Y,Infected,1,14,0,0,0,2,,,10,NA,NA,NA,NA,NA,12,
+S Met STD 20,S,Metsch,Standard,20,5,1/4/2022,1/19/2022,15,,1,Y,Infected,1,14,0,0,0,2,,,9,NA,NA,NA,NA,NA,11,
+S:M Met STD 11,SM,Metsch,Standard,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met STD 12,SM,Metsch,Standard,12,5,1/4/2022,1/27/2022,23,,1,Y,Infected,1,15,0,0,0,1,,,6,3,,,0,0,10,died on 1/27
+S:M Met STD 13,SM,Metsch,Standard,13,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met STD 14,SM,Metsch,Standard,14,5,1/4/2022,1/12/2022,8,,1,N,Exposed,NA,,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died before gut spore count measurement
+S:M Met STD 15,SM,Metsch,Standard,15,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met STD 16,SM,Metsch,Standard,16,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,16,0,0,0,2,,,3,6,,,5,0,16,
+S:M Met STD 17,SM,Metsch,Standard,17,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met STD 18,SM,Metsch,Standard,18,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+S:M Met STD 19,SM,Metsch,Standard,19,5,1/4/2022,1/12/2022,8,,1,N,Exposed,NA,,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died right after gut spore count
+S:M Met STD 20,SM,Metsch,Standard,20,5,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,11,0,0,0,0,,,4,4,,,4,8,20,NOT EXPOSED
+M Met STD 11,M,Metsch,Standard,11,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,,,0,3,,,12,0,15,
+M Met STD 12,M,Metsch,Standard,12,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,,,0,1,,,10,0,11,1/19 - 1 dead baby
+M Met STD 13,M,Metsch,Standard,13,5,1/4/2022,1/21/2022,17,,1,Y,Exposed,0,17,0,0,0,0,,,1,NA,NA,NA,NA,NA,1,
+M Met STD 14,M,Metsch,Standard,14,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,1,,,1,7,,,5,9,23,
+M Met STD 15,M,Metsch,Standard,15,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,17,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M Met STD 16,M,Metsch,Standard,16,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,17,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M Met STD 17,M,Metsch,Standard,17,5,1/4/2022,1/12/2022,8,,1,N,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died before gut spore count measurement
+M Met STD 18,M,Metsch,Standard,18,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,17,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M Met STD 19,M,Metsch,Standard,19,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,,,0,2,,,5,5,12,
+M Met STD 20,M,Metsch,Standard,20,5,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,12,0,0,0,0,,,0,4,,,15,0,19,NOT EXPOSED
+M+ Met STD 11,M+,Metsch,Standard,11,5,1/4/2022,1/19/2022,15,,1,Y,Exposed,0,18,0,0,0,0,,,2,NA,NA,NA,NA,NA,2,
+M+ Met STD 12,M+,Metsch,Standard,12,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,,2,1,,,2,2,7,
+M+ Met STD 13,M+,Metsch,Standard,13,5,1/4/2022,1/16/2022,12,,1,Y,Exposed,NA,18,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,died naturally
+M+ Met STD 14,M+,Metsch,Standard,14,5,1/4/2022,1/18/2022,14,,1,Y,Exposed,NA,18,0,0,0,2,NA,NA,NA,NA,NA,NA,NA,NA,2,died covered in white stuff (not metsch)
+M+ Met STD 15,M+,Metsch,Standard,15,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,1,,,1,4,,,1,2,9,
+M+ Met STD 16,M+,Metsch,Standard,16,5,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,,1,2,,,6,4,13,
+M+ Met STD 17,M+,Metsch,Standard,17,5,1/4/2022,1/26/2022,22,,1,Y,Infected,1,,0,0,0,2,,,1,1,,,0,NA,4,
+M+ Met STD 18,M+,Metsch,Standard,18,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,18,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M+ Met STD 19,M+,Metsch,Standard,19,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,18,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
+M+ Met STD 20,M+,Metsch,Standard,20,5,1/4/2022,1/27/2022,23,censored,0,Y,Uninfected,0,13,0,0,0,0,,,1,3,,,5,5,14,NOT EXPOSED

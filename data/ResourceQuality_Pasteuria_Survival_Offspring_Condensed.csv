@@ -1,0 +1,161 @@
+Unique_code,Diet,Parasites,Clone,Rep,Block,DateEmerged,DateDied,Lifespan,Censored,Infection,InfectionStatus,Treatment,Babies_10,Babies_12,Babies_16,Babies_19,Babies_23,Babies_26,Babies_30,Babies_33,Babies_37,Babies_38,InfectionStatus,Total Babies,Include_Lifespan,Notes
+S Uninf MID 1,Scenedesmus,Uninfected,Mid37,1,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,0,1,2,0,1,4,1,5,0,0,14,Y,12/6 - 1 dead baby; 12/11 - 1 dead baby
+S Uninf MID 2,Scenedesmus,Uninfected,Mid37,2,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,1,2,2,4,3,2,4,4,3,0,25,Y,
+S Uninf MID 3,Scenedesmus,Uninfected,Mid37,3,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,2,4,4,4,5,4,6,9,0,0,38,Y,
+S Uninf MID 4,Scenedesmus,Uninfected,Mid37,4,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,2,4,2,3,3,5,4,4,4,0,31,Y,
+S Uninf MID 5,Scenedesmus,Uninfected,Mid37,5,1,11/9/2021,11/16/2021,8,censored,Uninfected,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed
+S Uninf MID 6,Scenedesmus,Uninfected,Mid37,6,2,11/9/2021,11/24/2021,16,,Uninfected,0,1,0,1,12,NA,NA,NA,NA,NA,NA,NA,0,13,Y,died overnight
+S Uninf MID 7,Scenedesmus,Uninfected,Mid37,7,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,2,3,2,2,4,3,4,6,0,0,26,Y,
+S Uninf MID 8,Scenedesmus,Uninfected,Mid37,8,2,11/9/2021,11/26/2021,18,,Uninfected,0,1,0,1,4,NA,NA,NA,NA,NA,NA,NA,0,5,Y,
+S Uninf MID 9,Scenedesmus,Uninfected,Mid37,9,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,1,0,1,3,3,0,3,2,0,1,5,0,18,Y,
+S Uninf MID 10,Scenedesmus,Uninfected,Mid37,10,2,11/9/2021,11/25/2021,17,,Uninfected,0,1,0,2,2,2,NA,NA,NA,NA,NA,NA,0,6,Y,died naturally
+S:M Uninf MID 1,Scenedesmus:Microcystis,Uninfected,Mid37,1,1,11/9/2021,11/16/2021,8,censored,Uninfected,NA,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed
+S:M Uninf MID 2,Scenedesmus:Microcystis,Uninfected,Mid37,2,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,1,0,0,3,1,1,2,0,0,0,8,Y,
+S:M Uninf MID 3,Scenedesmus:Microcystis,Uninfected,Mid37,3,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,2,0,1,2,1,0,3,6,0,0,15,Y,
+S:M Uninf MID 4,Scenedesmus:Microcystis,Uninfected,Mid37,4,1,11/9/2021,11/16/2021,8,censored,Uninfected,NA,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed
+S:M Uninf MID 5,Scenedesmus:Microcystis,Uninfected,Mid37,5,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,1,0,1,3,0,4,0,2,0,0,11,Y,
+S:M Uninf MID 6,Scenedesmus:Microcystis,Uninfected,Mid37,6,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,1,0,2,1,2,2,0,4,0,0,12,Y,
+S:M Uninf MID 7,Scenedesmus:Microcystis,Uninfected,Mid37,7,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,0,0,1,0,2,0,2,3,0,0,8,Y,
+S:M Uninf MID 8,Scenedesmus:Microcystis,Uninfected,Mid37,8,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,0,1,1,1,1,0,2,4,0,0,10,Y,
+S:M Uninf MID 9,Scenedesmus:Microcystis,Uninfected,Mid37,9,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,0,1,1,2,3,2,2,5,0,0,16,Y,
+S:M Uninf MID 10,Scenedesmus:Microcystis,Uninfected,Mid37,10,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,2,0,0,0,2,1,2,0,0,2,0,0,7,Y,
+M Uninf MID 1,Microcystis,Uninfected,Mid37,1,1,11/9/2021,11/16/2021,8,,Uninfected,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,died overnight
+M Uninf MID 2,Microcystis,Uninfected,Mid37,2,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,3,0,0,0,1,1,0,1,2,2,1,0,8,Y,11/24: 1 dead baby
+M Uninf MID 3,Microcystis,Uninfected,Mid37,3,1,11/9/2021,12/2/2021,24,,Uninfected,0,3,0,0,1,0,0,NA,NA,NA,NA,NA,0,1,Y,12/1 - low heart rate; died 12/2
+M Uninf MID 4,Microcystis,Uninfected,Mid37,4,1,11/9/2021,11/16/2021,8,censored,Uninfected,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed
+M Uninf MID 5,Microcystis,Uninfected,Mid37,5,1,11/9/2021,11/23/2021,15,,Uninfected,0,3,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,died during respiration trial
+M Uninf MID 6,Microcystis,Uninfected,Mid37,6,2,11/9/2021,11/16/2021,8,,Uninfected,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,died overnight
+M Uninf MID 7,Microcystis,Uninfected,Mid37,7,2,11/9/2021,12/1/2021,23,,Uninfected,0,3,0,0,0,0,1,NA,NA,NA,NA,NA,0,1,Y,
+M Uninf MID 8,Microcystis,Uninfected,Mid37,8,2,11/9/2021,11/16/2021,8,,Uninfected,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,died overnight
+M Uninf MID 9,Microcystis,Uninfected,Mid37,9,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,3,0,0,1,1,0,0,0,0,0,0,0,2,Y,
+M Uninf MID 10,Microcystis,Uninfected,Mid37,10,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,3,0,0,0,1,0,0,0,1,3,0,0,5,Y,
+M+ Uninf MID 1,Microcystis Spiked,Uninfected,Mid37,1,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,4,0,0,0,0,1,0,1,2,0,0,0,4,Y,
+M+ Uninf MID 2,Microcystis Spiked,Uninfected,Mid37,2,1,11/9/2021,12/2/2021,24,,Uninfected,0,4,0,0,0,0,2,NA,NA,NA,NA,NA,0,2,Y,
+M+ Uninf MID 3,Microcystis Spiked,Uninfected,Mid37,3,1,11/9/2021,12/15/2021,37,,Uninfected,0,4,0,0,0,0,0,0,0,2,2,NA,0,4,Y,
+M+ Uninf MID 4,Microcystis Spiked,Uninfected,Mid37,4,1,11/9/2021,12/2/2021,24,,Uninfected,0,4,0,0,0,0,1,1,NA,NA,NA,NA,0,2,Y,
+M+ Uninf MID 5,Microcystis Spiked,Uninfected,Mid37,5,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,4,0,0,0,0,2,0,0,1,0,0,0,3,Y,
+M+ Uninf MID 6,Microcystis Spiked,Uninfected,Mid37,6,2,11/9/2021,12/1/2021,23,,Uninfected,0,4,0,0,0,0,0,NA,NA,NA,NA,NA,0,0,Y,
+M+ Uninf MID 7,Microcystis Spiked,Uninfected,Mid37,7,2,11/9/2021,11/28/2021,20,,Uninfected,0,4,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,
+M+ Uninf MID 8,Microcystis Spiked,Uninfected,Mid37,8,2,11/9/2021,12/2/2021,24,,Uninfected,0,4,0,0,0,0,1,NA,NA,NA,NA,NA,0,1,Y,12/1 - low movement; died 12/2
+M+ Uninf MID 9,Microcystis Spiked,Uninfected,Mid37,9,2,11/9/2021,12/11/2021,33,,Uninfected,0,4,0,0,0,0,0,0,0,1,NA,NA,0,1,Y,
+M+ Uninf MID 10,Microcystis Spiked,Uninfected,Mid37,10,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,4,0,0,0,0,0,2,2,2,1,0,0,7,Y,
+S Past MID 1,Scenedesmus,Pasteuria,Mid37,1,1,11/9/2021,12/11/2021,33,,Infected,1,5,0,2,0,0,0,0,0,0,NA,NA,1,2,Y,"12/9 - looks unhealthy, died 12/11"
+S Past MID 2,Scenedesmus,Pasteuria,Mid37,2,1,11/9/2021,12/7/2021,29,,Infected,1,5,0,0,2,0,0,0,NA,NA,NA,NA,1,2,Y,died overnight
+S Past MID 3,Scenedesmus,Pasteuria,Mid37,3,1,11/9/2021,11/27/2021,19,,Exposed,0,6,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,
+S Past MID 4,Scenedesmus,Pasteuria,Mid37,4,1,11/9/2021,12/9/2021,31,,Infected,1,5,0,2,0,0,0,0,0,NA,NA,NA,1,2,Y,
+S Past MID 5,Scenedesmus,Pasteuria,Mid37,5,1,11/9/2021,12/10/2021,32,,Infected,1,5,0,1,2,0,0,0,0,NA,NA,NA,1,3,Y,"12/9 - looks unhealthy, low movement; died 12/10"
+S Past MID 6,Scenedesmus,Pasteuria,Mid37,6,2,11/9/2021,12/16/2021,38,censored,Exposed,0,6,0,3,2,0,0,4,3,3,4,0,0,19,Y,
+S Past MID 7,Scenedesmus,Pasteuria,Mid37,7,2,11/9/2021,12/16/2021,38,censored,Exposed,0,6,0,0,2,0,0,5,5,4,3,0,0,19,Y,
+S Past MID 8,Scenedesmus,Pasteuria,Mid37,8,2,11/9/2021,11/23/2021,15,,Exposed,0,6,0,1,2,NA,NA,NA,NA,NA,NA,NA,0,3,Y,died during feeding rate trial
+S Past MID 9,Scenedesmus,Pasteuria,Mid37,9,2,11/9/2021,12/12/2021,34,,Infected,1,5,0,1,2,0,0,0,0,0,NA,NA,1,3,Y,
+S Past MID 10,Scenedesmus,Pasteuria,Mid37,10,2,11/9/2021,12/16/2021,38,censored,Exposed,0,6,0,2,3,0,0,2,4,4,3,4,0,22,Y,
+S:M Past MID 1,Scenedesmus:Microcystis,Pasteuria,Mid37,1,1,11/9/2021,12/16/2021,38,censored,Infected,1,7,0,0,1,0,0,0,0,1,0,0,1,2,Y,12/8 - baby in brood chamber
+S:M Past MID 2,Scenedesmus:Microcystis,Pasteuria,Mid37,2,1,11/9/2021,12/16/2021,38,censored,Infected,1,7,0,1,1,0,0,0,0,0,0,0,1,2,Y,
+S:M Past MID 3,Scenedesmus:Microcystis,Pasteuria,Mid37,3,1,11/9/2021,12/16/2021,38,censored,Exposed,0,8,0,0,0,0,0,1,0,2,3,0,0,6,Y,
+S:M Past MID 4,Scenedesmus:Microcystis,Pasteuria,Mid37,4,1,11/9/2021,12/16/2021,38,censored,Infected,1,7,0,0,2,0,0,0,0,0,0,0,1,2,Y,
+S:M Past MID 5,Scenedesmus:Microcystis,Pasteuria,Mid37,5,1,11/9/2021,12/16/2021,38,censored,Infected,1,7,0,0,1,0,0,0,0,0,0,0,1,1,Y,
+S:M Past MID 6,Scenedesmus:Microcystis,Pasteuria,Mid37,6,2,11/9/2021,11/16/2021,8,,Exposed,NA,8,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,
+S:M Past MID 7,Scenedesmus:Microcystis,Pasteuria,Mid37,7,2,11/9/2021,12/16/2021,38,censored,Infected,1,7,0,0,0,0,0,0,0,0,0,0,1,0,Y,
+S:M Past MID 8,Scenedesmus:Microcystis,Pasteuria,Mid37,8,2,11/9/2021,12/16/2021,38,censored,Exposed,0,8,0,0,1,1,2,0,2,2,2,2,0,12,Y,
+S:M Past MID 9,Scenedesmus:Microcystis,Pasteuria,Mid37,9,2,11/9/2021,12/2/2021,24,,Exposed,0,8,0,0,0,0,0,NA,NA,NA,NA,NA,1,0,Y,
+S:M Past MID 10,Scenedesmus:Microcystis,Pasteuria,Mid37,10,2,11/9/2021,12/3/2021,25,,Exposed,0,8,0,0,0,0,0,NA,NA,NA,NA,NA,1,0,Y,
+M Past MID 1,Microcystis,Pasteuria,Mid37,1,1,11/9/2021,11/30/2021,22,,Exposed,0,9,0,0,1,0,NA,NA,NA,NA,NA,NA,0,1,Y,"11/29 - looks unhealthy, died 11/30"
+M Past MID 2,Microcystis,Pasteuria,Mid37,2,1,11/9/2021,11/16/2021,8,censored,Exposed,NA,9,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed on 11/15 but alive; died overnight
+M Past MID 3,Microcystis,Pasteuria,Mid37,3,1,11/9/2021,12/1/2021,23,,Exposed,0,9,0,0,1,0,NA,NA,NA,NA,NA,NA,1,1,Y,found dead
+M Past MID 4,Microcystis,Pasteuria,Mid37,4,1,11/9/2021,12/11/2021,33,,Exposed,0,9,0,0,1,1,3,2,1,1,NA,NA,0,9,Y,12/8 - 1 dead baby
+M Past MID 5,Microcystis,Pasteuria,Mid37,5,1,11/9/2021,11/30/2021,22,,Exposed,0,9,0,0,0,0,NA,NA,NA,NA,NA,NA,1,0,Y,"11/29 - looks unhealthy, died 11/30"
+M Past MID 6,Microcystis,Pasteuria,Mid37,6,2,11/9/2021,11/25/2021,17,,Exposed,0,9,0,0,0,NA,NA,NA,NA,NA,NA,NA,0,0,Y,11/24 - 1 dead baby; died naturally
+M Past MID 7,Microcystis,Pasteuria,Mid37,7,2,11/9/2021,12/2/2021,24,,Exposed,0,9,0,0,0,0,0,NA,NA,NA,NA,NA,0,0,Y,
+M Past MID 8,Microcystis,Pasteuria,Mid37,8,2,11/9/2021,12/16/2021,38,censored,Infected,1,10,0,0,0,0,0,0,0,0,0,0,1,0,Y,
+M Past MID 9,Microcystis,Pasteuria,Mid37,9,2,11/9/2021,11/28/2021,20,,Exposed,0,9,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,
+M Past MID 10,Microcystis,Pasteuria,Mid37,10,2,11/9/2021,12/1/2021,23,,Exposed,0,9,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,11/30 - looks unhealthy; found dead 12/1
+M+ Past MID 1,Microcystis Spiked,Pasteuria,Mid37,1,1,11/9/2021,11/24/2021,16,,Exposed,0,11,0,0,1,NA,NA,NA,NA,NA,NA,NA,0,1,Y,
+M+ Past MID 2,Microcystis Spiked,Pasteuria,Mid37,2,1,11/9/2021,11/29/2021,21,,Exposed,0,11,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,11/28 - looks unhealthy; died 11/29 overnight
+M+ Past MID 3,Microcystis Spiked,Pasteuria,Mid37,3,1,11/9/2021,12/16/2021,38,censored,Infected,1,12,0,0,1,0,0,0,0,0,0,0,1,1,Y,
+M+ Past MID 4,Microcystis Spiked,Pasteuria,Mid37,4,1,11/9/2021,11/14/2021,6,censored,Exposed,NA,11,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,"died, possibly due to excessive toxin spike early in experiment"
+M+ Past MID 5,Microcystis Spiked,Pasteuria,Mid37,5,1,11/9/2021,11/29/2021,21,,Exposed,0,11,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,died overnight
+M+ Past MID 6,Microcystis Spiked,Pasteuria,Mid37,6,2,11/9/2021,11/27/2021,19,,Exposed,0,11,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,11/26 - looks unhealthy
+M+ Past MID 7,Microcystis Spiked,Pasteuria,Mid37,7,2,11/9/2021,11/29/2021,21,,Exposed,0,11,0,0,0,0,NA,NA,NA,NA,NA,NA,0,0,Y,
+M+ Past MID 8,Microcystis Spiked,Pasteuria,Mid37,8,2,11/9/2021,12/2/2021,24,,Exposed,0,11,0,0,0,0,0,NA,NA,NA,NA,NA,1,0,Y,12/1 - looks unhealthy; found dead 12/2
+M+ Past MID 9,Microcystis Spiked,Pasteuria,Mid37,9,2,11/9/2021,12/3/2021,25,,Exposed,0,11,0,0,0,0,0,NA,NA,NA,NA,NA,1,0,Y,
+M+ Past MID 10,Microcystis Spiked,Pasteuria,Mid37,10,2,11/9/2021,12/16/2021,38,censored,Infected,1,11,0,0,0,0,0,0,0,1,0,0,1,1,Y,Had 1 baby while infected with pasteuria
+S Uninf STD 1,Scenedesmus,Uninfected,Standard,1,1,11/9/2021,12/16/2021,38,,Uninfected,0,13,0,2,12,4,4,4,8,1,0,0,0,35,Y,died overnight
+S Uninf STD 2,Scenedesmus,Uninfected,Standard,2,1,11/9/2021,12/3/2021,25,,Uninfected,0,13,0,2,12,6,0,2,NA,NA,NA,NA,0,22,Y,
+S Uninf STD 3,Scenedesmus,Uninfected,Standard,3,1,11/9/2021,12/3/2021,25,,Uninfected,0,13,0,2,11,1,0,NA,NA,NA,NA,NA,0,14,Y,
+S Uninf STD 4,Scenedesmus,Uninfected,Standard,4,1,11/9/2021,12/6/2021,28,,Uninfected,0,13,0,3,7,4,3,2,NA,NA,NA,NA,0,19,Y,12/5 - not healthy
+S Uninf STD 5,Scenedesmus,Uninfected,Standard,5,1,11/9/2021,12/7/2021,29,,Uninfected,0,13,0,3,9,3,1,2,NA,NA,NA,NA,0,18,Y,
+S Uninf STD 6,Scenedesmus,Uninfected,Standard,6,2,11/9/2021,11/25/2021,17,censored,Uninfected,0,13,0,2,12,NA,NA,NA,NA,NA,NA,NA,0,14,N,"Animal missing, not saved"
+S Uninf STD 7,Scenedesmus,Uninfected,Standard,7,2,11/9/2021,11/24/2021,16,,Uninfected,0,13,0,3,9,NA,NA,NA,NA,NA,NA,NA,0,12,Y,died naturally
+S Uninf STD 8,Scenedesmus,Uninfected,Standard,8,2,11/9/2021,11/23/2021,15,,Uninfected,0,13,0,3,4,NA,NA,NA,NA,NA,NA,NA,0,7,Y,died during feeding rate trial
+S Uninf STD 9,Scenedesmus,Uninfected,Standard,9,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,13,0,1,12,4,4,5,11,4,4,6,0,51,Y,
+S Uninf STD 10,Scenedesmus,Uninfected,Standard,10,2,11/9/2021,11/16/2021,8,censored,Uninfected,NA,13,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,missing after feeding rate trial
+S:M Uninf STD 1,Scenedesmus:Microcystis,Uninfected,Standard,1,1,11/9/2021,12/4/2021,26,,Uninfected,0,14,0,1,4,7,0,0,NA,NA,NA,NA,0,12,Y,died covered in algae
+S:M Uninf STD 2,Scenedesmus:Microcystis,Uninfected,Standard,2,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,14,0,0,4,3,4,4,6,6,2,7,0,36,Y,12/4 - found dead copepod in the beaker...
+S:M Uninf STD 3,Scenedesmus:Microcystis,Uninfected,Standard,3,1,11/9/2021,12/3/2021,25,,Uninfected,0,14,0,2,3,9,2,2,NA,NA,NA,NA,0,18,Y,
+S:M Uninf STD 4,Scenedesmus:Microcystis,Uninfected,Standard,4,1,11/9/2021,12/13/2021,35,censored,Uninfected,0,14,0,2,6,0,2,1,1,0,NA,NA,0,12,N,MLF smashed after feeding rate but before bodysize measurement
+S:M Uninf STD 5,Scenedesmus:Microcystis,Uninfected,Standard,5,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,14,0,0,5,1,6,3,1,1,6,6,0,29,Y,
+S:M Uninf STD 6,Scenedesmus:Microcystis,Uninfected,Standard,6,2,11/9/2021,11/16/2021,8,censored,Uninfected,NA,14,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,MLF threw out animal accidentally :(
+S:M Uninf STD 7,Scenedesmus:Microcystis,Uninfected,Standard,7,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,14,0,1,2,3,6,1,1,4,5,0,0,23,Y,
+S:M Uninf STD 8,Scenedesmus:Microcystis,Uninfected,Standard,8,2,11/9/2021,11/30/2021,22,,Uninfected,0,14,0,2,0,8,4,NA,NA,NA,NA,NA,0,14,Y,
+S:M Uninf STD 9,Scenedesmus:Microcystis,Uninfected,Standard,9,2,11/9/2021,12/8/2021,30,,Uninfected,0,14,0,1,3,7,2,2,0,NA,NA,NA,0,15,Y,
+S:M Uninf STD 10,Scenedesmus:Microcystis,Uninfected,Standard,10,2,11/9/2021,11/15/2021,7,,Uninfected,NA,14,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,died during respiration
+M Uninf STD 1,Microcystis,Uninfected,Standard,1,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,15,0,1,1,3,4,1,0,3,5,0,0,18,Y,
+M Uninf STD 2,Microcystis,Uninfected,Standard,2,1,11/9/2021,11/27/2021,19,,Uninfected,0,15,0,1,1,4,NA,NA,NA,NA,NA,NA,0,6,Y,died with flowery zooplankton attached
+M Uninf STD 3,Microcystis,Uninfected,Standard,3,1,11/9/2021,11/29/2021,21,,Uninfected,0,15,0,0,3,3,NA,NA,NA,NA,NA,NA,0,6,Y,"11/28 looks unhealthy, died overnight"
+M Uninf STD 4,Microcystis,Uninfected,Standard,4,1,11/9/2021,12/3/2021,25,,Uninfected,0,15,0,0,1,0,0,NA,NA,NA,NA,NA,0,1,Y,11/27: 1 dead baby covered with flowery zooplankton
+M Uninf STD 5,Microcystis,Uninfected,Standard,5,1,11/9/2021,11/30/2021,22,,Uninfected,0,15,0,0,0,3,NA,NA,NA,NA,NA,NA,0,3,Y,"11/29: looks unhealthy, died on 11/30"
+M Uninf STD 6,Microcystis,Uninfected,Standard,6,2,11/9/2021,11/15/2021,7,,Uninfected,NA,15,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,died during respiration
+M Uninf STD 7,Microcystis,Uninfected,Standard,7,2,11/9/2021,11/22/2021,14,censored,Uninfected,0,15,0,0,1,NA,NA,NA,NA,NA,NA,NA,0,1,Y,possibly only saved the molt? Animal may have been squashed.
+M Uninf STD 8,Microcystis,Uninfected,Standard,8,2,11/9/2021,12/6/2021,28,,Uninfected,0,15,0,0,2,3,1,1,NA,NA,NA,NA,0,7,Y,12/5: unhealthy; died 12/6
+M Uninf STD 9,Microcystis,Uninfected,Standard,9,2,11/9/2021,12/7/2021,29,,Uninfected,0,15,0,0,1,0,2,0,2,NA,NA,NA,0,5,Y,"12/7: unhealhty looking before feeding rate, died during feeding rate"
+M Uninf STD 10,Microcystis,Uninfected,Standard,10,2,11/9/2021,11/30/2021,22,,Uninfected,0,15,0,0,1,3,NA,NA,NA,NA,NA,NA,0,4,Y,
+M+ Uninf STD 1,Microcystis Spiked,Uninfected,Standard,1,1,11/9/2021,12/7/2021,29,,Uninfected,0,16,0,0,1,0,2,0,NA,NA,NA,NA,0,3,Y,
+M+ Uninf STD 2,Microcystis Spiked,Uninfected,Standard,2,1,11/9/2021,12/7/2021,29,,Uninfected,0,16,0,0,0,0,3,2,2,NA,NA,NA,0,7,Y,11/24: 1 dead baby
+M+ Uninf STD 3,Microcystis Spiked,Uninfected,Standard,3,1,11/9/2021,12/4/2021,26,,Uninfected,0,16,0,1,0,0,0,2,NA,NA,NA,NA,0,3,Y,12/1: 1 dead baby; died tangled in algae
+M+ Uninf STD 4,Microcystis Spiked,Uninfected,Standard,4,1,11/9/2021,12/16/2021,38,censored,Uninfected,0,16,0,0,0,1,5,5,12,5,6,7,0,41,Y,11/24: 1 dead baby
+M+ Uninf STD 5,Microcystis Spiked,Uninfected,Standard,5,1,11/9/2021,11/15/2021,7,censored,Uninfected,NA,16,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,"animal missing on 11/15, nothing saved"
+M+ Uninf STD 6,Microcystis Spiked,Uninfected,Standard,6,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,16,0,0,0,1,0,0,0,3,1,0,0,5,Y,
+M+ Uninf STD 7,Microcystis Spiked,Uninfected,Standard,7,2,11/9/2021,11/28/2021,20,,Uninfected,0,16,0,0,1,0,NA,NA,NA,NA,NA,NA,0,1,Y,11/27: 1 dead baby; 12/6: not healthy; died 12/7
+M+ Uninf STD 8,Microcystis Spiked,Uninfected,Standard,8,2,11/9/2021,12/7/2021,29,,Uninfected,0,16,0,0,0,1,0,0,NA,NA,NA,NA,0,1,Y,"12/4: 1 dead baby; 12/6: low movement before respiration (possibly molting), died overnight on 12/7"
+M+ Uninf STD 9,Microcystis Spiked,Uninfected,Standard,9,2,11/9/2021,12/8/2021,30,,Uninfected,0,16,0,0,2,3,1,2,0,NA,NA,NA,0,8,Y,
+M+ Uninf STD 10,Microcystis Spiked,Uninfected,Standard,10,2,11/9/2021,12/16/2021,38,censored,Uninfected,0,16,0,0,1,1,6,5,2,2,8,0,0,25,Y,
+S Past STD 1,Scenedesmus,Pasteuria,Standard,1,1,11/9/2021,12/16/2021,38,censored,Infected,1,17,0,2,6,0,0,0,0,0,0,0,1,8,Y,
+S Past STD 2,Scenedesmus,Pasteuria,Standard,2,1,11/9/2021,12/1/2021,23,,Exposed,0,18,0,2,12,6,5,NA,NA,NA,NA,NA,0,25,Y,
+S Past STD 3,Scenedesmus,Pasteuria,Standard,3,1,11/9/2021,12/16/2021,38,censored,Exposed,0,18,0,4,10,3,1,2,1,2,3,0,0,26,Y,
+S Past STD 4,Scenedesmus,Pasteuria,Standard,4,1,11/9/2021,12/3/2021,25,,Exposed,0,18,0,3,7,1,0,NA,NA,NA,NA,NA,0,11,Y,
+S Past STD 5,Scenedesmus,Pasteuria,Standard,5,1,11/9/2021,12/16/2021,38,,Exposed,0,18,0,2,12,6,4,7,11,5,0,5,0,52,Y,very close to dying. will die today.
+S Past STD 6,Scenedesmus,Pasteuria,Standard,6,2,11/9/2021,12/16/2021,38,censored,Exposed,0,18,0,2,5,0,1,6,4,10,3,0,0,31,Y,
+S Past STD 7,Scenedesmus,Pasteuria,Standard,7,2,11/9/2021,11/23/2021,15,,Exposed,0,18,0,2,6,NA,NA,NA,NA,NA,NA,NA,0,8,Y,died naturally
+S Past STD 8,Scenedesmus,Pasteuria,Standard,8,2,11/9/2021,11/15/2021,7,censored,Exposed,NA,18,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,N,smashed
+S Past STD 9,Scenedesmus,Pasteuria,Standard,9,2,11/9/2021,12/16/2021,38,censored,Exposed,0,18,0,2,3,0,7,5,10,5,3,0,0,35,Y,
+S Past STD 10,Scenedesmus,Pasteuria,Standard,10,2,11/9/2021,11/27/2021,19,,Exposed,0,18,0,3,2,6,NA,NA,NA,NA,NA,NA,0,11,Y,animal degraded; saved parts of the animal
+S:M Past STD 1,Scenedesmus:Microcystis,Pasteuria,Standard,1,1,11/9/2021,11/16/2021,8,,Exposed,NA,19,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Y,
+S:M Past STD 2,Scenedesmus:Microcystis,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,2,1,2,6,2,2,3,2,2,0,22,Y,
+S:M Past STD 3,Scenedesmus:Microcystis,Pasteuria,Standard,3,1,11/9/2021,11/28/2021,20,,Exposed,0,19,0,0,2,4,NA,NA,NA,NA,NA,NA,0,6,Y,
+S:M Past STD 4,Scenedesmus:Microcystis,Pasteuria,Standard,4,1,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,3,5,5,2,3,3,2,6,1,0,30,Y,
+S:M Past STD 5,Scenedesmus:Microcystis,Pasteuria,Standard,5,1,11/9/2021,12/15/2021,37,,Exposed,0,19,0,0,5,4,1,1,3,0,4,NA,1,18,Y,11/27 - 1 dead baby; double check infection status with spore count
+S:M Past STD 6,Scenedesmus:Microcystis,Pasteuria,Standard,6,2,11/9/2021,11/23/2021,15,,Exposed,0,19,0,2,3,NA,NA,NA,NA,NA,NA,NA,0,5,Y,
+S:M Past STD 7,Scenedesmus:Microcystis,Pasteuria,Standard,7,2,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,2,6,4,4,2,2,3,3,0,0,26,Y,died overnight
+S:M Past STD 8,Scenedesmus:Microcystis,Pasteuria,Standard,8,2,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,0,9,3,4,4,4,5,4,9,0,42,Y,
+S:M Past STD 9,Scenedesmus:Microcystis,Pasteuria,Standard,9,2,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,2,4,5,2,2,9,5,4,0,0,33,Y,
+S:M Past STD 10,Scenedesmus:Microcystis,Pasteuria,Standard,10,2,11/9/2021,12/16/2021,38,censored,Exposed,0,19,0,2,6,4,5,7,5,7,2,9,0,47,Y,
+M Past STD 1,Microcystis,Pasteuria,Standard,1,1,11/9/2021,11/18/2021,10,,Exposed,0,20,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,
+M Past STD 2,Microcystis,Pasteuria,Standard,2,1,11/9/2021,11/18/2021,10,,Exposed,0,20,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,very dessicated
+M Past STD 3,Microcystis,Pasteuria,Standard,3,1,11/9/2021,11/29/2021,21,,Exposed,0,20,0,0,2,4,6,NA,NA,NA,NA,NA,0,12,Y,died during feeding rate
+M Past STD 4,Microcystis,Pasteuria,Standard,4,1,11/9/2021,11/23/2021,15,,Exposed,0,20,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,died during respiration
+M Past STD 5,Microcystis,Pasteuria,Standard,5,1,11/9/2021,11/18/2021,10,,Exposed,0,20,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,
+M Past STD 6,Microcystis,Pasteuria,Standard,6,2,11/9/2021,11/22/2021,14,,Exposed,0,20,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,NOT SAVED; died of natural causes
+M Past STD 7,Microcystis,Pasteuria,Standard,7,2,11/9/2021,11/15/2021,7,censored,Exposed,0,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,N,smashed
+M Past STD 8,Microcystis,Pasteuria,Standard,8,2,11/9/2021,12/16/2021,38,censored,Exposed,0,20,0,0,1,3,5,2,0,7,1,0,1,19,Y,11/24 - 1 dead baby
+M Past STD 9,Microcystis,Pasteuria,Standard,9,2,11/9/2021,12/1/2021,23,,Exposed,0,20,0,0,3,3,3,NA,NA,NA,NA,NA,0,9,Y,11/30 - looks unhealthy
+M Past STD 10,Microcystis,Pasteuria,Standard,10,2,11/9/2021,12/2/2021,24,,Exposed,0,20,0,0,0,2,1,NA,NA,NA,NA,NA,0,3,Y,
+M+ Past STD 1,Microcystis Spiked,Pasteuria,Standard,1,1,11/9/2021,11/28/2021,20,,Exposed,0,21,0,0,0,1,NA,NA,NA,NA,NA,NA,0,1,Y,
+M+ Past STD 2,Microcystis Spiked,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,38,censored,Exposed,0,21,0,1,2,0,4,4,6,1,2,0,0,20,Y,
+M+ Past STD 3,Microcystis Spiked,Pasteuria,Standard,3,1,11/9/2021,11/22/2021,14,,Exposed,0,21,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,11/20 - 2 dead babies
+M+ Past STD 4,Microcystis Spiked,Pasteuria,Standard,4,1,11/9/2021,12/8/2021,30,,Infected,1,22,0,0,1,0,0,0,0,NA,NA,NA,1,1,Y,"11/20 - 1 dead baby; 12/1 - 1 dead baby, check for infection with spore counts"
+M+ Past STD 5,Microcystis Spiked,Pasteuria,Standard,5,1,11/9/2021,11/30/2021,22,,Exposed,0,21,0,0,0,2,NA,NA,NA,NA,NA,NA,0,2,Y,"11'24 - 1 dead baby; 11/29 looks unhealthy, died 11/30"
+M+ Past STD 6,Microcystis Spiked,Pasteuria,Standard,6,2,11/9/2021,11/27/2021,19,,Exposed,0,21,0,1,0,1,NA,NA,NA,NA,NA,NA,0,2,Y,
+M+ Past STD 7,Microcystis Spiked,Pasteuria,Standard,7,2,11/9/2021,12/16/2021,38,censored,Exposed,0,21,0,0,1,3,3,4,4,4,5,0,0,24,Y,
+M+ Past STD 8,Microcystis Spiked,Pasteuria,Standard,8,2,11/9/2021,11/24/2021,16,,Exposed,0,21,0,1,0,NA,NA,NA,NA,NA,NA,NA,0,1,Y,died naturally
+M+ Past STD 9,Microcystis Spiked,Pasteuria,Standard,9,2,11/9/2021,11/18/2021,10,,Exposed,0,21,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,
+M+ Past STD 10,Microcystis Spiked,Pasteuria,Standard,10,2,11/9/2021,11/18/2021,10,,Exposed,0,21,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,0,Y,
