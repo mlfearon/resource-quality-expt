@@ -1,0 +1,1555 @@
+---
+title: "Resource Quality Experiment Analysis"
+author: "Michelle Fearon"
+date: "2/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Background
+
+This code provides the compilation, analyses, and figures for the Resource Quality Experiment. The goal of this experiment was to understand how resource quality can mechanistically alter parasite prevalence by impacting host physiology.
+
+### Question: Does resource quality directly influence parasite prevalence by altering host susceptibility via nutrition and/or immunity (host physiology)?
+
+### Hypotheses: 
+1. Hosts provided high quality food will have higher feeding rates which will lead to large body size and greater exposure to parasites (higher prevalence), and greater production of spores for both parasites.
+
+2. Hosts provided poor quality diets will be protected from infection, potentially through a reduced feeding rate that reduces the chances of exposure, but those that do get infected will produce fewer spores per animal due to limited resources for the parasite to exploit.
+
+
+### Experiment Design
+
+- 4 Food quality: 100% Scenedesmus (high quality), 50:50 Scenedesmus:Microcystis, 100% Microcystis alone (low quality), Microcystis+Microcystin (spiked)
+- 2 Host clones: Standard, Mid37
+- 3 Parasite: Uninfected, Metsch, Pasteuria
+
+
+Note: The comparison between the Microcystis alone and Microcystis+Microcystin (spiked) treatments will allow for testing specifically how the toxin changes host physiology and infection.
+
+Pasteuria and Metsch (and their associated Control treatments) with both host genotypes were run separately, therefore the data will be analyzed separately based on each of the two experiments.
+
+
+```{r, set directory and load libraries, results='hide', warning=FALSE, message=FALSE}
+setwd("C:/Users/mlfea/OneDrive/Documents/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code")
+
+library(dplyr)
+library(tidyr)
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(ggeffects)
+library(epiR)
+library(car)
+library(lubridate)
+library(survival)
+library(rms)
+library(survminer)
+library(ggplot2)
+library(viridis)
+library(RColorBrewer)
+```
+
+Import Data
+```{r, import data}
+# Pasteuria data
+p_data <- read.csv("ResourceQuality_Pasteuria_Full.csv", stringsAsFactors = F)
+p_longdata <- read.csv("ResourceQuality_Pasteuria_Full_ByExptDay.csv", stringsAsFactors = F)
+p_lifetable <- read.csv("ResourceQuality_Pasteuria_LifeTableResults.csv", stringsAsFactors = F)
+
+# Metsch data
+m_data <- read.csv("ResourceQuality_Metsch_Full.csv", stringsAsFactors = F)
+m_longdata <- read.csv("ResourceQuality_Metsch_Full_ByExptDay.csv", stringsAsFactors = F)
+m_lifetable <- read.csv("ResourceQuality_Metsch_LifeTableResults.csv", stringsAsFactors = F)
+
+```
+
+Reorder factors
+```{r, reorder factors}
+p_data$Diet <- factor(p_data$Diet, levels = c("S", "SM", "M", "M+"))
+p_data$Infection <- factor(p_data$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+p_data$Parasites <- factor(p_data$Parasites, levels = c("Uninfected", "Pasteuria"))
+p_longdata$Diet <- factor(p_longdata$Diet, levels = c("S", "SM", "M", "M+"))
+p_longdata$Infection <- factor(p_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+p_lifetable$Diet <- factor(p_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
+p_lifetable$Infection <- factor(p_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+
+
+m_data$Diet <- factor(m_data$Diet, levels = c("S", "SM", "M", "M+"))
+m_data$Infection <- factor(m_data$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+m_data$Parasites <- factor(m_data$Parasites, levels = c("Uninfected", "Metsch"))
+m_longdata$Diet <- factor(m_longdata$Diet, levels = c("S", "SM", "M", "M+"))
+m_longdata$Infection <- factor(m_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+m_lifetable$Diet <- factor(m_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
+m_lifetable$Infection <- factor(m_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+
+```
+
+
+
+```{r, overdispersion function, echo=FALSE}
+# Overdispersion parameter estimation function from Ben Bolker: http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#testing-for-overdispersioncomputing-overdispersion-factor
+# Comment additions from http://ase.tufts.edu/gsc/gradresources/guidetomixedmodelsinr/mixed%20model%20guide.html
+overdisp_fun <- function(model) {
+  rdf <- df.residual(model)
+  rp <- residuals(model,type="pearson")
+  Pearson.chisq <- sum(rp^2)
+  prat <- Pearson.chisq/rdf
+  pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
+  c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
+}
+```
+
+
+
+## Infection Prevalence
+
+### Comparison of Pasteuria infection prevalence based on diet and host clone.
+
+```{r, model of Pasteuria prevalence by treatments}
+p_data_prev <- p_data %>% filter(!is.na(InfectionStatus) & Parasites == "Pasteuria") # remove animals that died during exposure and remove uninfected treatments
+
+pprevmod <- glm(InfectionStatus ~ Diet * Clone, family = binomial, data = p_data_prev)
+# Note: left off the block random effect here since it seemed to cause a problem with the model... 
+summary(pprevmod)
+Anova(pprevmod)
+overdisp_fun(pprevmod)
+
+pprevmod_contrasts <- emmeans(pprevmod, specs = pairwise ~ Diet | Clone, type = "response")
+pprevmod_contrasts
+
+```
+
+
+
+```{r, figure of Pasteuria prevalence by treatment}
+# Marginal effects from best model with Abundance on the x axis
+past_prev <- ggpredict(pprevmod, c("Clone", "Diet"))
+
+# set the color scheme for the Diet treatments
+diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
+
+p_prev_fig <- plot(past_prev, dodge = 0.4) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Pasteuria prevalence by diet x host clone") +
+  labs(x = "Host Clone", y = "Pasteuria Prevalence (%)") +
+  theme_classic()
+p_prev_fig
+
+# figures for presentation
+p_prev_fig2 <- plot(past_prev, dodge = 0.5, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Pasteuria prevalence by diet x host clone") +
+  labs(x = "Host Clone", y = "Bacteria Prevalence (%)") +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_prev_fig2
+
+ggsave("PasteuriaPrev_DietxClone.tiff", plot = p_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+
+
+# calculate prevalence for each diet and clone
+p_data_prev$Rep <- as.character(p_data_prev$Rep)
+
+past_prev_sum <- p_data_prev %>%
+  group_by(Diet, Clone) %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), .groups = "rowwise") %>%
+  mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
+         Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
+         Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
+
+# figures for presentation
+p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2, position = position_dodge(width = 0.7)) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, position = position_dodge(width = 0.7)) + 
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Host Clone", y = "Bacteria Prevalence (%)") +
+  ylim(0, 100) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_prev_fig3
+
+p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Diet Treatment", y = "Bacteria Prevalence (%)") +
+  ylim(0, 100) +
+  facet_wrap(~Clone) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_prev_fig3
+
+ggsave("PasteuriaPrevCalcualtions_DietxClone.tiff", plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+```
+
+There is a significant difference in prevalence based on clone, but not based on diet nor the interaction between the two. Standards were generally more resistant to this strain of Pasteuria compared to Mid37s. For Mid37s, there is lower Pasteuria prevalence for the M and M+ treatments, but it is not a significant difference. Maybe since we only have the 10 reps, our prevalence has rather large error bars. 
+
+In comparison with Kristel's 2019 Proc B paper, we had lower Pasteuria infection in the mid37s overall, but also may have a greater difference between the Scenedesmus diet and the Microcystis and spiked Microcystis diets (note that we use different stains of Microcystis though).
+
+
+
+
+### Comparison of Metsch infection prevalence based on diet, and host clone.
+
+```{r, model of Metsch prevalence by treatments}
+m_data_prev <- m_data %>% filter(!is.na(InfectionStatus) & Parasites == "Metsch") # remove animals that died during exposure and remove uninfected treatments
+
+m_data_prev$Block <- as.factor(m_data_prev$Block)
+
+mprevmod <- glm(InfectionStatus ~ Diet * Clone, family = binomial, data = m_data_prev)
+# Note: left off the block random effect here since it seemed to cause a problem with the model... 
+summary(mprevmod)
+Anova(mprevmod)
+overdisp_fun(mprevmod)
+AIC(mprevmod)
+
+mprevmod_contrasts <- emmeans(mprevmod, specs = pairwise ~ Diet | Clone, type = "response")
+mprevmod_contrasts
+
+```
+
+```{r, figure of Metsch prevalence by treatment}
+# Marginal effects from best model with Abundance on the x axis
+metsch_prev <- ggpredict(mprevmod, c("Clone", "Diet"))
+
+m_prev_fig <- plot(metsch_prev, dodge = 0.4) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Metsch prevalence by diet x host clone") +
+  labs(x = "Host Clone", y = "Metchnikowia Prevalence (%)") +
+  theme_classic()
+m_prev_fig
+
+# figure for presentation
+m_prev_fig2 <- plot(metsch_prev, dodge = 0.5, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Metsch prevalence by diet x host clone") +
+  labs(x = "Host Clone", y = "Fungus Prevalence (%)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_prev_fig2
+
+ggsave("MetschPrev_DietxClone.tiff", plot = m_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+
+
+# calculate prevalence for each diet and clone
+m_data_prev$Rep <- as.character(m_data_prev$Rep)
+
+metsch_prev_sum <- m_data_prev %>%
+  group_by(Diet, Clone) %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), .groups = "rowwise") %>%
+  mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
+         Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
+         Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
+
+# figures for presentation
+m_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2, position = position_dodge(width = 0.7)) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, position = position_dodge(width = 0.7)) + 
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Host Clone", y = "Fungus Prevalence (%)") +
+  ylim(0, 100) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_prev_fig3
+
+m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Diet Treatment", y = "Fungus Prevalence (%)") +
+  ylim(0, 100) +
+  facet_wrap(~Clone) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_prev_fig3
+
+ggsave("MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+```
+
+
+The separation in the data (categories with all zeros or all ones) is causing problems for this analysis in the M treatment. Clearly in both clones there are significant differences in the diet treatments with S having MUCH higher infection than all other diets. No significant differences between clones, nor is there an interaction between clone and diet (removed the interaction term from the model). It seems that the presence of Microcystis in the diet seems to really protect against Metsch infection!  
+
+In comparison to Kristel's 2019 Proc B paper, we similarly see a large decrease in infection prevalence when comparing the high quality Scenedesmus diet to the low quality Micorcystis diet. We don't see much of a change in infection prevalence between the Microcystis and the toxin spiked Microcosytis treatments though. 
+
+
+## Spore Yield
+
+### Comparison of Total Pasteuria spore yield based on diet and host clone.
+
+```{r, model of Total Pasteuria spore yield by treatments}
+# remove animals that died during exposure and remove uninfected treatments and remove animals with no spores detected
+p_data_spores <- p_data %>% filter(!is.na(InfectionStatus) & Parasites == "Pasteuria" & total_spores > 0) 
+
+
+ptotsporemod <- lmer(log(total_spores) ~ Diet * Clone + (1|Block), data = p_data_spores)
+summary(ptotsporemod)
+Anova(ptotsporemod)
+AIC(ptotsporemod)
+
+ptotsporemod_contrasts <- emmeans(ptotsporemod, specs = pairwise ~ Diet | Clone, type = "response")
+ptotsporemod_contrasts
+
+```
+
+```{r, figure of Pasteuria total spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+past_totspores <- ggpredict(ptotsporemod, c("Clone", "Diet"))
+
+p_totspore_fig <- plot(past_totspores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Total Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Pasteuria Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+p_totspore_fig
+
+p_totspore_fig2 <- ggplot(p_data_spores, aes(x = Diet, y = total_spores)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Total Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Pasteuria spore yield (log scaled)") +
+  theme_classic()
+p_totspore_fig2
+```
+
+
+There is a significant difference in spore yield based on clone, but not based on diet nor the interaction between the diet and clone. Model with the interaction included has a lower AIC, so left in the interaction. The range in spore yield in the M and M+ treatments for Mid37 seem much greater than for S and SM though. Overall, standard did not really get infected my Pasteuria much, though we did detect a few mature spores. Anecdotally, they did seem possibly degraded though...
+
+**Question 1:** Is this data better represented by the ggeffects plot (top) or the boxplot (bottom)? It is possible that the standard error in the top plot is larger than it should be because the point has been back transformed from the log transformation, but I'm not sure that the standard error was as well based on one of the error messages...
+
+**Question 2:** This data includes animals that I only saw one or two spores in the entire count (mostly in Standard treatments). I did not count those animals as infected in the prevalence data above because although I found a spore present, they did not appear infected in photos and the count was so low that I did not consider it a full infection. Should those very low spore counts be included in this analysis or should we have a cut off threshold for the spore yield that is needed to be included? 
+
+
+### Comparison of Mature Pasteuria spore yield based on diet and host clone.
+
+Note that there is one standard animal that had zero mature spores but did have one immature spore detected in the S treatment, which is included in this data set. 
+
+```{r, model of Mature Pasteuria spore yield by treatments}
+pmaturesporemod <- lmer(log(mature_spores+1) ~ Diet * Clone + (1|Block), data = p_data_spores)
+summary(pmaturesporemod)
+Anova(pmaturesporemod)
+AIC(pmaturesporemod)
+
+pmaturesporemod_contrasts <- emmeans(pmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
+pmaturesporemod_contrasts
+
+```
+
+```{r, figure of Pasteuria mature spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+past_maturespores <- ggpredict(pmaturesporemod, c("Clone", "Diet"))
+
+p_maturespore_fig <- plot(past_maturespores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Pasteuria Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+p_maturespore_fig
+
+# figure for presentation
+p_maturespore_fig3 <- plot(past_maturespores, dodge = 0.5, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Mature Bacteria Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_maturespore_fig3
+
+ggsave("PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+
+p_maturespore_fig2 <- ggplot(p_data_spores, aes(x = Diet, y = mature_spores+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Pasteuria spore yield (log scaled)") +
+  theme_classic()
+p_maturespore_fig2
+```
+
+
+Results are similar to the total spore yield analyses. There is a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments. In the Mid37s 
+
+
+
+
+### Comparison of Immature Pasteuria spore yield based on diet and host clone.
+
+Most animals did not have any immature spores detected, so there will be a lot of zeros in this data set. I did not detect any cauliflower stage Pasteuria, so I did not run any models/figures for that parasite developmental stage.
+
+```{r, model of Immature Pasteuria spore yield by treatments}
+pimmaturesporemod <- lmer(log(immature_spores+1) ~ Diet * Clone + (1|Block), data = p_data_spores)
+summary(pimmaturesporemod)
+Anova(pimmaturesporemod)
+AIC(pimmaturesporemod)
+
+pimmaturesporemod_contrasts <- emmeans(pimmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
+pimmaturesporemod_contrasts
+
+```
+
+```{r, figure of Pasteuria immature spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+past_immaturespores <- ggpredict(pimmaturesporemod, c("Clone", "Diet"))
+
+p_immaturespore_fig <- plot(past_immaturespores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Immature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Immature Pasteuria Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+p_immaturespore_fig
+
+p_immaturespore_fig2 <- ggplot(p_data_spores, aes(x = Diet, y = immature_spores+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Immature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Immature Pasteuria spore yield (log scaled)") +
+  theme_classic()
+p_immaturespore_fig2
+```
+
+
+Overall there are many fewer immature spores compared to mature spores in the infected animals. There is very wide variation in the number of immature spores in M and M+ treatments in Mid37s. May want to think about which data to acutally keep in this data set since there are a lot of zeros...
+
+
+I did not find any spores at the cauliflower stage.
+
+
+
+### Comparison of Total Metsch spore yield based on diet and host clone.
+
+
+Most of the infected animals are in the S treatment, with only 3 in SM, and 1 in M+
+```{r, model of Total Metsch spore yield by treatments}
+# remove animals that died during exposure and remove uninfected treatments and remove animals with no spores detected
+m_data_spores <- m_data %>% filter(!is.na(InfectionStatus) & Parasites == "Metsch" & total_spores > 0) 
+#hist(m_data_spores$total_spores)
+
+mtotsporemod <- lmer(log(total_spores) ~ Diet + Clone + (1|Block), data = m_data_spores)
+summary(mtotsporemod)
+Anova(mtotsporemod)
+AIC(mtotsporemod)
+
+mtotsporemod_contrasts <- emmeans(mtotsporemod, specs = pairwise ~ Diet | Clone, type = "response")
+mtotsporemod_contrasts
+
+```
+
+```{r, figure of Metsch total spore yield by treatment}
+# set the color scheme for the Diet treatments for Metsch spore counts (missing the M treatment)
+diet_colors2 <- c("#ADDD8E", "#41AB5D", "#1D91C0")
+
+# Marginal effects from best model with Host clone on the x axis
+metsch_totspores <- ggpredict(mtotsporemod, c("Clone", "Diet"))
+
+m_totspore_fig <- plot(metsch_totspores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Total Metsch Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Metsch Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+m_totspore_fig
+
+m_totspore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = total_spores)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Total Metsch Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Metsch spore yield (log scaled)") +
+  theme_classic()
+m_totspore_fig2
+```
+
+There is not a significant difference in spore yield based on clone (but somewhat close p = 0.088), nor based on diet. The intereaction between the diet and clone was not significant and oversaturated the model so I removed it. Overall, S treatment had many more infected animals and on average higher than the other diet treatments but since there are so few samples in the other diet treatments it is hard to determine if that is a real difference. 
+
+**NOTE** There is something not working quite right for the predicted figure with points and error bars because the data points for mid37 are shifted, and there are predicted values for M and M+ in mid37s when there aren't any data points for those treatments... USE THE BOXPLOT FIGURE!
+
+
+### Comparison of Mature Metsch spore yield based on diet and host clone.
+
+
+```{r, model of Mature Metsch spore yield by treatments}
+mmaturesporemod <- lmer(log(mature_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+summary(mmaturesporemod)
+Anova(mmaturesporemod)
+AIC(mmaturesporemod)
+
+mmaturesporemod_contrasts <- emmeans(mmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
+mmaturesporemod_contrasts
+
+```
+
+```{r, figure of Metsch mature spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+metsch_maturespores <- ggpredict(mmaturesporemod, c("Clone", "Diet"))
+View(metsch_maturespores)
+
+m_maturespore_fig <- plot(metsch_maturespores, dodge = 0.5, add.data = T, jitter = 0.05) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Metsch Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Metsch Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+m_maturespore_fig
+
+
+# figure for presentation
+m_maturespore_fig3 <- plot(metsch_maturespores, dodge = 0.5, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Mature Fungus Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_maturespore_fig3
+
+ggsave("MetschMatureSpores_DietxClone.tiff", plot = m_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+
+m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Mature Metsch Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Mature Fungal Spore Yield (log scaled)") +
+  theme_classic()
+m_maturespore_fig2
+
+ggsave("MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+```
+
+Results are similar to the total spore yield analyses. There is not a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments.
+
+
+
+### Comparison of Immature Metsch spore yield based on diet and host clone.
+
+```{r, model of Immature Metsch spore yield by treatments}
+mimmaturesporemod <- lmer(log(immature_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+summary(mimmaturesporemod)
+Anova(mimmaturesporemod)
+AIC(mimmaturesporemod)
+
+mimmaturesporemod_contrasts <- emmeans(mimmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
+mimmaturesporemod_contrasts
+
+```
+
+```{r, figure of Metsch immature spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+metsch_immaturespores <- ggpredict(mimmaturesporemod, c("Clone", "Diet"))
+
+m_immaturespore_fig <- plot(metsch_immaturespores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Immature Metsch Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Immature Metsch Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+m_immaturespore_fig
+
+m_immaturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = immature_spores+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Immature Metsch Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Immature Metsch spore yield (log scaled)") +
+  theme_classic()
+m_immaturespore_fig2
+```
+
+Overall there are many fewer immature spores compared to mature spores in the infected animals.
+
+
+
+
+
+### Comparison of Budding Metsch spore yield based on diet and host clone.
+
+```{r, model of Budding Metsch spore yield by treatments}
+mbudsporemod <- lmer(log(bud_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+summary(mbudsporemod)
+Anova(mbudsporemod)
+AIC(mbudsporemod)
+
+mbudsporemod_contrasts <- emmeans(mbudsporemod, specs = pairwise ~ Diet | Clone, type = "response")
+mbudsporemod_contrasts
+
+```
+
+```{r, figure of Metsch budding spore yield by treatment}
+# Marginal effects from best model with Abundance on the x axis
+metsch_budspores <- ggpredict(mbudsporemod, c("Clone", "Diet"))
+
+m_budspore_fig <- plot(metsch_budspores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Budding Metsch Spore Yield by diet x host clone") +
+  labs(x = "Host Clone", y = "Budding Metsch Spore Yield (log scale)") +
+  scale_y_log10(labels = scales::comma) +
+  theme_classic()
+m_budspore_fig
+
+m_budspore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = bud_spores+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Budding Metsch Spore Yield by diet x host clone") +
+  labs(x = "Diet", y = "Budding Metsch spore yield (log scaled)") +
+  theme_classic()
+m_budspore_fig2
+```
+
+Overall there are many fewer immature spores compared to mature spores in the infected animals.
+
+
+
+## Gut spore data for Metsch
+
+The day after Metsch exposure, we looked at the number of Metsch spores that were embedded in or punctured through the gut wall of the daphnia, as well as the number of Metsch spores that were entirely in the haemoceol (body cavity) of the daphnia. We counted the number of hemocytes that were attached to either punctured or haemoceol spores that had passed partially or completely through the gut wall. 
+
+### Total number of spores in the gut
+
+```{r, model of Metsch total attacking gut spores by treatment}
+m_data_gutspore <- m_data %>% filter(Block == 5 & Infection != "Uninfected") 
+# only include animals in block 5 that were checked for gut spores and remove 3 animals that did not get exposed to parasites (STD SM, M, and M+ rep 20 for all, b/c ran out of spores for exposure)
+hist(m_data_gutspore$TotalGutSpores)
+
+mgutsporemod <- glm(TotalGutSpores ~ Diet * Clone, family = poisson, data = m_data_gutspore)
+# Note: left off the block random effect because all these animals were in the same block 
+summary(mgutsporemod)
+Anova(mgutsporemod)
+overdisp_fun(mgutsporemod)
+AIC(mgutsporemod)
+
+mgutsporemod2 <- glm(TotalGutSpores ~ Diet * Clone * length.um, family = poisson, data = m_data_gutspore)
+# Note: left off the block random effect because all these animals were in the same block 
+summary(mgutsporemod2)
+Anova(mgutsporemod2)
+overdisp_fun(mgutsporemod2)
+AIC(mgutsporemod2)
+
+mgutsporemod_contrasts <- emmeans(mgutsporemod, specs = pairwise ~ Diet | Clone, type = "response")
+mgutsporemod_contrasts
+
+```
+```{r, figure of Metsch total gut spore by treatment}
+# Marginal effects from best model with Abundance on the x axis
+metsch_totgutspores <- ggpredict(mgutsporemod2, c("length.um", "Diet", "Clone"))
+
+# figure with bodysize
+m_totgutspores_fig <- plot(metsch_totgutspores, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Total Metsch spores in the gut by diet x host clone") +
+  labs(x = "Host Length (um)", y = "Number Metsch spores attacking gut") +
+  ylim(0,50) +
+  theme_classic()
+m_totgutspores_fig
+
+# Marginal effects from best model with Abundance on the x axis
+metsch_totgutspores1 <- ggpredict(mgutsporemod, c("Clone", "Diet"))
+
+m_totgutspores_fig1 <- plot(metsch_totgutspores1, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Total Metsch spores in the gut by diet x host clone") +
+  labs(x = "Host Clone", y = "Number Metsch spores attacking gut") +
+  theme_classic()
+m_totgutspores_fig1
+
+m_totgutspores_fig2 <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Total Metsch spores in the gut by diet x host clone") +
+  labs(x = "Diet", y = "Number Metsch spores attacking gut") +
+  theme_classic()
+m_totgutspores_fig2
+
+# figure for presentation
+m_totgutspores_fig3 <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Diet", y = "Number of Fungus Spores Attacking Gut") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_totgutspores_fig3
+
+ggsave("MetschGutSpores_DietxClone.tiff", plot = m_totgutspores_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+```
+
+The effect of diet treatment and host clone were significant. Bodysize was not a significant predictor of the number of attacking metsch spores in the gut, and the model that included bodysize made the interaction between Diet*Clone insignificant (it was sig in the model without bodyzie included and the AIC is lower by ~9 in that model). There were substantially more Metsch spores attacking the guts of animals fed the high-quality Scenedesmus diet, and Standards tended to have more spores in their guts than Mid37s. This fits with our understanding that Standards tend to be more susceptible to Metsch than Mid37s. 
+
+**Diets that included any Microcystis appear to really protect hosts from early exposure to attacking spores!**
+
+I didn't run the models or figures for the different degrees of spore penetration into the gut (i.e. embedded, punctured, and haemoceol spores), but the pattern above is largely the same for the embedded and punctured spores. There were relatively few haemoceol spores overall, and all of the ones that I saw were in the S treatments. 
+
+Tara Stewart Merrill looked at the proportion of attacking spores and a few other ways of calculating these spores counts, so we could potentially update these response variables to match what she previously did. (Note, I think that she included both embedded and punctured spores as "barrier spores" in her paper, so my "total gut spore" count is equivalent to her "Attacking spore" count)
+
+### Hemocytes per punctured or haemoceol spore
+
+We counted the number of hemocytes that were attached to metsch spores that had punctured or penetrated into the haemoceol of the daphnia. We then calculated the number of hemocytes per punctured or haemoceol spore by dividing the number of hemocytes counted by the total number of punctured and haemoceol spores ("TotalPunctSpores" column).
+
+**Needed to filter data to remove animals where there were no punctured spores because then there would also not be any hemocytes counted, so there would to separation in the data.**
+
+```{r, model of hemocytes per Metsch attacking gut spores by treatment}
+m_data_hemocytes <- m_data_gutspore %>% filter(TotalGutSpores > 0) 
+dim(m_data_hemocytes)
+m_data_hemocytes$Unique.code <- as.factor(m_data_hemocytes$Unique.code)
+
+hist(m_data_hemocytes$Hemocytes)
+hist(m_data_hemocytes$HemocytesPerSpore)
+# I'm not sure what is the best distribution to use for this data since it doesn't look normal but a poisson won't fit because the data are not integers...
+
+# Number of hemocytes
+mhemocytemod <- glmer(Hemocytes ~ Diet * Clone + TotalPunctSpores + (1|Unique.code), family = "poisson", data = m_data_hemocytes, control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
+summary(mhemocytemod)
+Anova(mhemocytemod)
+overdisp_fun(mhemocytemod) 
+AIC(mhemocytemod)
+# model is very overdispersed so I included a unique ID random effect to correct for that. The length term did not work well when included in the model, and the results for it were very messy, so I removed it to improve the model.
+
+# Hemocytes per spore and including body size as a predictor
+mhemocytemod2 <- lm(HemocytesPerSpore ~ Diet * Clone * length.um, data = m_data_hemocytes)
+# Note: left off the block random effect because all these animals were in the same block 
+summary(mhemocytemod2)
+Anova(mhemocytemod2)
+AIC(mhemocytemod2)
+
+# Hemocytes per spore and NOT including body size as a predictor
+mhemocytemod3 <- lm(HemocytesPerSpore ~ Diet * Clone, data = m_data_hemocytes)
+# Note: left off the block random effect because all these animals were in the same block 
+summary(mhemocytemod3)
+Anova(mhemocytemod3)
+AIC(mhemocytemod3) # AIC is lower without bodyzie
+
+mhemocytemod_contrasts <- emmeans(mhemocytemod3, specs = pairwise ~ Diet | Clone, type = "response")
+mhemocytemod_contrasts
+
+```
+```{r, figures of Metsch hemocytes per spore by treatment}
+# Marginal effects 
+metsch_hemocytes <- ggpredict(mhemocytemod, c("TotalPunctSpores", "Diet", "Clone"))
+
+# figure with Total punctured spores
+m_hemocytes_fig <- plot(metsch_hemocytes, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Recruited Hemocytes by # puncturing spores X diet x host clone") +
+  labs(x = "Attacking Metsch spores", y = "Recruited Hemocytes") +
+  ylim(0,55) +
+  theme_classic()
+m_hemocytes_fig
+
+## Figure for presentation
+m_hemocytes_fig2 <- ggplot(m_data_hemocytes, aes(x = Diet, y = Hemocytes)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Hemocytes per attacking Metsch spore in the gut by diet x host clone") +
+  labs(x = "Diet", y = "Recruited Hemocytes") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_hemocytes_fig2
+
+ggsave("Hemocytes_DietxClone.tiff", plot = m_hemocytes_fig2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
+
+# Marginal effects from best model with Abundance on the x axis
+# metsch_hemocytes <- ggpredict(mhemocytemod, c("length.um", "Diet", "Clone"))
+# 
+# # figure with bodysize
+# m_hemocytes_fig2 <- plot(metsch_hemocytes, dodge = 0.4, add.data = T) +
+#   scale_color_manual(values = diet_colors) +
+#   scale_fill_manual(values = diet_colors) +
+#   ggtitle("Recruited Hemocytes by bodysize X diet x host clone") +
+#   labs(x = "Length (um)", y = "Recruited Hemocytes") +
+#   ylim(0,55) +
+#   theme_classic()
+# m_hemocytes_fig2
+
+
+
+# Marginal effects
+metsch_hemocytesperspore <- ggpredict(mhemocytemod3, c("Clone", "Diet"))
+
+# figure with bodysize
+m_hemocytesperspore_fig <- plot(metsch_hemocytesperspore, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Hemocytes per attacking Metsch spore in the gut by diet x host clone") +
+  labs(x = "Host Clone", y = "Number of Hemocytes per Metsch spore attacking gut") +
+  theme_classic()
+m_hemocytesperspore_fig
+
+
+m_hemocytesperspore_fig2 <- ggplot(m_data_hemocytes, aes(x = Diet, y = HemocytesPerSpore)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Hemocytes per attacking Metsch spore in the gut by diet x host clone") +
+  labs(x = "Diet", y = "Number of Hemocytes per Metsch spore attacking gut") +
+  theme_classic()
+m_hemocytesperspore_fig2
+
+
+# figure for presentation
+m_hemocytesperspore_fig3 <- ggplot(m_data_hemocytes, aes(x = Diet, y = HemocytesPerSpore)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Hemocytes per attacking Metsch spore in the gut by diet x host clone") +
+  labs(x = "Diet", y = "Recruited Hemocytes per Attacking Fungus Spore") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_hemocytesperspore_fig3
+
+ggsave("HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+```
+
+
+**Number of recruited hemoctyes model**
+This model is having some problems, so I don't fully trust it yet...the GLM version is overdispered, so I added the unique code random effect to correct for the overdispersion. But when I do that, the model fails to converge if length is included. Even with length removed, it seems there is a bit of an issue because the figure can't produce the confidence intervals... 
+
+In the GLMM with the random effect, there is only a significant positive correlation with the number of recruited hemoctyes. This matches what Tara previously found that the more attacking spores leads to more recruited hemoctyes.
+
+In the GLM without the random effect there are significant interactions between Diet x Clone and Diet x length, and Total Punctured Spores attacking the gut has a significant positive correlation with the number of recruited hemoctyes. But this model is overdispersed, as discussed above, so may not be accurate.
+
+
+**Recruited hemoctyes per spore model** 
+There was no significant difference between diet or host clone in the number of recruited hemoctyes per attacking spore. Tested body legnth too, but it was not a significant predictor and the model AIC was improved by removing length from the model.
+
+
+### Does number of attacking spores and/or number of recruited hemocytes predict terminal Metsch infection?
+
+
+```{r, model of Metsch prevalence by treatments and attacking spores and recruited hemocytes}
+m_data_inf <- m_data_gutspore %>% filter(!is.na(InfectionStatus)) 
+dim(m_data_gutspore)
+dim(m_data_inf)
+
+mprevmod2 <- glm(InfectionStatus ~ Diet + Clone + TotalPunctSpores + Hemocytes, family = "binomial", data = m_data_inf)
+summary(mprevmod2)
+Anova(mprevmod2)
+overdisp_fun(mprevmod2)
+
+# Model does not perform well because there is too much separation in the data due to the effects of diet. 
+# if Diet and clone are removed, there is still no sig effects of Total punctured spores or # hemocytes on infection...
+
+mprevmod_contrasts <- emmeans(mprevmod2, specs = pairwise ~ Diet | Clone, type = "response")
+mprevmod_contrasts
+
+```
+
+```{r, figures of Metsch prevaelence by diet x clone + attacking spores + hemocytes}
+# Marginal effects from best model with Abundance on the x axis
+metsch_inf <- ggpredict(mprevmod2, c("TotalPunctSpores", "Diet", "Clone"))
+
+# figure with Total punctured spores
+m_inf_fig <- plot(metsch_inf, dodge = 0.4, add.data = T, ci = F) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Metsch prevalence by # attacking spores x diet x host clone") +
+  labs(x = "Attacking Metsch spores", y = "Metsch Prevalence (%)") +
+  theme_classic()
+m_inf_fig
+
+# Marginal effects from best model with Abundance on the x axis
+metsch_inf2 <- ggpredict(mprevmod2, c("Hemocytes", "Diet", "Clone"))
+
+# figure with Total punctured spores
+m_inf_fig2 <- plot(metsch_inf2, dodge = 0.4, add.data = T, ci = F) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Metsch prevalence by diet x host clone") +
+  labs(x = "Recruited Hemocytes", y = "Metsch Prevalence (%)") +
+  theme_classic()
+m_inf_fig2
+```
+
+I think the data here may be too sparse to be used well. Unfortunately many of the animals that I checked for spores in the guts died the day after I looked at them under the scope, so I was not able to assess terminal infection status for those animals. And there was an unfortunate trend that the more of the animals that had spores in their guts tended to die more either because I took longer to count them on the scope, and/or they were more sensitive since they were experiencing an infection. 
+
+
+## Fecundity 
+
+### Total Feculity by treatment for Pasteuria experiment
+
+Compare differences in total fecundity in the Pasteuria experiment based on infection status, diet, and host clone.
+
+```{r, model of total fecundity for Pasteuria}
+p_data_fecund <- p_data %>% filter(!is.na(Total.Babies)  & lifespan.days > 11)
+hist(p_data$Total.Babies) 
+
+pfecundmod <- lmer(log(Total.Babies+1) ~ Diet * Infection * Clone + (1|Block), data = p_data_fecund)
+summary(pfecundmod)
+Anova(pfecundmod)
+overdisp_fun(pfecundmod)
+
+pfecundmod_contrasts <- emmeans(pfecundmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+pfecundmod_contrasts
+
+```
+
+```{r, total fecunity by treatment for past}
+p_fecund_tot <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic()
+p_fecund_tot
+
+# figure for presentation
+p_fecund_tot2 <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  scale_y_log10(labels = scales::comma) +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_tot2
+
+ggsave("PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+```
+
+The total fecundity model for Pasteuria is not performing perfectly with a poisson distribution, so I ended up log + 1 transforming total fecundity and running a LMM. This reduced changed whether the interactions are significant between diets, infection status, and host clones.  In this model there are significant effects of diet, infection status, and clone, but no interactions between each factor. 
+
+Generally, decreasing resource quality leads to lower total fecundity. Pasteuria infected animals have fewer babies due to the parasite castration, though interestingly in the high quality diet some animals are able to have their first clutch before infection castrates them. And overall, Standards typically had more babies than Mid37s (though I think at a cost to their long-term survival...we will see below.)
+
+
+I am not sure why the poisson distribution did not work...I thought that the poisson distribution should automatically log the response variable within the model to deal with count data... 
+
+
+**Question:** What is the best way to account for Clone differences in the models? Do we care whether there are sig differences there? If not, then it may be better/easier to separate the data based on clone? 
+
+
+### Total Feculity by treatment for Metsch experiment
+
+Compare differences in total fecundity in the Metsch experiment based on infection status, diet, and host clone.
+
+```{r, model of total fecundity for Metsch}
+m_data_fecund <- m_data %>% filter(!is.na(Total.Babies) & lifespan.days > 11)
+hist(m_data$Total.Babies) 
+hist(log(m_data$Total.Babies+1)) 
+
+mfecundmod <- lmer(log(Total.Babies+1) ~ Diet * Infection * Clone + (1|Block), data = m_data_fecund)
+summary(mfecundmod)
+Anova(mfecundmod)
+
+mfecundmod_contrasts <- emmeans(mfecundmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+mfecundmod_contrasts
+```
+
+```{r, total fecunity by treatment for metsch}
+m_fecund_tot2 <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  scale_y_log10(labels = scales::comma) +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_tot2
+
+ggsave("MetschTotalFecundity_DietxClonexInfection.tiff", plot = m_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+```
+
+For the metsch experiment, all interactions between diet, infection status and clone are significant, except for the full 3-way interaction. 
+In Mid37s, the S and uninfected treatment has higher total fecundity compared to most other treatments. Otherwise no significant differences among diet or infection status. In standards, S and SM uninfected have the highest total fecundity, which are significantly higher than S, SM and M exposed.  Overall, exposed animals seem to have very wide variability in their total fecundity compared to uninfected animals. This may suggest that there is some energetic cost to resisting infection (for some animals at least). Infected animals in S and SM treatments can still produce offspring despite infection.
+
+**Question 1:** There are some differences in the sample size since we are doing it based off of the infection status (i.e. some treatments with very few infected or very few exposed depending on the prevalence in that treatment). Is there a better way to account for this? You can see where there are only a few points in the boxplots...
+
+**Question 2:** Is the best way to visualize these difference by using letters on top of the different boxplots? Or adding the sig interaction effects in an annotation?
+
+
+### Cummulative Fecunity over time
+
+Need to do this still...
+
+**Should this be average cumulative fecundity over time by treatment? Not sure how to best make this plot**
+
+```{r, cumulative fecunity over time plot for past}
+#fecund_time <- ggplot()
+
+#fecund_time
+
+```
+
+
+### Little r by treatment for Pasteuria experiment
+
+**Question:** Should I use r_mx or r_Fx? They are similar but slightly different versions. I have used r_mx for now but can easily change it.
+
+```{r, little r figure for pasteuria experiment}
+p_little_r <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.2,  position=position_dodge(width=0.5)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Little r by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "r_mx") +
+  theme_classic()
+p_little_r
+
+# figure for presentation
+p_little_r2 <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.2,  position=position_dodge(width=0.5)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Little r by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Instantaneous Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_little_r2
+
+ggsave("PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+```
+
+High quality diets produce the largest little r instanteous growth rates, and decreases with poorer quality diet. Exposure to Pasteuria, but not getting infected seems to reduce the little r for Mid37s a bit, but not for standards. Infection with Pasteuria results in castration, so those animals have very low little r's. Overall, there is not much of a difference in little r for M vs spiked toxin M treatments, except for exposed Mid37s, which have a very low little r with a wide standard error. This effect is not seen for Standards.
+
+
+### Little r by treatment for Metsch experiment
+
+```{r, little r figure for metsch experiment}
+m_little_r <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.2,  position=position_dodge(width=0.5)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Little r by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = "r_mx") +
+  theme_classic()
+m_little_r
+
+# figure for presentation
+m_little_r2 <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.2,  position=position_dodge(width=0.5)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Little r by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Instantaneous Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_little_r2
+
+ggsave("MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+```
+
+Metsch does not castrate it's host, so there is less of a dramatic effect on little r based on parasite infection. As diet quality decreases, little r decreases as well for both host clones and regardless of infection. In Standards, little r seems to be lower in animals exposed or infected with Metsch compared to uninfected animals, so maybe there is an energetic cost to resisting infection, and getting infected would definitely be costly for the animal. There doesn't seem to be this same difference in MId37s, except for in the high quality S diet treatment. Again there are no major differences between the Microcystis and toxin spiked Microcystis treatments.
+
+
+Note that since the Metsch experiment was ended after 16 days post-exposure, the differences between the infected animals that died before the end of the experiment and the uninfected/exposed animals that were still alive at the end of the experiment would have become greater.
+
+
+
+## Bodysize and Growth Rate
+
+### Growth rate between week 1 and 2 for Pasteuria experiment
+
+Compare differences in total fecundity in the Pasteuria experiment based on infection status, diet, and host clone.
+
+```{r, model of growth rate for Pasteuria}
+p_data_growth <- p_data %>% filter(!is.na(GrowthRate))
+hist(p_data_growth$GrowthRate)  # wow normal data!! 
+
+pgrowthmod <- lmer(GrowthRate ~ Diet * Infection * Clone + (1|Block), data = p_data_growth)
+# removed block random effect because it was singular and caused a problem in the model
+summary(pgrowthmod)
+Anova(pgrowthmod)
+
+pgrowthmod_contrasts <- emmeans(pgrowthmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+pgrowthmod_contrasts
+
+```
+```{r, growth rate by treatment for past}
+p_growth <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "Growth Rate (um per day)") +
+  theme_classic()
+p_growth
+
+# figure for presentation
+p_growth2 <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Growth Rate ("~ mu* "m per day)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_growth2
+
+ggsave("PastGrowthRate_DietxClonexInfection.tiff", plot = p_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+```
+Since this is growth rate early on in the experiment, there would not have been signs of infection yet. There doesn't seem to be large differences between the infection status categories nor host clone. There are only significant differences consistently based on diet quality, where growth rate declines with poorer quality diet.
+
+
+### Growth rate between week 1 and 2 for Metsch experiment
+
+Compare differences in total fecundity in the Pasteuria experiment based on infection status, diet, and host clone.
+
+```{r, model of growth rate for Metsch}
+m_data_growth <- m_data %>% filter(!is.na(GrowthRate))
+hist(m_data_growth$GrowthRate) # wow normal data!! 
+
+mgrowthmod <- lmer(GrowthRate ~ Diet * Infection * Clone +(1|Block), data = m_data_growth)
+# Model had problems when all interactions and random effect included, but none of the interactions are significant
+# so I removed the interactions and kept the random effect
+summary(mgrowthmod)
+Anova(mgrowthmod)
+AIC(mgrowthmod)
+
+mgrowthmod_contrasts <- emmeans(mgrowthmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+mgrowthmod_contrasts
+
+```
+Model AIC is a bit lower without including all the interactions
+
+```{r, growth rate by treatment for Metsch}
+m_growth <- ggplot(m_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
+  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = "Growth Rate (um per day)") +
+  theme_classic()
+m_growth
+
+# figure for presentation
+m_growth2 <- ggplot(m_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Growth Rate ("~ mu* "m per day)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_growth2
+
+ggsave("MetschGrowthRate_DietxClonexInfection.tiff", plot = m_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+```
+
+There are significant differences for Diet, infection status, and host clone, but no sig interactions between any of those factors. As with the Pasteuria experiment, growth rate declined with poorer quality diets, Growth rate is lower in exposed or infected animals compared to uninfected animals, more so for the M and M+ treatments in Mid37s (less so for Standards).
+
+
+## Bodysize over time for Pasteuria experiment
+Need to do this still...
+
+**Question 1:** Would these plots be useful or necessary compared to the growth rate ones from above? 
+
+**Question 2:** if yes, then what is the best way to show this data over time? I was thinking averaging by treatment for each week of the experiment with std error bars...
+
+
+## Bodysize over time for Metsch experiment
+Need to do this still...
+
+
+
+
+## Survival analyses
+
+### Pasteuria survival analyses
+
+Need to remove some animals from data set? Which ones? Depending on whether we go with the Parasite treatment or the infection status (i.e. exposed vs infected vs uninfected) we may want to remove some categories where there are only one or two animals from the survival analysis.
+
+Need to separate data based on host clone to make the plots easier to look at.
+
+```{r, parse pasteuria data by host clone}
+p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data_std$Diet))
+p_data$Diet2 <- factor(p_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+
+p_data$SurvObj <- with(p_data, Surv(lifespan.days, Status))
+
+
+p_data_std <- p_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+p_data_mid <- p_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+```
+
+
+**Standard survival in the Pasteuria experiment**
+
+Kaplan-Meier models estimate the survival probability and the long-rank test. 
+
+```{r, pasteuria experiment survival analyses for standards, fig.width=12}
+p_data_std$SurvObj <- with(p_data_std, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_std <- survfit(SurvObj ~ Diet + Parasites, data = p_data_std, conf.type = "log-log")
+km.by.diet_parasite_std
+km.by.diet_infstatus_std <- survfit(SurvObj ~ Diet + Infection, data = p_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std
+km.by.diet_infstatus_std2 <- survfit(SurvObj ~ Diet2 + Infection, data = p_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std2
+
+ggsurvplot(km.by.diet_parasite_std, data = p_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std, data = p_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std2, data = p_data_std, pval = TRUE, xlab = "Days")
+
+```
+
+Cox proportional hazards model calculates the risk of death and respective hazard ratios (HR). HR < 1 indicates an increased risk of death, and HR < 1 indicates a decreased risk of death.
+
+```{r, pasteuria experiment cox prop hazards analyses for standards, fig.width=8}
+
+# Cox proportional hazards model
+cox.diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = p_data_std)
+cox.diet_parasite_std
+cox.diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = p_data_std)
+summary(cox.diet_infstatus_std)
+cox.diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_std)
+summary(cox.diet_infstatus_std2)
+
+
+cox.diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = p_data)
+summary(cox.diet_infstatus_clone)
+
+# forest plot
+ggforest(cox.diet_parasite_std, data = p_data_std)
+ggforest(cox.diet_infstatus_std, data = p_data_std)
+ggforest(cox.diet_infstatus_std2, data = p_data_std)
+
+# forest plot for presentation
+past_cox <- ggforest(cox.diet_infstatus_clone, data = p_data, cpositions = c(0.02, 0.15, 0.35))
+past_cox
+ggsave("PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
+
+# NOTE: the forest plot has a problem plotting the reference if it starts with the same letter as another factor in the same variable (e.g. S and SM), but the analysis runs correctly
+
+```
+
+
+**Mid37 survival in the Pasteuria experiment**
+
+```{r, pasteuria experiment survival analyses for mid37s, fig.width=12}
+p_data_mid$SurvObj <- with(p_data_mid, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_mid <- survfit(SurvObj ~ Diet + Parasites, data = p_data_mid, conf.type = "log-log")
+km.by.diet_infstatus_mid <- survfit(SurvObj ~ Diet + Infection, data = p_data_mid, conf.type = "log-log")
+
+ggsurvplot(km.by.diet_parasite_mid, data = p_data_mid, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_mid, data = p_data_mid, pval = TRUE, xlab = "Days")
+
+```
+
+```{r, pasteuria experiment cox prop hazards analyses for mid37s, fig.width=8}
+
+# Cox proportional hazards model
+cox.diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = p_data_mid)
+cox.diet_parasite_mid
+cox.diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = p_data_mid)
+cox.diet_infstatus_mid
+cox.diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_mid)
+cox.diet_infstatus_mid2
+
+# forest plot
+ggforest(cox.diet_parasite_mid, data = p_data_mid)
+ggforest(cox.diet_infstatus_mid, data = p_data_mid)
+```
+
+May need to make a treatment category for Diet x parasite or Diet x Infection Status to be able to see the interaction between the treatments more clearly. Including an interaction term in the Cox model doesn't seem to be working when I try that...
+
+Interestingly, pasteuria exposed animals suffered more mortality than then infected animals in Mid37s.
+
+
+### Metsch survival analyses
+
+```{r, parse metsch data by host clone}
+m_data$Diet2 = recode_factor(m_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data_std$Diet))
+m_data$Diet2 <- factor(m_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+
+m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
+
+m_data_std <- m_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+m_data_mid <- m_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+
+```
+
+
+**Standard survival in the Metsch experiment**
+
+```{r, metsch experiment survival analyses for standards, fig.width=12}
+m_data_std$SurvObj <- with(m_data_std, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_std <- survfit(SurvObj ~ Diet + Parasites, data = m_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std <- survfit(SurvObj ~ Diet + Infection, data = m_data_std, conf.type = "log-log")
+
+#pairwise survdiff
+res <- pairwise_survdiff(Surv(lifespan.days, Status) ~ Diet + Infection,
+     data = m_data_std)
+res
+
+ggsurvplot(km.by.diet_parasite_std, data = m_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std, data = m_data_std, pval = TRUE, xlab = "Days")
+
+```
+
+```{r, metsch experiment cox prop hazards analyses for standards, fig.width=8}
+
+# Cox proportional hazards model
+cox.m_diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = m_data_std)
+cox.m_diet_parasite_std
+cox.m_diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = m_data_std)
+summary(cox.m_diet_infstatus_std)
+cox.m_diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = m_data_std)
+summary(cox.m_diet_infstatus_std2)
+
+m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
+cox.m_diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection +Clone, data = m_data)
+summary(cox.m_diet_infstatus_clone)
+
+# forest plot
+ggforest(cox.m_diet_parasite_std, data = m_data_std)
+ggforest(cox.m_diet_infstatus_std, data = m_data_std)
+ggforest(cox.m_diet_infstatus_std2, data = m_data_std)
+
+# forest plot for presentation
+metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
+metsch_cox
+ggsave("MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+```
+
+Animals that were exposed to or infected with metsch experienced much greater risk of death! 
+
+Not sure why both the uninfected and metsch treatments are considered reference in the first figure...
+
+
+**Mid37 survival in the Metsch experiment**
+
+```{r, metsch experiment survival analyses for mid37s, fig.width=12}
+m_data_mid$SurvObj <- with(m_data_mid, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_mid <- survfit(SurvObj ~ Diet + Parasites, data = m_data_mid, conf.type = "log-log")
+km.by.diet_infstatus_mid <- survfit(SurvObj ~ Diet + Infection, data = m_data_mid, conf.type = "log-log")
+
+ggsurvplot(km.by.diet_parasite_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
+
+```
+
+```{r, metsch experiment cox prop hazards analyses for mid37s, fig.width=8}
+
+# Cox proportional hazards model
+cox.m_diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = m_data_mid)
+cox.m_diet_parasite_mid
+cox.m_diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = m_data_mid)
+cox.m_diet_infstatus_mid
+
+# forest plot
+ggforest(cox.m_diet_parasite_mid, data = p_data_mid)
+ggforest(cox.m_diet_infstatus_mid, data = p_data_mid)
+
+```
+
+Animals that were exposed to or infected with metsch experienced much greater risk of death! 
+
+Not sure why both the uninfected and metsch treatments are considered reference in the first figure...
+
+
+
+### Lifespan figures
+
+Pasteuria lifespan
+
+```{r, pasteuria lifespan figure}
+# figure for presentation
+p_data_lifespan <- p_data %>% filter(Include_Lifespan == "Y")
+
+p_lifespan <- ggplot(p_data_lifespan, aes(x = Infection, y = Lifespan)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_lifespan
+
+ggsave("PastLifespan_DietxClonexInfection.tiff", plot = p_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+```
+
+
+
+Metsch lifespan
+
+```{r, metsch lifespan figure}
+# figure for presentation
+m_data_lifespan <- m_data %>% filter(Include_Lifespan == "Y")
+
+
+m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Past Expt") +
+  labs(x = "Parasite Exposure", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_lifespan
+
+ggsave("MetschLifespan_DietxClonexInfection.tiff", plot = m_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+```
+
+
