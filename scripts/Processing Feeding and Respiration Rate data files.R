@@ -8,6 +8,11 @@ library(dplyr)
 library(tidyverse)
 library(lubridate)
 library(fs)
+library(here)
+
+
+# set the path to the script relative to the project root directory
+here::i_am("scripts/Processing Feeding and Respiration Rate data files.R")
 
 
 ################################################
@@ -46,8 +51,8 @@ FeedingRate$Plate <- recode(FeedingRate$Plate, Plate1 = 1, Plate2 = 2, Plate3 = 
 setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code")
 
 
-past_feed_meta <- read.csv("ResourceQuality_Pasteuria_FeedingRateMetadata.csv", header = T, stringsAsFactors = F)
-metsch_feed_meta <- read.csv("ResourceQuality_Metsch_FeedingRateMetadata.csv", header = T, stringsAsFactors = F)
+past_feed_meta <- read.csv(here("data/ResourceQuality_Pasteuria_FeedingRateMetadata.csv"), header = T, stringsAsFactors = F)
+metsch_feed_meta <- read.csv(here("data/ResourceQuality_Metsch_FeedingRateMetadata.csv"), header = T, stringsAsFactors = F)
 
 feeding_meta <- bind_rows(past_feed_meta, metsch_feed_meta)
 
@@ -245,7 +250,7 @@ boxplot(FeedingRateCalc_Treatment$Clearance ~ FeedingRateCalc_Treatment$Diet)
 
 
 
-write.csv(FeedingRateCalc_Treatment, "ResourceQuality_FeedingRateCalc.csv", quote = F, row.names=FALSE)
+write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv", quote = F, row.names=FALSE)
 
 
 
@@ -259,10 +264,10 @@ setwd("C:/Users/mlfea/OneDrive/Documents/Projects/MHMP Daphnia Duffy/Resource Qu
 
 
 # returns the file names as a character vector
-file_paths <- fs::dir_ls()
+file_paths <- fs::dir_ls(path = "./data/RespirationRate", regexp = ('/\bOxygen\b/g')) # need to select just the oxygen docs
 
 
-# read in all files in the directory, remove first row, add block, day and plate metadata for each dataset, combine all rows
+# read in all files in the directory, remove first row, add block, day and plate metadata for each data set, combine all rows
 RespRate <- file_paths %>%
   map( function(path) {
     read_csv(path, skip=1)} %>% # read in all files and remove the first row
@@ -270,7 +275,7 @@ RespRate <- file_paths %>%
   bind_rows %>% # bind all rows together
   separate(Name, into=c("Block", "Day", "Plate"), sep="_")  # separate the file name into block, day and plate numbers
 
-View(FeedingRate)
+View(RespRate)
 
 # recode block, day and plate to numbers
 RespRate$Block <- recode(RespRate$Block, Block1 = 1, Block2 = 2)
