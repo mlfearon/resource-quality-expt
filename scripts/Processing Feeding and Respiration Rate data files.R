@@ -267,21 +267,25 @@ write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv",
 file_paths2 <- fs::dir_ls(path = "./data/RespirationRate/Oxygen_Sat/", regexp = ('(Oxygen)(.csv)$')) # need to select just the oxygen docs
 length(file_paths2)
 
-df <- read.csv(here("data/RespirationRate/Oxygen_sat/Block1_Day15_plate1_results_Oxygen.csv"), stringsAsFactors = F,)
+df <- read.csv(here("data/RespirationRate/Oxygen_sat/Block1_Day22_plate3_results_Oxygen.csv"), stringsAsFactors = F,)
+dim(df)
 # read in all files in the directory, remove first row, add block, day and plate metadata for each data set, combine all rows
 RespRate <- file_paths2 %>%
   map( function(path) {
-    read_csv(path, skip=0)} %>% # read in all files and remove the first row
-      mutate(Name = str_remove_all(path, "_results_Oxygen.csv"))) %>% # add file name to each row
+    read_csv(path, skip=0, col_types = "cncccccccccccccccccccccccc")} %>% # read in all files and remove the first row
+      mutate(Name = str_remove_all(path, "./data/RespirationRate/Oxygen_Sat/"))) %>% # add file name to each row
   bind_rows %>% # bind all rows together
-  separate(Name, into=c("Block", "Day", "Plate"), sep="_")  # separate the file name into block, day and plate numbers
+  separate(Name, into=c("Block", "Day", "Plate", "results", "Oxygen"), sep="_") %>% # separate the file name into block, day and plate numbers
+  dplyr::rename(Date.Time = "Date/Time", Time.Min = "Time/Min.") %>%
+  #extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
+  select(Block:Plate, Date.Time:D6)
 
 View(RespRate)
 
 # recode block, day and plate to numbers
-RespRate$Block <- recode(RespRate$Block, Block1 = 1, Block2 = 2)
-RespRate$Day <- recode(RespRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29)
-RespRate$Plate <- recode(RespRate$Plate, Plate1 = 1, Plate2 = 2, Plate3 = 3, Plate4 = 4)
+RespRate$Block <- recode(RespRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
+RespRate$Day <- recode(RespRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
+RespRate$Plate <- recode(RespRate$Plate, plate1 = 1, plate2 = 2, plate3 = 3, plate4 = 4)
 
 
 
