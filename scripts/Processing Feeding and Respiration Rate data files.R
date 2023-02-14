@@ -11,6 +11,7 @@ library(fs)
 library(here)
 
 
+
 # set the path to the script relative to the project root directory
 here::i_am("scripts/Processing Feeding and Respiration Rate data files.R")
 
@@ -20,21 +21,18 @@ here::i_am("scripts/Processing Feeding and Respiration Rate data files.R")
 ################################################
 
 
-# Set working directory
-setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code/FeedingRate")
-
-
 # returns the file names as a character vector
-file_paths <- fs::dir_ls()
+file_paths <- fs::dir_ls(path = "./data/FeedingRate/")
 
 
 # read in all files in the directory, remove first row, add block, day and plate metadata for each dataset, combine all rows
 FeedingRate <- file_paths %>%
   map( function(path) {
     read_csv(path, skip=1)} %>% # read in all files and remove the first row
-      mutate(Name = str_remove_all(path, ".csv"))) %>% # add file name to each row
+      mutate(Name = str_remove_all(path, "./data/FeedingRate/"))) %>%   # add file name to each row
   bind_rows %>% # bind all rows together
   separate(Name, into=c("Block", "Day", "Plate"), sep="_") %>%  # separate the file name into block, day and plate numbers
+  separate(Plate, into=c("Plate", "csv"), sep="[.]") %>%   # separate the plate number and csv file extension
   dplyr::rename(Date.Time = "Reading Date/Time", chlorophyll = "chlorphyll:435,665") %>%
   extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
   select(Well:Plate)
@@ -259,19 +257,22 @@ write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv",
 ################################################
 
 
-# Set working directory
-setwd("C:/Users/mlfea/OneDrive/Documents/Projects/MHMP Daphnia Duffy/Resource Quality/Data and Code/RespirationRate")
-
+### Need to convert all Oxygen files from excel to csv, remove first 12 rows and last 7 columns (27-32).
+## I tried to do this in a fancy way, and I was able to select just the oxygen files, but ran into problems with the 
+## excel file type and some of the weird symbols that were in the header of the excel file prevented it from downloading
+## Anyways I got frustrated and just did it by hand in the end... try again another day
+      # code to select just the Oxygen docs, problem is with reading in the docs as they are due to special symbols in the header
 
 # returns the file names as a character vector
-file_paths <- fs::dir_ls(path = "./data/RespirationRate", regexp = ('/\bOxygen\b/g')) # need to select just the oxygen docs
+file_paths2 <- fs::dir_ls(path = "./data/RespirationRate/Oxygen_Sat/", regexp = ('(Oxygen)(.csv)$')) # need to select just the oxygen docs
+length(file_paths2)
 
-
+df <- read.csv(here("data/RespirationRate/Oxygen_sat/Block1_Day15_plate1_results_Oxygen.csv"), stringsAsFactors = F,)
 # read in all files in the directory, remove first row, add block, day and plate metadata for each data set, combine all rows
-RespRate <- file_paths %>%
+RespRate <- file_paths2 %>%
   map( function(path) {
-    read_csv(path, skip=1)} %>% # read in all files and remove the first row
-      mutate(Name = str_remove_all(path, ".csv"))) %>% # add file name to each row
+    read_csv(path, skip=0)} %>% # read in all files and remove the first row
+      mutate(Name = str_remove_all(path, "_results_Oxygen.csv"))) %>% # add file name to each row
   bind_rows %>% # bind all rows together
   separate(Name, into=c("Block", "Day", "Plate"), sep="_")  # separate the file name into block, day and plate numbers
 
