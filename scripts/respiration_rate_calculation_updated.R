@@ -6,6 +6,7 @@
 https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html
 
 library(tidyverse)
+library(readxl)
 library(here)
 library(devtools)
 install_github('colin-olito/LoLinR')
@@ -16,12 +17,13 @@ here::i_am("scripts/respiration_rate_calculation.R")
 
 # read in respiration file for a single plate
 resp <- read.csv(here("data/Day10_plate3_results_Oxygen_example.csv"), stringsAsFactors = F, header = T)
-
+# try with one of my plates
+resp <- read_csv(here("data/RespirationRate/Oxygen_Sat/Block2_Day7_plate1_results_Oxygen.csv"))
 
 # remove temp, pressure, salinity metadata (constant during sampling)
 resp <- resp[,1:26] 
 
-# remove the first 20 minutes of sampling while animals are accimating
+# remove the first 20 minutes of sampling while animals are acclimating
 resp <- resp[which(resp$Time.Min.>20),] 
 
 resp.rate <- matrix(0,24,3)
@@ -42,7 +44,9 @@ for(i in 1:length(resp.rate[,2])){
   resp.rate[i,3] <- -1 * ((resp.rate[i,2] - control) / 100) * 2 * 6.4 
 }
 # V = volume of water in vials in mL (we had 2 mL vials)
-# 𝛽O2 = oxygen capacitance of air-saturated water at 20°C = 6.40 (Cameron, 1986)
+# 𝛽O2 = oxygen capacitance of air-saturated water at 20°C = 6.40 (Cameron, 1986)   
+
+################## NOTE: my samples appear to be run with an internal temp of 21.75 to 22.5°C
 
 resp.rate <- as.data.frame(resp.rate)
 resp.rate[,1] <- colnames(resp)[3:26]
@@ -66,5 +70,5 @@ resp.rate <- resp.rate %>%
 daphniaRegs  <-  rankLocReg(xall=resp$Time.Min., yall=resp$A2, alpha=0.2, 
                            method="pc", verbose=TRUE) 
 summary(daphniaRegs)
-plot(daphniaRegs, rank = 1)
+plot(daphniaRegs, rank = 2)
 outputRankLocRegPlot(daphniaRegs)
