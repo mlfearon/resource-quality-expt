@@ -287,15 +287,20 @@ RespRate$Block <- recode(RespRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Blo
 RespRate$Day <- recode(RespRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
 RespRate$Plate <- recode(RespRate$Plate, plate1 = 1, plate2 = 2, plate3 = 3, plate4 = 4)
 
+# convert Date.Time column to a date and time format
+RespRate$Date.Time <- as.POSIXct(RespRate$Date.Time, tz = "EST", format = "%d.%m.%Y %H:%M%OS") # adds in today's date, but only need the start/end times relative to each other
 
 
+# convert all "No Sensor" occurrences to NAs, convert all Oxygen saturation values to numeric
+RespRate <- RespRate %>% 
+  mutate_if(is.character,stringr::str_replace_all, pattern = "No Sensor",replacement = "NA") %>%
+  mutate(across(where(is.character), as.numeric))
+str(RespRate)
 
 
-
-
-
-
-
+# loop through respiration calculation for each block, day, plate, and well
+    # compile into new data frame where each row represents a single block, day, plate, and well combination with the respiration rate calculated
+    # join with the metadata to compare patterns across different treatments
 
 
 
