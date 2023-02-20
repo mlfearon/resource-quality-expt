@@ -397,13 +397,14 @@ str(thisplate)
 # calculate the metabolic rate (converted to metabolic rate (J/hr) using the calorific conversion factor of 20.08 J/ml O2 (Lighton, 2008))
 RespRateCalc <- RespRateCalc %>%
   select(Block:Column, O2.sat.per.hr:metabolic.rate, Notes) %>%
-  mutate(metabolic.rate = VO2 * 20.13) # metabolic rate is J/hr (calculated as 16+5.164(RQ))
+  mutate(metabolic.rate = VO2 * 20.13)  # metabolic rate is J/hr (calculated as 16+5.164(RQ))
 # where RQ, the respiratory quotient, is the ratio of VCO2 to VO2, which can be assumed to be 0.8 when not measured (Lighton 2008)
 # Problem is that calculates to 20.1312. 
 # to get 20.08, the RQ would need to 0.79
 View(RespRateCalc)
 
-
+# Set the Diet factor order
+RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
 x <- i <- 2
 j <- 1
@@ -449,50 +450,108 @@ plot_week1_oxysat <- ggplot(data = RespRateCalc_plot_Week1, aes(x = Parasites, y
   theme_classic()
 plot_week1_oxysat
 
+View(RespRateCalc_plot_Week1)
+
+# filter day to remove NAs and by week 2
+RespRateCalc_plot_Week2 <- RespRateCalc %>%
+  filter(!is.na(Parasites)) %>%
+  filter(Week == 2) 
+str(RespRateCalc_plot_Week2)
+
+plot_week2 <- ggplot(data = RespRateCalc_plot_Week2, aes(x = Parasites, y = metabolic.rate)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of Respiration Rate parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_week2
 
 
 
+plot_week2_oxysat <- ggplot(data = RespRateCalc_plot_Week2, aes(x = Parasites, y = O2.sat.per.hr)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of O2 saturation per hour parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_week2_oxysat
+
+
+# filter day to remove NAs and by week 3
+RespRateCalc_plot_Week3 <- RespRateCalc %>%
+  filter(!is.na(Parasites)) %>%
+  filter(Week == 3) 
+str(RespRateCalc_plot_Week3)
+sum(is.na(RespRateCalc_plot_Week3$O2.sat.per.hr))
+
+plot_week3 <- ggplot(data = RespRateCalc_plot_Week3, aes(x = Parasites, y = metabolic.rate)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of Respiration Rate parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_week3
 
 
 
+plot_week3_oxysat <- ggplot(data = RespRateCalc_plot_Week3, aes(x = Parasites, y = O2.sat.per.hr)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of O2 saturation per hour parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_week3_oxysat
 
 
-# directory where csv files are located
-path <- file.path(getwd())
+## Plot of O2 saturation over time by week (needs work still, make a treatment category that spans all weeks for a particular treatment)
+RespRateCalc_Sum.clean <- RespRateCalc %>%
+  filter(!is.na(Parasites)) %>%
+  group_by(Diet, Parasites, Clone, Week) %>%
+  summarize(N  = length(O2.sat.per.hr),
+            O2.mean = mean(O2.sat.per.hr),
+            O2.sd   = sd(O2.sat.per.hr),
+            O2.se   = O2.sd / sqrt(N),
+            resp.mean = mean(metabolic.rate),
+            resp.sd   = sd(metabolic.rate),
+            resp.se   = resp.sd / sqrt(N))
+RespRateCalc_Sum.clean$Week <- as.factor(RespRateCalc_Sum.clean$Week)
 
+plot_byWeek <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = O2.mean)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=1, position=position_dodge(width=0.8)) + 
+  geom_line(aes(color=Diet, group = Parasites), linewidth=2, position=position_dodge(dodge.width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(dodge.width=0.8)) +
+  facet_grid(Parsites~Clone) +
+  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  #scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of O2 saturation per hour parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_byWeek
 
-#-------------------
-# make a list of all file names with csv or txt ext.
-#-------------------
-# $         : end of file name
-# (csv|txt) : multiple file extentions
-# \\.       : avoid unwanted cases such as .ccsv
-#-------------------
-v.filename <- list.files(path, pattern="\\.(csv|txt)$", 
-                         ignore.case = TRUE, 
-                         full.names = FALSE)
-
-
-
-# read and make each data.frame
-for(fn in v.filename) {
-  
-  df.each = read.csv(fn)
-  
-  print(fn); print(df.each)
-}
-
-
-
-
-df <- list.files(full.names = TRUE) %>% 
-  lapply( function(x) {read_csv(x, skip=1 )}) %>%
-  mutate(Name = str_remove_all(x, ".csv", "")) %>%
-  bind_rows
-
-??str_remove_all
-?map_df
-
-map_df(dat_files, ~read_csv(.x) %>%
-         mutate(month_year = str_remove_all(.x, ".csv", "")) %>%
-         separate(month_year, into=c("Month", "Year"), sep=" ")
