@@ -46,9 +46,6 @@ FeedingRate$Plate <- recode(FeedingRate$Plate, Plate1 = 1, Plate2 = 2, Plate3 = 
 
 
 # need to join meta data to the feeding rate data
-setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code")
-
-
 past_feed_meta <- read.csv(here("data/ResourceQuality_Pasteuria_FeedingRateMetadata.csv"), header = T, stringsAsFactors = F)
 metsch_feed_meta <- read.csv(here("data/ResourceQuality_Metsch_FeedingRateMetadata.csv"), header = T, stringsAsFactors = F)
 
@@ -256,6 +253,13 @@ write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv",
 # Respiration Rate
 ################################################
 
+# read in metadata for respiration rate trials
+# need to join meta data to the feeding rate data
+past_resp_meta <- read.csv(here("data/ResourceQuality_Pasteuria_RespirationRateMetadata.csv"), header = T, stringsAsFactors = F)
+metsch_resp_meta <- read.csv(here("data/ResourceQuality_Metsch_RespirationRateMetadata.csv"), header = T, stringsAsFactors = F)
+
+RespRateCalc <- bind_rows(past_resp_meta, metsch_resp_meta)
+
 
 ### Need to convert all Oxygen files from excel to csv, remove first 12 rows and last 7 columns (27-32).
 ## I tried to do this in a fancy way, and I was able to select just the oxygen files, but ran into problems with the 
@@ -267,8 +271,7 @@ write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv",
 file_paths2 <- fs::dir_ls(path = "./data/RespirationRate/Oxygen_Sat/", regexp = ('(Oxygen)(.csv)$')) # need to select just the oxygen docs
 length(file_paths2)
 
-df <- read.csv(here("data/RespirationRate/Oxygen_sat/Block1_Day22_plate3_results_Oxygen.csv"), stringsAsFactors = F,)
-dim(df)
+
 # read in all files in the directory, remove first row, add block, day and plate metadata for each data set, combine all rows
 RespRate <- file_paths2 %>%
   map( function(path) {
@@ -297,11 +300,154 @@ RespRate <- RespRate %>%
   mutate(across(where(is.character), as.numeric))
 str(RespRate)
 
+# add week to dataset based on day of experiment
+RespRate$ID <- 1:length(RespRate$Block)
+RespRate$Week <- NA
+
+for(i in RespRate$ID){
+  if(RespRate$Day[i] == 7 | RespRate$Day[i] == 8){
+    RespRate$Week[i] <- 1
+  }else if(RespRate$Day[i] == 14 | RespRate$Day[i] == 15){
+    RespRate$Week[i] <- 2
+  }else if(RespRate$Day[i] == 21 | RespRate$Day[i] == 22){
+    RespRate$Week[i] <- 3
+  }else if(RespRate$Day[i] == 28 | RespRate$Day[i] == 29){
+    RespRate$Week[i] <- 4
+  }else if(RespRate$Day[i] == 35 | RespRate$Day[i] == 36){
+    RespRate$Week[i] <- 5
+  }else{
+    RespRate$Week[i] <- NA
+  }
+}
+
+
+# remove the extra time over 140 minutes of sampling to standardize the amount of time sampled for each animal
+        # some respiration trials ran over the 140 min, so we are removing the "extra" time so that regressions are computed over the same time window for all animals
+RespRate <- filter(RespRate, Time.Min < 141)
+
 
 # loop through respiration calculation for each block, day, plate, and well
     # compile into new data frame where each row represents a single block, day, plate, and well combination with the respiration rate calculated
     # join with the metadata to compare patterns across different treatments
 
+# setting up vectors to cycle through
+block <- c(1:4)
+plate <- c(1:4)
+wells <- colnames(select(RespRate, A1:D6))
+
+# Set up empty columns to add data to in the for loop below
+RespRateCalc$O2.sat.per.hr <- NA 
+RespRateCalc$VO2 <- NA
+RespRateCalc$metabolic.rate <- NA
+
+for(i in block){
+  thisblock <- filter(RespRate, Block == i) # filter data by each block
+  if(i > 2){        # block 3 and 4 (Metsch expt) only have 3 weeks, while blocks 1 and 2 (Past) have 5 weeks
+    week <- c(1:3)
+  } else {
+    week <- c(1:5)
+  }
+  for(j in week){
+    thisweek <- filter(thisblock, Week == j) # filter block data by each week of the data set
+    
+    for(k in plate){
+      thisplate <- filter(thisweek, Plate == k) # filter week data by each plate
+      
+      for(l in wells){
+        if(sum(is.na(thisplate[ , l])) > 0){
+          RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == l, "O2.sat.per.hr"] <- NA
+        } else{
+          ox.sat.values <- unlist(c((thisplate[ , l])), use.names = F)
+          # run all the local regressions to estimate the monotonic slope for each animal
+          # use alpha threshold of at least 30% of the data included in the regression
+          # Generally the L% method (pc) seems to fit the data best for most animals
+          daphniaRegs  <-  rankLocReg(xall=thisplate$Time.Min, yall=ox.sat.values, alpha=0.3, # (ma = rate of change in oxygen saturation for an experimental treatment)
+                                      method="pc", verbose=TRUE) 
+          # get the specific row for the animal to store associated data
+          RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == l, "O2.sat.per.hr"] <- daphniaRegs$allRegs[1, "b1"] * 60  # extract the best monotonic slope (per min), multiply by 60 to get the per hour slope, store the Oxygen saturation per hour
+        }
+
+      }
+      # filter data to get only this plate 
+      temp_plate <-  filter(RespRateCalc, Block == i & Week == j & Plate == k)
+      
+      # filter data to get only blank controls 
+      temp_controls <-  filter(temp_plate, Parasites == "Blank") 
+      
+      # calculated the mean of the wells with controls only (mc = per run average rate of change for the blank controls)
+      control <- mean(temp_controls$O2.sat.per.hr)
+      
+      # Calculate the rate of oxygen consumption (VO2) (mL O2/hr)
+      # VO2=−1×[(ma−mc)∕100]×V×𝛽O2
+      for(m in wells){
+        RespRateCalc[ RespRateCalc$Well == m, "VO2"] <- -1 * ((RespRateCalc[RespRateCalc$Well == m, "O2.sat.per.hr"] - control) / 100) * 0.002 * 6.15 
+      }
+      # V = volume of water in vials in mL (we had 2 mL vials)  = 0.002 L
+      # 𝛽O2 = oxygen capacitance of air-saturated water at 20°C = 6.40 (Cameron, 1986) in mg/L (I think)   
+      
+      ################## NOTE: my samples appear to be run with an internal temp of 21.75 to 22.5°C, 
+      ################# so maybe need to change this number for my calculations to be more accurate?
+              # 6.15 at 22°C (volume solubility of O2) mL O2 per L of water (Cameron, 1986) 
+      
+    }
+  }
+}
+str(thisplate)
+
+# calculate the metabolic rate (converted to metabolic rate (J/hr) using the calorific conversion factor of 20.08 J/ml O2 (Lighton, 2008))
+RespRateCalc <- RespRateCalc %>%
+  select(Block:Column, O2.sat.per.hr:metabolic.rate, Notes) %>%
+  mutate(metabolic.rate = VO2 * 20.13) # metabolic rate is J/hr (calculated as 16+5.164(RQ))
+# where RQ, the respiratory quotient, is the ratio of VCO2 to VO2, which can be assumed to be 0.8 when not measured (Lighton 2008)
+# Problem is that calculates to 20.1312. 
+# to get 20.08, the RQ would need to 0.79
+View(RespRateCalc)
+
+
+
+x <- i <- 2
+j <- 1
+k <- 4
+l <- "A4"
+
+
+# diet color palette
+diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
+
+# filter day to remove NAs and by week 1
+RespRateCalc_plot_Week1 <- RespRateCalc %>%
+  filter(!is.na(Parasites)) %>%
+  filter(Week == 1) 
+
+plot_week1 <- ggplot(data = RespRateCalc_plot_Week1, aes(x = Parasites, y = metabolic.rate)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of Respiration Rate parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_week1
+
+
+
+plot_week1_oxysat <- ggplot(data = RespRateCalc_plot_Week1, aes(x = Parasites, y = O2.sat.per.hr)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Test plot of O2 saturation per hour parasite exposure x diet x host clone") +
+  labs(x = "Parasite Exposure", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_week1_oxysat
 
 
 
