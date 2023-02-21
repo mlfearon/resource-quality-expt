@@ -362,7 +362,9 @@ plate <- c(1:4)
 wells <- colnames(select(RespRate, A1:D6))
 
 # Set up empty columns to add data to in the for loop below
-RespRateCalc$O2.sat.per.hr <- NA 
+RespRateCalc$O2.sat.per.hr <- NA
+RespRateCalc$mean.control.O2.sat <- NA
+RespRateCalc$sd.control.O2.sat <- NA
 RespRateCalc$VO2 <- NA
 RespRateCalc$metabolic.rate <- NA
 
@@ -405,11 +407,15 @@ for(i in block){
       
       # calculated the mean of the wells with controls only (mc = per run average rate of change for the blank controls)
       control <- mean(temp_controls$O2.sat.per.hr)
+      control.sd <- sd(temp_controls$O2.sat.per.hr)
       
       # Calculate the rate of oxygen consumption (VO2) (mL O2/hr)
       # VO2=−1×[(ma−mc)∕100]×V×𝛽O2
       for(m in wells){
-        RespRateCalc[ RespRateCalc$Well == m, "VO2"] <- -1 * ((RespRateCalc[RespRateCalc$Well == m, "O2.sat.per.hr"] - control) / 100) * 0.002 * 6.15 
+        RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == m, "VO2"] <- 
+          -1 * ((RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == m, "O2.sat.per.hr"] - control) / 100) * 0.002 * 6.15 
+        RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == m, "mean.control.O2.sat"] <- control
+        RespRateCalc[ RespRateCalc$Block == i & RespRateCalc$Week == j & RespRateCalc$Plate == k & RespRateCalc$Well == m, "sd.control.O2.sat"] <- control.sd
       }
       # V = volume of water in vials in mL (we had 2 mL vials)  = 0.002 L
       # 𝛽O2 = oxygen capacitance of air-saturated water at 20°C = 6.40 (Cameron, 1986) in mg/L (I think)   
@@ -484,10 +490,40 @@ summary(daphniaRegs_test5)
 plot(daphniaRegs_test5, rank = 1)       # L% is the best fit
 outputRankLocRegPlot(daphniaRegs_test5) # Very BAD fit compared to other animals in the same treatment, do not include this point
         # since there are NAs in part of the time series, the rankLocReg function in the loop does not calculate
-        # a slope, so it is already not included in the calculated metabolic rates
+        # a slope, so it is already an NA in the calculated metabolic rates
+
+# Block 3 day 15 plate 3 M Blank C5 - check extreme blank control (-8.58 slope)
+test4 <- RespRate %>% filter(Block == 3, Day == 15, Plate == 3) %>% as.data.frame()
+daphniaRegs_test4a  <-  rankLocReg(xall=test4$Time.Min, yall=test4$C5, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test4a)
+plot(daphniaRegs_test4a, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test4a) # yes, very negative slope but fits the data well, not an error
+        # range of measurements is much lower than all other blanks, but similar to some other wells nearby  
+
+# Block 4 day 14 plate 4 M+ Blank B6 - check extreme blank control (-5.82 slope)
+test6 <- RespRate %>% filter(Block == 4, Day == 14, Plate == 4) %>% as.data.frame()
+daphniaRegs_test6  <-  rankLocReg(xall=test6$Time.Min, yall=test6$B6, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test6)
+plot(daphniaRegs_test6, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test6) # yes, very negative slope but fits the data well, not an error
+# range of measurements is much lower than all other wells 
+
+# Block 1 day 29 plate 2 SM Blank D1 - check extreme blank control (-4.68 slope)
+test7 <- RespRate %>% filter(Block == 1, Day == 29, Plate == 2) %>% as.data.frame()
+daphniaRegs_test7  <-  rankLocReg(xall=test7$Time.Min, yall=test7$D1, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test7)
+plot(daphniaRegs_test7, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test7) # yes, very negative slope but fits the data well, not an error
+# range of measurements is much lower than all other wells 
 
 
 
+###############################
+# Initial figures to explore the respiration data
+##############################
 
 # diet color palette
 diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
@@ -556,7 +592,7 @@ plot_week2_oxysat <- ggplot(data = RespRateCalc_plot_Week2, aes(x = Parasites, y
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
   facet_wrap(~Clone) +
-  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
@@ -606,29 +642,55 @@ plot_week3_oxysat
 
 ## Plot of O2 saturation over time by week (needs work still, make a treatment category that spans all weeks for a particular treatment)
 RespRateCalc_Sum.clean <- RespRateCalc %>%
-  filter(!is.na(Parasites)) %>%
-  group_by(Diet, Parasites, Clone, Week) %>%
+  filter(!is.na(Parasites), Parasites != "Blank") %>%
+  group_by(Diet, Parasites, Clone, Week, Treatment) %>%
   summarize(N  = length(O2.sat.per.hr),
-            O2.mean = mean(O2.sat.per.hr),
-            O2.sd   = sd(O2.sat.per.hr),
+            O2.mean = mean(O2.sat.per.hr, na.rm = T),
+            O2.sd   = sd(O2.sat.per.hr, na.rm = T),
             O2.se   = O2.sd / sqrt(N),
             resp.mean = mean(metabolic.rate),
             resp.sd   = sd(metabolic.rate),
             resp.se   = resp.sd / sqrt(N))
 RespRateCalc_Sum.clean$Week <- as.factor(RespRateCalc_Sum.clean$Week)
+RespRateCalc_Sum.clean$Diet <- factor(RespRateCalc_Sum.clean$Diet, levels = c("S", "SM", "M", "M+"))
 
-plot_byWeek <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = O2.mean)) +
+
+#  IN future Split by experiment (Past vs Metsch)
+plot_byWeek <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
-  geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=1, position=position_dodge(width=0.8)) + 
-  geom_line(aes(color=Diet, group = Parasites), linewidth=2, position=position_dodge(dodge.width=0.8)) +
-  geom_point(aes(color=Diet), size=2, position=position_dodge(dodge.width=0.8)) +
-  facet_grid(Parsites~Clone) +
-  #scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
+  geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=2) +
+  geom_point(aes(color=Diet), size=4, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
-  #scale_color_manual(values = c(rep("black", 4))) +
-  ggtitle("Test plot of O2 saturation per hour parasite exposure x diet x host clone") +
-  labs(x = "Parasite Exposure", y = "Oxygen Saturation Per hour (%/hr)") +
+  ggtitle("Test plot of O2 saturation per hour by week and parasite x diet x host clone") +
+  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
   theme_classic()
 plot_byWeek
+
+
+
+
+
+## check of variation in blank controls within and across plates
+Blank_data <- RespRateCalc %>%
+  filter(!is.na(Parasites), Parasites == "Blank") %>%
+  mutate(block_plate = paste0(Block, "_", Plate))
+Blank_data$Plate <- as.factor(Blank_data$Plate)
+Blank_data$Diet <- factor(Blank_data$Diet, levels = c("S", "SM", "M", "M+"))
+
+blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, group = Diet, shape = Plate)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  #geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
+  #geom_line(aes(color=Diet, group = Diet), linewidth=2) +
+  geom_jitter(aes(color=Diet), size=3, alpha = 0.8, width = 0.2) +
+  facet_wrap(~Block) +
+  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Test plot of CONTROLS O2 saturation per hour by week and diet") +
+  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+blankplot_byWeek
 
