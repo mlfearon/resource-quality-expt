@@ -8,6 +8,8 @@ library(dplyr)
 library(tidyverse)
 library(lubridate)
 library(fs)
+install_github('colin-olito/LoLinR')
+library(LoLinR)
 library(here)
 
 
@@ -259,8 +261,9 @@ past_resp_meta <- read.csv(here("data/ResourceQuality_Pasteuria_RespirationRateM
 metsch_resp_meta <- read.csv(here("data/ResourceQuality_Metsch_RespirationRateMetadata.csv"), header = T, stringsAsFactors = F)
 
 RespRateCalc <- bind_rows(past_resp_meta, metsch_resp_meta)
-
-
+unique(RespRateCalc$Parasites)
+unique(RespRateCalc$Clone)
+unique(RespRateCalc$Diet)
 ### Need to convert all Oxygen files from excel to csv, remove first 12 rows and last 7 columns (27-32).
 ## I tried to do this in a fancy way, and I was able to select just the oxygen files, but ran into problems with the 
 ## excel file type and some of the weird symbols that were in the header of the excel file prevented it from downloading
@@ -326,6 +329,29 @@ for(i in RespRate$ID){
 RespRate <- filter(RespRate, Time.Min < 141)
 
 
+# Samples from block 3, Day 22 plates 1-4 were samples on 1 min intervals instead of 2 min intervals
+# Need to thin this data to match with all other plates in the data set
+library(ds4psy)
+RespRate_Block3Day22 <- RespRate %>% filter(Block == 3, Day == 22) %>% as.data.frame()
+head(RespRate_Block3Day22)
+dim(RespRate_Block3Day22)
+range(RespRate_Block3Day22$ID)
+RespRate_Block3Day22_thinned <- RespRate_Block3Day22 %>%
+  filter(!is_wholenumber(ID/2))  # remove even rows so that timepoints match other plates (0, 2, 4 min, etc)
+head(RespRate_Block3Day22_thinned)
+tail(RespRate_Block3Day22_thinned)
+dim(RespRate_Block3Day22_thinned)
+
+
+# replace block 3, Day 22 plates 1-4 with thinned data
+RespRate <- RespRate %>% filter(ID < 3433 | ID > 4017) # remove based on line IDs
+dim(RespRate)  # should be 4242 rows (4806-564)
+RespRate <- rbind(RespRate, RespRate_Block3Day22_thinned)
+dim(RespRate)  # should be 4525 rows(4242+283)
+
+
+
+
 # loop through respiration calculation for each block, day, plate, and well
     # compile into new data frame where each row represents a single block, day, plate, and well combination with the respiration rate calculated
     # join with the metadata to compare patterns across different treatments
@@ -339,6 +365,9 @@ wells <- colnames(select(RespRate, A1:D6))
 RespRateCalc$O2.sat.per.hr <- NA 
 RespRateCalc$VO2 <- NA
 RespRateCalc$metabolic.rate <- NA
+
+
+### Loop takes a VERY long time to run ###
 
 for(i in block){
   thisblock <- filter(RespRate, Block == i) # filter data by each block
@@ -406,10 +435,58 @@ View(RespRateCalc)
 # Set the Diet factor order
 RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
-x <- i <- 2
-j <- 1
-k <- 4
-l <- "A4"
+# save CSV file
+write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv", quote = F, row.names=FALSE))
+
+
+
+##############################
+# check the Oxygen saturation per hr slope calculation for a few extreme values
+##############################
+
+# Block 1 day 15 plate 1 S Blank B2 - positive rate
+test1 <- RespRate %>% filter(Block == 1, Day == 15, Plate == 1) %>% as.data.frame()
+daphniaRegs_test1  <-  rankLocReg(xall=test1$Time.Min, yall=test1$B2, alpha=0.3, 
+                            method="pc", verbose=TRUE) 
+summary(daphniaRegs_test1) 
+plot(daphniaRegs_test1, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test1) # yes, slight positive slope but not much change in O2 sat over time
+
+# Block 1 day 8 plate 2 SM Blank A1 - positive rate
+test2 <- RespRate %>% filter(Block == 1, Day == 8, Plate == 2) %>% as.data.frame()
+daphniaRegs_test2  <-  rankLocReg(xall=test2$Time.Min, yall=test2$A1, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test2)
+plot(daphniaRegs_test2, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test2) # yes, slight positive slope but not much change in O2 sat over time
+
+# Block 3 day 15 plate 2 SM Uninf STD B2 - very negative rate
+test3 <- RespRate %>% filter(Block == 3, Day == 15, Plate == 2) %>% as.data.frame()
+daphniaRegs_test3  <-  rankLocReg(xall=test3$Time.Min, yall=test3$B2, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test3)
+plot(daphniaRegs_test3, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test3) # yes, very negative slope but fits the data well, not an error
+
+# Block 3 day 15 plate 3 M Uninf MID D4 - very negative rate
+test4 <- RespRate %>% filter(Block == 3, Day == 15, Plate == 3) %>% as.data.frame()
+daphniaRegs_test4  <-  rankLocReg(xall=test4$Time.Min, yall=test4$D4, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test4)
+plot(daphniaRegs_test4, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test4) # yes, very negative slope but fits the data well, not an error
+
+# Block 2 day 14 plate 1 S Uninf MID a4 - sample had an error in recording initially (in C2), but moved to new well (A4)
+test5 <- RespRate %>% filter(Block == 2, Day == 14, Plate == 1) %>% filter(!is.na(A4)) %>% as.data.frame()
+daphniaRegs_test5  <-  rankLocReg(xall=test5$Time.Min, yall=test5$A4, alpha=0.3, 
+                                  method="pc", verbose=TRUE) 
+summary(daphniaRegs_test5)
+plot(daphniaRegs_test5, rank = 1)       # L% is the best fit
+outputRankLocRegPlot(daphniaRegs_test5) # Very BAD fit compared to other animals in the same treatment, do not include this point
+        # since there are NAs in part of the time series, the rankLocReg function in the loop does not calculate
+        # a slope, so it is already not included in the calculated metabolic rates
+
+
 
 
 # diet color palette
