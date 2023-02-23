@@ -56,7 +56,7 @@ S:M Met MID 4,SM,Metsch,Mid37,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7
 S:M Met MID 5,SM,Metsch,Mid37,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,7,0,0,0,0,0,,2,1,0,,1,0,4,
 S:M Met MID 6,SM,Metsch,Mid37,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Infected,1,,0,0,0,0,,0,0,0,,0,0,0,0,
 S:M Met MID 7,SM,Metsch,Mid37,7,4,1/4/2022,1/20/2022,16,,1,Y,Exposed,0,7,0,0,0,0,,0,0,NA,NA,NA,NA,NA,0,1/17 - molt attached during respiration
-S:M Met MID 8,SM,Metsch,Mid37,8,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,7,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died overnight
+S:M Met MID 8,SM,Metsch,Mid37,8,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,7,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died overnight after respiration trial before feeding rate trial
 S:M Met MID 9,SM,Metsch,Mid37,9,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,7,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during feeding rate protocol
 S:M Met MID 10,SM,Metsch,Mid37,10,4,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,7,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Met MID 1,M,Metsch,Mid37,1,3,1/4/2022,1/24/2022,20,,1,Y,Exposed,0,8,0,0,0,0,0,,0,0,0,NA,NA,NA,0,

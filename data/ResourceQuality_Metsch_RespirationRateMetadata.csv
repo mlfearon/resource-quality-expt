@@ -1,577 +1,577 @@
-Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Column,Treatment,Experiment,Died,Notes
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,6,A1,A,1,SUninfSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,8,A2,A,2,SUninfMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,8,A3,A,3,SUninfSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,7,A4,A,4,SMetschSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,1,A5,A,5,SBlankBlank,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,10,A6,A,6,SUninfSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,6,B1,B,1,SMetschMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,2,B2,B,2,SBlankBlank,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,8,B3,B,3,SMetschSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,7,B4,B,4,SUninfMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,9,B5,B,5,SUninfSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,6,B6,B,6,SMetschSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,10,C1,C,1,SMetschSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,8,C2,C,2,SMetschMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,10,C3,C,3,SUninfMID,Metsch,,was picked up to check for animal before 30 min
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,9,C4,C,4,SMetschMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,9,C5,C,5,SMetschSTD,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,4,C6,C,6,SBlankBlank,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,6,D1,D,1,SUninfMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,NA,NA,NA,D2,D,2,SNANA,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,3,D3,D,3,SBlankBlank,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,10,D4,D,4,SMetschMID,Metsch,,
-4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,9,D5,D,5,SUninfMID,Metsch,,was picked up to check for animal before 30 min
-4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,7,D6,D,6,SMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,8,A1,A,1,SMMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,3,A2,A,2,SMBlankBlank,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,10,A3,A,3,SMUninfMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,9,A4,A,4,SMUninfSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,7,A5,A,5,SMMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,1,A6,A,6,SMBlankBlank,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,9,B1,B,1,SMMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,7,B2,B,2,SMUninfMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,7,B3,B,3,SMMetschSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,2,B4,B,4,SMBlankBlank,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,8,B5,B,5,SMUninfMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,6,B6,B,6,SMMetschSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,7,C1,C,1,SMUninfSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,8,C2,C,2,SMMetschSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,10,C3,C,3,SMUninfSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,6,C4,C,4,SMMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,9,C5,C,5,SMUninfMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,6,C6,C,6,SMUninfSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,10,D1,D,1,SMMetschMID,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,4,D2,D,2,SMBlankBlank,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,10,D3,D,3,SMMetschSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,8,D4,D,4,SMUninfSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,9,D5,D,5,SMMetschSTD,Metsch,,
-4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,6,D6,D,6,SMUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,7,A1,A,1,MUninfSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,10,A2,A,2,MMetschMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,10,A3,A,3,MUninfSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,8,A4,A,4,MMetschMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,7,A5,A,5,MMetschSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,9,A6,A,6,MUninfSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,7,B1,B,1,MMetschMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,10,B2,B,2,MUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,3,B3,B,3,MBlankBlank,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,6,B4,B,4,MUninfSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,9,B5,B,5,MMetschMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,1,B6,B,6,MBlankBlank,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,6,C1,C,1,MUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,9,C2,C,2,MMetschSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,6,C3,C,3,MMetschMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,7,C4,C,4,MUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,10,C5,C,5,MMetschSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,9,C6,C,6,MUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,6,D1,D,1,MMetschSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,4,D2,D,2,MBlankBlank,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,8,D3,D,3,MUninfMID,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,8,D4,D,4,MMetschSTD,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,2,D5,D,5,MBlankBlank,Metsch,,
-4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,8,D6,D,6,MUninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,2,A1,A,1,M+BlankBlank,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,9,A2,A,2,M+MetschSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,6,A3,A,3,M+UninfMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,8,A4,A,4,M+UninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,10,A5,A,5,M+MetschSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,6,A6,A,6,M+UninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,8,B1,B,1,M+MetschMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,7,B2,B,2,M+UninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,9,B3,B,3,M+UninfMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,8,B4,B,4,M+MetschSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,1,B5,B,5,M+BlankBlank,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,10,B6,B,6,M+UninfMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,6,C1,C,1,M+MetschSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,7,C2,C,2,M+MetschSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,10,C3,C,3,M+MetschMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,10,C4,C,4,M+UninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,3,C5,C,5,M+BlankBlank,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,7,C6,C,6,M+MetschMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,9,D1,D,1,M+MetschMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,4,D2,D,2,M+BlankBlank,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,9,D3,D,3,M+UninfSTD,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,7,D4,D,4,M+UninfMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,6,D5,D,5,M+MetschMID,Metsch,,
-4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,8,D6,D,6,M+UninfMID,Metsch,,
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,3,A1,A,1,SUninfMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,5,A2,A,2,SMetschSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,2,A3,A,3,SMetschSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,4,A4,A,4,SBlankBlank,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,2,A5,A,5,SMetschMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,2,A6,A,6,SBlankBlank,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,1,B1,B,1,SMetschMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,4,B2,B,2,SUninfSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,1,B3,B,3,SUninfSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,5,B4,B,4,SMetschMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,4,B5,B,5,SUninfMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,2,B6,B,6,SUninfSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,4,C1,C,1,SMetschSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,5,C2,C,2,SUninfMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,3,C3,C,3,SBlankBlank,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,5,C4,C,4,SUninfSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,4,C5,C,5,SMetschMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,3,C6,C,6,SUninfSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,1,D1,D,1,SBlankBlank,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,3,D2,D,2,SMetschSTD,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,1,D3,D,3,SUninfMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,3,D4,D,4,SMetschMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,2,D5,D,5,SUninfMID,Metsch,,Set up at 9:45
-3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,1,D6,D,6,SMetschSTD,Metsch,,Set up at 9:45
-3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,4,A1,A,1,SMBlankBlank,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,2,A2,A,2,SMUninfSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,1,A3,A,3,SMUninfMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,2,A4,A,4,SMMetschSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,1,A5,A,5,SMUninfSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,1,A6,A,6,SMBlankBlank,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,5,B1,B,1,SMMetschSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,3,B2,B,2,SMMetschSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B3,B,3,SMMetschMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,3,B4,B,4,SMBlankBlank,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,4,B5,B,5,SMMetschSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B6,B,6,SMMetschMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,4,C1,C,1,SMUninfSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,3,C2,C,2,SMUninfMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,1,C3,C,3,SMMetschSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,3,C4,C,4,SMUninfSTD,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,5,C5,C,5,SMMetschMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,2,C6,C,6,SMUninfMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,5,D1,D,1,SMUninfMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,4,D2,D,2,SMMetschMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,2,D3,D,3,SMBlankBlank,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,3,D4,D,4,SMMetschMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,4,D5,D,5,SMUninfMID,Metsch,,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,5,D6,D,6,SMUninfSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,3,A1,A,1,MMetschMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,3,A2,A,2,MBlankBlank,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,2,A3,A,3,MMetschSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,2,A4,A,4,MUninfSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,3,A5,A,5,MMetschSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,3,A6,A,6,MUninfMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,3,B1,B,1,MUninfSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,4,B2,B,2,MMetschMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,5,B3,B,3,MUninfSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,1,B4,B,4,MMetschMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,4,B5,B,5,MUninfMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,1,B6,B,6,MBlankBlank,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,5,C1,C,1,MMetschMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,5,C2,C,2,MUninfMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,2,C3,C,3,MUninfMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,4,C4,C,4,MBlankBlank,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,4,C5,C,5,MMetschSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,1,C6,C,6,MMetschSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,1,D1,D,1,MUninfMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,2,D2,D,2,MBlankBlank,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,5,D3,D,3,MMetschSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,2,D4,D,4,MMetschMID,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,4,D5,D,5,MUninfSTD,Metsch,,
-3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,1,D6,D,6,MUninfSTD,Metsch,,
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,1,A1,A,1,M+UninfMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,A2,A,2,M+MetschMID,Metsch,,"Dropped before respiration, set up at 14:00"
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,2,A3,A,3,M+UninfMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,5,A4,A,4,M+MetschMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,4,A5,A,5,M+MetschMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,3,A6,A,6,M+BlankBlank,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,3,B1,B,1,M+UninfSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,2,B2,B,2,M+MetschSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,5,B3,B,3,M+UninfSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,4,B4,B,4,M+UninfSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,4,B5,B,5,M+BlankBlank,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,5,B6,B,6,M+MetschSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,3,C1,C,1,M+MetschMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,1,C2,C,2,M+BlankBlank,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,3,C3,C,3,M+MetschSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,5,C4,C,4,M+UninfMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,4,C5,C,5,M+MetschSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,1,C6,C,6,M+UninfSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,4,D1,D,1,M+UninfMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,1,D2,D,2,M+MetschMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,2,D3,D,3,M+UninfSTD,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,3,D4,D,4,M+UninfMID,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,2,D5,D,5,M+BlankBlank,Metsch,,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,D6,D,6,M+MetschMID,Metsch,,set up at 14:00
-4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,1,A1,A,1,SBlankBlank,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,7,A2,A,2,SMetschMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,6,A3,A,3,SMetschSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,8,A4,A,4,SMetschSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,7,A5,A,5,SUninfMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,10,A6,A,6,SUninfSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,10,B1,B,1,SUninfMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,NA,NA,NA,B2,B,2,SNANA,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,8,B3,B,3,SUninfSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,3,B4,B,4,SBlankBlank,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,6,B5,B,5,SMetschMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,9,B6,B,6,SMetschSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,10,C1,C,1,SMetschMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,9,C2,C,2,SUninfSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,7,C3,C,3,SMetschSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,NA,NA,NA,C4,C,4,SNANA,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,2,C5,C,5,SBlankBlank,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,8,C6,C,6,SUninfMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,9,D1,D,1,SUninfMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,4,D2,D,2,SBlankBlank,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,8,D3,D,3,SMetschMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,6,D4,D,4,SUninfMID,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,10,D5,D,5,SMetschSTD,Metsch,,
-4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,6,D6,D,6,SUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,1,A1,A,1,SMBlankBlank,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,8,A2,A,2,SMUninfMID,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,6,A3,A,3,SMUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,A4,A,4,SMNANA,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,9,A5,A,5,SMUninfMID,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,4,A6,A,6,SMBlankBlank,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,8,B1,B,1,SMUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,6,B2,B,2,SMMetschMID,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,6,B3,B,3,SMUninfMID,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,7,B4,B,4,SMMetschSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,10,B5,B,5,SMMetschSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,10,B6,B,6,SMUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,7,C1,C,1,SMMetschMID,Metsch,,"Molt attached after respiration, doesn't look healthy"
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,10,C2,C,2,SMUninfMID,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,2,C4,C,4,SMBlankBlank,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,C5,C,5,SMNANA,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,6,C6,C,6,SMMetschSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,D1,D,1,SMNANA,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,7,D2,D,2,SMUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,9,D3,D,3,SMUninfSTD,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,3,D4,D,4,SMBlankBlank,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,D5,D,5,SMNANA,Metsch,,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,9,D6,D,6,SMMetschSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,7,A1,A,1,MUninfSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,A2,A,2,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,MID,9,A3,A,3,MMetschMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,2,A4,A,4,MBlankBlank,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,7,A5,A,5,MUninfMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,8,A6,A,6,MUninfSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B1,B,1,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,4,B2,B,2,MBlankBlank,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,8,B3,B,3,MUninfMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B4,B,4,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,10,B5,B,5,MUninfMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B6,B,6,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,9,C1,C,1,MUninfSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,C2,C,2,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,C3,C,3,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,6,C4,C,4,MUninfSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,MID,7,C5,C,5,MMetschMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,1,C6,C,6,MBlankBlank,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,STD,6,D1,D,1,MMetschSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,6,D2,D,2,MUninfMID,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,3,D3,D,3,MBlankBlank,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,D4,D,4,MNANA,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,10,D5,D,5,MUninfSTD,Metsch,,
-4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,D6,D,6,MNANA,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,7,A1,A,1,M+MetschMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,1,A2,A,2,M+BlankBlank,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,6,A3,A,3,M+UninfSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,10,A4,A,4,M+UninfMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,8,A5,A,5,M+MetschMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,7,A6,A,6,M+UninfSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,6,B1,B,1,M+UninfMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,9,B2,B,2,M+UninfSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,8,B3,B,3,M+UninfSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,4,B4,B,4,M+BlankBlank,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,10,B5,B,5,M+MetschMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,2,B6,B,6,M+BlankBlank,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,6,C1,C,1,M+MetschSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,8,C2,C,2,M+MetschSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,3,C3,C,3,M+BlankBlank,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,9,C4,C,4,M+UninfMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,9,C5,C,5,M+MetschSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,10,C6,C,6,M+UninfSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,8,D1,D,1,M+UninfMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,10,D2,D,2,M+MetschSTD,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,7,D3,D,3,M+UninfMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,6,D4,D,4,M+MetschMID,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,NA,NA,NA,D5,D,5,M+NANA,Metsch,,
-4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,7,D6,D,6,M+MetschSTD,Metsch,,
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,1,A1,A,1,SUninfMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,5,A2,A,2,SMetschMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,3,A3,A,3,SUninfSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,4,A4,A,4,SUninfMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,4,A5,A,5,SMetschSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,3,A6,A,6,SBlankBlank,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,5,B1,B,1,SMetschSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,1,B2,B,2,SMetschMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,4,B3,B,3,SBlankBlank,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,NA,NA,NA,B4,B,4,SNANA,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,2,B5,B,5,SMetschMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,3,B6,B,6,SUninfMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,1,C1,C,1,SBlankBlank,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,4,C2,C,2,SUninfSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,3,C3,C,3,SMetschMID,Metsch,,"Set up at 9:12, slow moving after respiration"
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,1,C4,C,4,SUninfSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,3,C5,C,5,SMetschSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,2,C6,C,6,SUninfSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,5,D1,D,1,SUninfMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,1,D2,D,2,SMetschSTD,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,2,D3,D,3,SUninfMID,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,NA,NA,NA,D4,D,4,SNANA,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,2,D5,D,5,SBlankBlank,Metsch,,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,4,D6,D,6,SMetschMID,Metsch,,Set up at 9:12
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,4,A1,A,1,SMMetschMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,4,A2,A,2,SMBlankBlank,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,2,A3,A,3,SMUninfSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,1,A4,A,4,SMUninfSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,3,A5,A,5,SMMetschMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,2,A6,A,6,SMBlankBlank,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,3,B1,B,1,SMUninfMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,5,B2,B,2,SMUninfSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,3,B3,B,3,SMMetschSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,3,B4,B,4,SMBlankBlank,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,NA,NA,NA,B5,B,5,SMNANA,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,4,B6,B,6,SMMetschSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,1,C1,C,1,SMMetschSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,1,C2,C,2,SMBlankBlank,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,5,C4,C,4,SMMetschMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,1,C5,C,5,SMMetschMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,4,C6,C,6,SMUninfMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,2,D1,D,1,SMUninfMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,2,D2,D,2,SMMetschSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,5,D3,D,3,SMUninfMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,4,D4,D,4,SMUninfSTD,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,1,D5,D,5,SMUninfMID,Metsch,,
-3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,3,D6,D,6,SMUninfSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,3,A1,A,1,MUninfMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,A2,A,2,MNANA,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,5,A3,A,3,MUninfSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,3,A4,A,4,MMetschMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,2,A5,A,5,MBlankBlank,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,4,A6,A,6,MUninfSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,4,B1,B,1,MBlankBlank,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,1,B2,B,2,MUninfSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,B3,B,3,MNANA,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,5,B4,B,4,MUninfMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,STD,5,B5,B,5,MMetschSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,1,B6,B,6,MMetschMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,4,C1,C,1,MMetschMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,2,C2,C,2,MUninfMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,2,C3,C,3,MUninfSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,STD,4,C4,C,4,MMetschSTD,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,1,C5,C,5,MBlankBlank,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,1,C6,C,6,MUninfMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,3,D1,D,1,MBlankBlank,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,2,D2,D,2,MMetschMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,D3,D,3,MNANA,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,4,D4,D,4,MUninfMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,5,D5,D,5,MMetschMID,Metsch,,
-3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,3,D6,D,6,MUninfSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,3,A1,A,1,M+UninfSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,1,A2,A,2,M+MetschSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,3,A3,A,3,M+BlankBlank,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,5,A4,A,4,M+UninfSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,1,A5,A,5,M+UninfMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,4,A6,A,6,M+BlankBlank,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,3,B1,B,1,M+UninfMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,1,B2,B,2,M+BlankBlank,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,2,B3,B,3,M+MetschSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,5,B4,B,4,M+MetschSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,2,B5,B,5,M+MetschMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,2,B6,B,6,M+UninfMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,4,C1,C,1,M+UninfMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,3,C2,C,2,M+MetschSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,2,C3,C,3,M+UninfSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,3,C4,C,4,M+MetschMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,5,C5,C,5,M+MetschMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,5,C6,C,6,M+UninfMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,1,D1,D,1,M+UninfSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,4,D2,D,2,M+MetschSTD,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,4,D3,D,3,M+MetschMID,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,NA,NA,NA,D4,D,4,M+NANA,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,2,D5,D,5,M+BlankBlank,Metsch,,
-3,15,4,2,1/18/2022,13:05,15:41,M+,NA,NA,NA,D6,D,6,M+NANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,6,A1,A,1,SUninfMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A2,A,2,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A3,A,3,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,9,A4,A,4,SUninfSTD,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,10,A5,A,5,SMetschMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,4,A6,A,6,SBlankBlank,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,6,B1,B,1,SMetschMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,3,B2,B,2,SBlankBlank,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B3,B,3,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,7,B4,B,4,SUninfMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B5,B,5,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B6,B,6,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,C1,C,1,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,9,C2,C,2,SUninfMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,C3,C,3,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,10,C4,C,4,SUninfMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,2,C5,C,5,SBlankBlank,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,8,C6,C,6,SUninfMID,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,1,D1,D,1,SBlankBlank,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D2,D,2,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,6,D3,D,3,SUninfSTD,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D4,D,4,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D5,D,5,SNANA,Metsch,,
-4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,8,D6,D,6,SUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,6,A1,A,1,SMMetschSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,8,A2,A,2,SMUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,A3,A,3,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,9,A4,A,4,SMUninfMID,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,1,A5,A,5,SMBlankBlank,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,7,A6,A,6,SMMetschSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,8,B1,B,1,SMUninfMID,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B2,B,2,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,10,B3,B,3,SMUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B4,B,4,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,6,B5,B,5,SMUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B6,B,6,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,2,C1,C,1,SMBlankBlank,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,7,C2,C,2,SMUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,9,C4,C,4,SMMetschSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,9,C5,C,5,SMUninfSTD,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,MID,6,C6,C,6,SMMetschMID,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,3,D1,D,1,SMBlankBlank,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,D2,D,2,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,6,D3,D,3,SMUninfMID,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,10,D4,D,4,SMUninfMID,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,D5,D,5,SMNANA,Metsch,,
-4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,4,D6,D,6,SMBlankBlank,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A1,A,1,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,4,A2,A,2,MBlankBlank,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A3,A,3,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,8,A4,A,4,MUninfMID,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A5,A,5,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,9,A6,A,6,MUninfSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,8,B1,B,1,MUninfSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,B2,B,2,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,10,B3,B,3,MUninfSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,B4,B,4,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,1,B5,B,5,MBlankBlank,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,MID,7,B6,B,6,MMetschMID,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,MID,9,C1,C,1,MMetschMID,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,2,C2,C,2,MBlankBlank,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,C3,C,3,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,6,C4,C,4,MUninfMID,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,C5,C,5,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,6,C6,C,6,MUninfSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,7,D1,D,1,MUninfMID,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,7,D2,D,2,MUninfSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,STD,6,D3,D,3,MMetschSTD,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,D4,D,4,MNANA,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,3,D5,D,5,MBlankBlank,Metsch,,
-4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,10,D6,D,6,MUninfMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,7,A1,A,1,M+MetschSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,10,A2,A,2,M+UninfSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,4,A3,A,3,M+BlankBlank,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,6,A4,A,4,M+MetschMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,6,A5,A,5,M+UninfSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,8,A6,A,6,M+MetschSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,2,B1,B,1,M+BlankBlank,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,6,B2,B,2,M+MetschSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,6,B3,B,3,M+UninfMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,8,B4,B,4,M+UninfSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,NA,NA,NA,B5,B,5,M+NANA,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,1,B6,B,6,M+BlankBlank,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,7,C1,C,1,M+UninfSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,NA,NA,NA,C2,C,2,M+NANA,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,10,C3,C,3,M+MetschMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,7,C4,C,4,M+MetschMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,3,C5,C,5,M+BlankBlank,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,9,C6,C,6,M+MetschSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,8,D1,D,1,M+UninfMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,7,D2,D,2,M+UninfMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,9,D3,D,3,M+UninfSTD,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,9,D4,D,4,M+UninfMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,8,D5,D,5,M+MetschMID,Metsch,,
-4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,10,D6,D,6,M+UninfMID,Metsch,,
-3,22,1,3,1/25/2022,9:34,11:56,S,Metsch,MID,2,A1,A,1,SMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,4,A2,A,2,SBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,A3,A,3,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,4,A4,A,4,SUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,A5,A,5,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,2,A6,A,6,SUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B1,B,1,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,3,B2,B,2,SUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B3,B,3,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B4,B,4,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,2,B5,B,5,SBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B6,B,6,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,1,C1,C,1,SBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C2,C,2,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,1,C3,C,3,SUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C4,C,4,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C5,C,5,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,2,C6,C,6,SUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,1,D1,D,1,SUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,5,D2,D,2,SUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,D3,D,3,SNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,3,D4,D,4,SBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,4,D5,D,5,SUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,3,D6,D,6,SUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,5,A1,A,1,SMUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,3,A2,A,2,SMMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,1,A3,A,3,SMMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,4,A4,A,4,SMUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,2,A5,A,5,SMMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,4,A6,A,6,SMBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,2,B1,B,1,SMUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,NA,NA,NA,B2,B,2,SMNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,3,B3,B,3,SMBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,3,B4,B,4,SMMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,5,B5,B,5,SMUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,3,B6,B,6,SMUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,5,C1,C,1,SMMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,1,C2,C,2,SMUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,4,C4,C,4,SMMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,1,C5,C,5,SMBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,1,C6,C,6,SMMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,2,D1,D,1,SMBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,4,D2,D,2,SMMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,3,D3,D,3,SMUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,2,D4,D,4,SMUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,4,D5,D,5,SMUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,1,D6,D,6,SMUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,1,A1,A,1,MUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,A2,A,2,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,3,A3,A,3,MBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,A4,A,4,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,2,A5,A,5,MUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,STD,5,A6,A,6,MMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,B1,B,1,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,3,B2,B,2,MUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,B3,B,3,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,2,B4,B,4,MUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,3,B5,B,5,MMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,2,B6,B,6,MBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,C1,C,1,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,3,C2,C,2,MUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,1,C3,C,3,MBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,2,C4,C,4,MMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,4,C5,C,5,MUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,5,C6,C,6,MUninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,1,D1,D,1,MUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,D2,D,2,MNANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,STD,4,D3,D,3,MMetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,5,D4,D,4,MUninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,5,D5,D,5,MMetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,4,D6,D,6,MBlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,3,A1,A,1,M+UninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,4,A2,A,2,M+UninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,2,A3,A,3,M+UninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,2,A4,A,4,M+UninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,5,A5,A,5,M+MetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,4,A6,A,6,M+BlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,3,B1,B,1,M+UninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,B2,B,2,M+NANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,1,B3,B,3,M+BlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,B4,B,4,M+NANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,2,B5,B,5,M+MetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,1,B6,B,6,M+MetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,4,C1,C,1,M+MetschMID,Metsch,,dropped before respiration
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,5,C2,C,2,M+UninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,C3,C,3,M+NANA,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,1,C4,C,4,M+UninfSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,5,C5,C,5,M+MetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,2,C6,C,6,M+BlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,3,D1,D,1,M+BlankBlank,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,4,D2,D,2,M+MetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,3,D3,D,3,M+MetschMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,5,D4,D,4,M+UninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,1,D5,D,5,M+UninfMID,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,2,D6,D,6,M+MetschSTD,Metsch,,all readings were done at 1 min intervals instead of 2 min intervals
+Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Column,Treatment,Experiment,Died.After.Resp,Notes
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,6,A1,A,1,SUninfSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,8,A2,A,2,SUninfMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,8,A3,A,3,SUninfSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,7,A4,A,4,SMetschSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,1,A5,A,5,SBlankBlank,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,10,A6,A,6,SUninfSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,6,B1,B,1,SMetschMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,2,B2,B,2,SBlankBlank,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,8,B3,B,3,SMetschSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,7,B4,B,4,SUninfMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,STD,9,B5,B,5,SUninfSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,6,B6,B,6,SMetschSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,10,C1,C,1,SMetschSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,8,C2,C,2,SMetschMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,10,C3,C,3,SUninfMID,Metsch,N,was picked up to check for animal before 30 min
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,9,C4,C,4,SMetschMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,STD,9,C5,C,5,SMetschSTD,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,4,C6,C,6,SBlankBlank,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,6,D1,D,1,SUninfMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,NA,NA,NA,D2,D,2,SNANA,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Blank,Blank,3,D3,D,3,SBlankBlank,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,10,D4,D,4,SMetschMID,Metsch,N,
+4,7,1,1,1/10/2022,9:52,12:20,S,Uninf,MID,9,D5,D,5,SUninfMID,Metsch,N,was picked up to check for animal before 30 min
+4,7,1,1,1/10/2022,9:52,12:20,S,Metsch,MID,7,D6,D,6,SMetschMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,8,A1,A,1,SMMetschMID,Metsch,Y,died overnight after respiration trial before feeding rate trial
+4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,3,A2,A,2,SMBlankBlank,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,10,A3,A,3,SMUninfMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,9,A4,A,4,SMUninfSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,7,A5,A,5,SMMetschMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,1,A6,A,6,SMBlankBlank,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,9,B1,B,1,SMMetschMID,Metsch,Y,died during feeding rate trial the day after the respiration trial
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,7,B2,B,2,SMUninfMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,7,B3,B,3,SMMetschSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,2,B4,B,4,SMBlankBlank,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,8,B5,B,5,SMUninfMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,6,B6,B,6,SMMetschSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,7,C1,C,1,SMUninfSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,8,C2,C,2,SMMetschSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,10,C3,C,3,SMUninfSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,6,C4,C,4,SMMetschMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,9,C5,C,5,SMUninfMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,6,C6,C,6,SMUninfSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,MID,10,D1,D,1,SMMetschMID,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Blank,Blank,4,D2,D,2,SMBlankBlank,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,10,D3,D,3,SMMetschSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,STD,8,D4,D,4,SMUninfSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Metsch,STD,9,D5,D,5,SMMetschSTD,Metsch,N,
+4,7,2,1,1/10/2022,9:52,12:20,SM,Uninf,MID,6,D6,D,6,SMUninfMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,7,A1,A,1,MUninfSTD,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,10,A2,A,2,MMetschMID,Metsch,Y,died next day during feeding rate trial (within 24 hours of respiration trial)
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,10,A3,A,3,MUninfSTD,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,8,A4,A,4,MMetschMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,7,A5,A,5,MMetschSTD,Metsch,Y,died next day during feeding rate trial (within 24 hours of respiration trial)
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,9,A6,A,6,MUninfSTD,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,7,B1,B,1,MMetschMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,10,B2,B,2,MUninfMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,3,B3,B,3,MBlankBlank,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,6,B4,B,4,MUninfSTD,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,9,B5,B,5,MMetschMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,1,B6,B,6,MBlankBlank,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,6,C1,C,1,MUninfMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,9,C2,C,2,MMetschSTD,Metsch,Y,died next day during feeding rate trial (within 24 hours of respiration trial)
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,MID,6,C3,C,3,MMetschMID,Metsch,Y,died during feeding rate trial the day after the respiration trial
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,7,C4,C,4,MUninfMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,10,C5,C,5,MMetschSTD,Metsch,Y,died next day during feeding rate trial (within 24 hours of respiration trial)
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,9,C6,C,6,MUninfMID,Metsch,Y,"found smashed after respiration trial, likely got smashed in the cap of the respiration vial prior to the start of the trial"
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,6,D1,D,1,MMetschSTD,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,4,D2,D,2,MBlankBlank,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,MID,8,D3,D,3,MUninfMID,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Metsch,STD,8,D4,D,4,MMetschSTD,Metsch,Y,died next day during feeding rate trial (within 24 hours of respiration trial)
+4,7,3,1,1/10/2022,13:32,16:08,M,Blank,Blank,2,D5,D,5,MBlankBlank,Metsch,N,
+4,7,3,1,1/10/2022,13:32,16:08,M,Uninf,STD,8,D6,D,6,MUninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,2,A1,A,1,M+BlankBlank,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,9,A2,A,2,M+MetschSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,6,A3,A,3,M+UninfMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,8,A4,A,4,M+UninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,10,A5,A,5,M+MetschSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,6,A6,A,6,M+UninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,8,B1,B,1,M+MetschMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,7,B2,B,2,M+UninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,9,B3,B,3,M+UninfMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,8,B4,B,4,M+MetschSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,1,B5,B,5,M+BlankBlank,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,10,B6,B,6,M+UninfMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,6,C1,C,1,M+MetschSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,STD,7,C2,C,2,M+MetschSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,10,C3,C,3,M+MetschMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,10,C4,C,4,M+UninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,3,C5,C,5,M+BlankBlank,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,7,C6,C,6,M+MetschMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,9,D1,D,1,M+MetschMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Blank,Blank,4,D2,D,2,M+BlankBlank,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,STD,9,D3,D,3,M+UninfSTD,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,7,D4,D,4,M+UninfMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Metsch,MID,6,D5,D,5,M+MetschMID,Metsch,N,
+4,7,4,1,1/10/2022,13:32,16:08,M+,Uninf,MID,8,D6,D,6,M+UninfMID,Metsch,N,
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,3,A1,A,1,SUninfMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,5,A2,A,2,SMetschSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,2,A3,A,3,SMetschSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,4,A4,A,4,SBlankBlank,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,2,A5,A,5,SMetschMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,2,A6,A,6,SBlankBlank,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,1,B1,B,1,SMetschMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,4,B2,B,2,SUninfSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,1,B3,B,3,SUninfSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,5,B4,B,4,SMetschMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,4,B5,B,5,SUninfMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,2,B6,B,6,SUninfSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,4,C1,C,1,SMetschSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,5,C2,C,2,SUninfMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,3,C3,C,3,SBlankBlank,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,5,C4,C,4,SUninfSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,4,C5,C,5,SMetschMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,STD,3,C6,C,6,SUninfSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Blank,Blank,1,D1,D,1,SBlankBlank,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,3,D2,D,2,SMetschSTD,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,1,D3,D,3,SUninfMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,MID,3,D4,D,4,SMetschMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Uninf,MID,2,D5,D,5,SUninfMID,Metsch,N,Set up at 9:45
+3,8,1,1,1/11/2022,10:30,12:54,S,Metsch,STD,1,D6,D,6,SMetschSTD,Metsch,N,Set up at 9:45
+3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,4,A1,A,1,SMBlankBlank,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,2,A2,A,2,SMUninfSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,1,A3,A,3,SMUninfMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,2,A4,A,4,SMMetschSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,1,A5,A,5,SMUninfSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,1,A6,A,6,SMBlankBlank,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,5,B1,B,1,SMMetschSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,3,B2,B,2,SMMetschSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B3,B,3,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,3,B4,B,4,SMBlankBlank,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,4,B5,B,5,SMMetschSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B6,B,6,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,4,C1,C,1,SMUninfSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,3,C2,C,2,SMUninfMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,1,C3,C,3,SMMetschSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,3,C4,C,4,SMUninfSTD,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,5,C5,C,5,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,2,C6,C,6,SMUninfMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,5,D1,D,1,SMUninfMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,4,D2,D,2,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,2,D3,D,3,SMBlankBlank,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,3,D4,D,4,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,MID,4,D5,D,5,SMUninfMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Uninf,STD,5,D6,D,6,SMUninfSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,3,A1,A,1,MMetschMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,3,A2,A,2,MBlankBlank,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,2,A3,A,3,MMetschSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,2,A4,A,4,MUninfSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,3,A5,A,5,MMetschSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,3,A6,A,6,MUninfMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,3,B1,B,1,MUninfSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,4,B2,B,2,MMetschMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,5,B3,B,3,MUninfSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,1,B4,B,4,MMetschMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,4,B5,B,5,MUninfMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,1,B6,B,6,MBlankBlank,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,5,C1,C,1,MMetschMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,5,C2,C,2,MUninfMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,2,C3,C,3,MUninfMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,4,C4,C,4,MBlankBlank,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,4,C5,C,5,MMetschSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,1,C6,C,6,MMetschSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,MID,1,D1,D,1,MUninfMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Blank,Blank,2,D2,D,2,MBlankBlank,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,STD,5,D3,D,3,MMetschSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Metsch,MID,2,D4,D,4,MMetschMID,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,4,D5,D,5,MUninfSTD,Metsch,N,
+3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,1,D6,D,6,MUninfSTD,Metsch,N,
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,1,A1,A,1,M+UninfMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,A2,A,2,M+MetschMID,Metsch,N,"Dropped before respiration, set up at 14:00"
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,2,A3,A,3,M+UninfMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,5,A4,A,4,M+MetschMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,4,A5,A,5,M+MetschMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,3,A6,A,6,M+BlankBlank,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,3,B1,B,1,M+UninfSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,2,B2,B,2,M+MetschSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,5,B3,B,3,M+UninfSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,4,B4,B,4,M+UninfSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,4,B5,B,5,M+BlankBlank,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,5,B6,B,6,M+MetschSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,3,C1,C,1,M+MetschMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,1,C2,C,2,M+BlankBlank,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,3,C3,C,3,M+MetschSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,5,C4,C,4,M+UninfMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,4,C5,C,5,M+MetschSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,1,C6,C,6,M+UninfSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,4,D1,D,1,M+UninfMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,1,D2,D,2,M+MetschMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,2,D3,D,3,M+UninfSTD,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,3,D4,D,4,M+UninfMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,2,D5,D,5,M+BlankBlank,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,D6,D,6,M+MetschMID,Metsch,N,set up at 14:00
+4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,1,A1,A,1,SBlankBlank,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,7,A2,A,2,SMetschMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,6,A3,A,3,SMetschSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,8,A4,A,4,SMetschSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,7,A5,A,5,SUninfMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,10,A6,A,6,SUninfSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,10,B1,B,1,SUninfMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,NA,NA,NA,B2,B,2,SNANA,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,8,B3,B,3,SUninfSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,3,B4,B,4,SBlankBlank,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,6,B5,B,5,SMetschMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,9,B6,B,6,SMetschSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,10,C1,C,1,SMetschMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,9,C2,C,2,SUninfSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,7,C3,C,3,SMetschSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,NA,NA,NA,C4,C,4,SNANA,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,2,C5,C,5,SBlankBlank,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,8,C6,C,6,SUninfMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,9,D1,D,1,SUninfMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,4,D2,D,2,SBlankBlank,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,8,D3,D,3,SMetschMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,MID,6,D4,D,4,SUninfMID,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,10,D5,D,5,SMetschSTD,Metsch,N,
+4,14,1,2,1/17/2022,9:43,12:09,S,Uninf,STD,6,D6,D,6,SUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,1,A1,A,1,SMBlankBlank,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,8,A2,A,2,SMUninfMID,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,6,A3,A,3,SMUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,A4,A,4,SMNANA,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,9,A5,A,5,SMUninfMID,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,4,A6,A,6,SMBlankBlank,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,8,B1,B,1,SMUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,6,B2,B,2,SMMetschMID,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,6,B3,B,3,SMUninfMID,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,7,B4,B,4,SMMetschSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,10,B5,B,5,SMMetschSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,10,B6,B,6,SMUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,7,C1,C,1,SMMetschMID,Metsch,Y,"Molt attached during respiration, doesn't look healthy"
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,10,C2,C,2,SMUninfMID,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,2,C4,C,4,SMBlankBlank,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,C5,C,5,SMNANA,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,6,C6,C,6,SMMetschSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,D1,D,1,SMNANA,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,7,D2,D,2,SMUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,9,D3,D,3,SMUninfSTD,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,3,D4,D,4,SMBlankBlank,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,D5,D,5,SMNANA,Metsch,N,
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,9,D6,D,6,SMMetschSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,7,A1,A,1,MUninfSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,A2,A,2,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,MID,9,A3,A,3,MMetschMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,2,A4,A,4,MBlankBlank,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,7,A5,A,5,MUninfMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,8,A6,A,6,MUninfSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B1,B,1,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,4,B2,B,2,MBlankBlank,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,8,B3,B,3,MUninfMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B4,B,4,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,10,B5,B,5,MUninfMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,B6,B,6,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,9,C1,C,1,MUninfSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,C2,C,2,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,C3,C,3,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,6,C4,C,4,MUninfSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,MID,7,C5,C,5,MMetschMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,1,C6,C,6,MBlankBlank,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Metsch,STD,6,D1,D,1,MMetschSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,MID,6,D2,D,2,MUninfMID,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Blank,Blank,3,D3,D,3,MBlankBlank,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,D4,D,4,MNANA,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,Uninf,STD,10,D5,D,5,MUninfSTD,Metsch,N,
+4,14,3,2,1/17/2022,13:13,16:04,M,NA,NA,NA,D6,D,6,MNANA,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,7,A1,A,1,M+MetschMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,1,A2,A,2,M+BlankBlank,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,6,A3,A,3,M+UninfSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,10,A4,A,4,M+UninfMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,8,A5,A,5,M+MetschMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,7,A6,A,6,M+UninfSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,6,B1,B,1,M+UninfMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,9,B2,B,2,M+UninfSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,8,B3,B,3,M+UninfSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,4,B4,B,4,M+BlankBlank,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,10,B5,B,5,M+MetschMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,2,B6,B,6,M+BlankBlank,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,6,C1,C,1,M+MetschSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,8,C2,C,2,M+MetschSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Blank,Blank,3,C3,C,3,M+BlankBlank,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,9,C4,C,4,M+UninfMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,9,C5,C,5,M+MetschSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,STD,10,C6,C,6,M+UninfSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,8,D1,D,1,M+UninfMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,10,D2,D,2,M+MetschSTD,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Uninf,MID,7,D3,D,3,M+UninfMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,MID,6,D4,D,4,M+MetschMID,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,NA,NA,NA,D5,D,5,M+NANA,Metsch,N,
+4,14,4,2,1/17/2022,13:13,16:04,M+,Metsch,STD,7,D6,D,6,M+MetschSTD,Metsch,N,
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,1,A1,A,1,SUninfMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,5,A2,A,2,SMetschMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,3,A3,A,3,SUninfSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,4,A4,A,4,SUninfMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,4,A5,A,5,SMetschSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,3,A6,A,6,SBlankBlank,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,5,B1,B,1,SMetschSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,1,B2,B,2,SMetschMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,4,B3,B,3,SBlankBlank,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,NA,NA,NA,B4,B,4,SNANA,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,2,B5,B,5,SMetschMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,3,B6,B,6,SUninfMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,1,C1,C,1,SBlankBlank,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,4,C2,C,2,SUninfSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,3,C3,C,3,SMetschMID,Metsch,N,"Set up at 9:12, slow moving after respiration, didn't die until 1/22 (infected)"
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,1,C4,C,4,SUninfSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,3,C5,C,5,SMetschSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,STD,2,C6,C,6,SUninfSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,5,D1,D,1,SUninfMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,STD,1,D2,D,2,SMetschSTD,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,2,D3,D,3,SUninfMID,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,NA,NA,NA,D4,D,4,SNANA,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,2,D5,D,5,SBlankBlank,Metsch,N,Set up at 9:12
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,4,D6,D,6,SMetschMID,Metsch,Y,"Set up at 9:12, died over night after respiration trial (infected)"
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,4,A1,A,1,SMMetschMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,4,A2,A,2,SMBlankBlank,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,2,A3,A,3,SMUninfSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,1,A4,A,4,SMUninfSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,3,A5,A,5,SMMetschMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,2,A6,A,6,SMBlankBlank,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,3,B1,B,1,SMUninfMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,5,B2,B,2,SMUninfSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,3,B3,B,3,SMMetschSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,3,B4,B,4,SMBlankBlank,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,NA,NA,NA,B5,B,5,SMNANA,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,4,B6,B,6,SMMetschSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,1,C1,C,1,SMMetschSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,1,C2,C,2,SMBlankBlank,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,5,C4,C,4,SMMetschMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,1,C5,C,5,SMMetschMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,4,C6,C,6,SMUninfMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,2,D1,D,1,SMUninfMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,STD,2,D2,D,2,SMMetschSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,5,D3,D,3,SMUninfMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,4,D4,D,4,SMUninfSTD,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,MID,1,D5,D,5,SMUninfMID,Metsch,N,
+3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,3,D6,D,6,SMUninfSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,3,A1,A,1,MUninfMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,A2,A,2,MNANA,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,5,A3,A,3,MUninfSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,3,A4,A,4,MMetschMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,2,A5,A,5,MBlankBlank,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,4,A6,A,6,MUninfSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,4,B1,B,1,MBlankBlank,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,1,B2,B,2,MUninfSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,B3,B,3,MNANA,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,5,B4,B,4,MUninfMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,STD,5,B5,B,5,MMetschSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,1,B6,B,6,MMetschMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,4,C1,C,1,MMetschMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,2,C2,C,2,MUninfMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,2,C3,C,3,MUninfSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,STD,4,C4,C,4,MMetschSTD,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,1,C5,C,5,MBlankBlank,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,1,C6,C,6,MUninfMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Blank,Blank,3,D1,D,1,MBlankBlank,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,2,D2,D,2,MMetschMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,NA,NA,NA,D3,D,3,MNANA,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,MID,4,D4,D,4,MUninfMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Metsch,MID,5,D5,D,5,MMetschMID,Metsch,N,
+3,15,3,2,1/18/2022,13:05,15:41,M,Uninf,STD,3,D6,D,6,MUninfSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,3,A1,A,1,M+UninfSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,1,A2,A,2,M+MetschSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,3,A3,A,3,M+BlankBlank,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,5,A4,A,4,M+UninfSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,1,A5,A,5,M+UninfMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,4,A6,A,6,M+BlankBlank,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,3,B1,B,1,M+UninfMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,1,B2,B,2,M+BlankBlank,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,2,B3,B,3,M+MetschSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,5,B4,B,4,M+MetschSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,2,B5,B,5,M+MetschMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,2,B6,B,6,M+UninfMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,4,C1,C,1,M+UninfMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,3,C2,C,2,M+MetschSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,2,C3,C,3,M+UninfSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,3,C4,C,4,M+MetschMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,5,C5,C,5,M+MetschMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,MID,5,C6,C,6,M+UninfMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Uninf,STD,1,D1,D,1,M+UninfSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,STD,4,D2,D,2,M+MetschSTD,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Metsch,MID,4,D3,D,3,M+MetschMID,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,NA,NA,NA,D4,D,4,M+NANA,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,Blank,Blank,2,D5,D,5,M+BlankBlank,Metsch,N,
+3,15,4,2,1/18/2022,13:05,15:41,M+,NA,NA,NA,D6,D,6,M+NANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,6,A1,A,1,SUninfMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A2,A,2,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A3,A,3,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,9,A4,A,4,SUninfSTD,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,10,A5,A,5,SMetschMID,Metsch,Y,"Died day after respiration trial, may have been weak "
+4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,4,A6,A,6,SBlankBlank,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,6,B1,B,1,SMetschMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,3,B2,B,2,SBlankBlank,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B3,B,3,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,7,B4,B,4,SUninfMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B5,B,5,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,B6,B,6,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,C1,C,1,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,9,C2,C,2,SUninfMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,C3,C,3,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,10,C4,C,4,SUninfMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,2,C5,C,5,SBlankBlank,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,MID,8,C6,C,6,SUninfMID,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,1,D1,D,1,SBlankBlank,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D2,D,2,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,6,D3,D,3,SUninfSTD,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D4,D,4,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,D5,D,5,SNANA,Metsch,N,
+4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,8,D6,D,6,SUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,6,A1,A,1,SMMetschSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,8,A2,A,2,SMUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,A3,A,3,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,9,A4,A,4,SMUninfMID,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,1,A5,A,5,SMBlankBlank,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,7,A6,A,6,SMMetschSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,8,B1,B,1,SMUninfMID,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B2,B,2,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,10,B3,B,3,SMUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B4,B,4,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,6,B5,B,5,SMUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,B6,B,6,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,2,C1,C,1,SMBlankBlank,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,7,C2,C,2,SMUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,STD,9,C4,C,4,SMMetschSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,STD,9,C5,C,5,SMUninfSTD,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Metsch,MID,6,C6,C,6,SMMetschMID,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,3,D1,D,1,SMBlankBlank,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,D2,D,2,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,6,D3,D,3,SMUninfMID,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Uninf,MID,10,D4,D,4,SMUninfMID,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,NA,NA,NA,D5,D,5,SMNANA,Metsch,N,
+4,21,2,3,1/24/2022,9:38,12:04,SM,Blank,Blank,4,D6,D,6,SMBlankBlank,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A1,A,1,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,4,A2,A,2,MBlankBlank,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A3,A,3,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,8,A4,A,4,MUninfMID,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,A5,A,5,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,9,A6,A,6,MUninfSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,8,B1,B,1,MUninfSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,B2,B,2,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,10,B3,B,3,MUninfSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,B4,B,4,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,1,B5,B,5,MBlankBlank,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,MID,7,B6,B,6,MMetschMID,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,MID,9,C1,C,1,MMetschMID,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,2,C2,C,2,MBlankBlank,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,C3,C,3,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,6,C4,C,4,MUninfMID,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,C5,C,5,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,6,C6,C,6,MUninfSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,7,D1,D,1,MUninfMID,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,STD,7,D2,D,2,MUninfSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Metsch,STD,6,D3,D,3,MMetschSTD,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,NA,NA,NA,D4,D,4,MNANA,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Blank,Blank,3,D5,D,5,MBlankBlank,Metsch,N,
+4,21,3,3,1/24/2022,12:58,15:50,M,Uninf,MID,10,D6,D,6,MUninfMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,7,A1,A,1,M+MetschSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,10,A2,A,2,M+UninfSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,4,A3,A,3,M+BlankBlank,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,6,A4,A,4,M+MetschMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,6,A5,A,5,M+UninfSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,8,A6,A,6,M+MetschSTD,Metsch,N,MLF smashed after respiration trial
+4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,2,B1,B,1,M+BlankBlank,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,6,B2,B,2,M+MetschSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,6,B3,B,3,M+UninfMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,8,B4,B,4,M+UninfSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,NA,NA,NA,B5,B,5,M+NANA,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,1,B6,B,6,M+BlankBlank,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,7,C1,C,1,M+UninfSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,NA,NA,NA,C2,C,2,M+NANA,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,10,C3,C,3,M+MetschMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,7,C4,C,4,M+MetschMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Blank,Blank,3,C5,C,5,M+BlankBlank,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,STD,9,C6,C,6,M+MetschSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,8,D1,D,1,M+UninfMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,7,D2,D,2,M+UninfMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,STD,9,D3,D,3,M+UninfSTD,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,9,D4,D,4,M+UninfMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Metsch,MID,8,D5,D,5,M+MetschMID,Metsch,N,
+4,21,4,3,1/24/2022,12:58,15:50,M+,Uninf,MID,10,D6,D,6,M+UninfMID,Metsch,N,
+3,22,1,3,1/25/2022,9:34,11:56,S,Metsch,MID,2,A1,A,1,SMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,4,A2,A,2,SBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,A3,A,3,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,4,A4,A,4,SUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,A5,A,5,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,2,A6,A,6,SUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B1,B,1,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,3,B2,B,2,SUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B3,B,3,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B4,B,4,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,2,B5,B,5,SBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,B6,B,6,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,1,C1,C,1,SBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C2,C,2,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,1,C3,C,3,SUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C4,C,4,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,C5,C,5,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,2,C6,C,6,SUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,1,D1,D,1,SUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,5,D2,D,2,SUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,NA,NA,NA,D3,D,3,SNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Blank,Blank,3,D4,D,4,SBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,MID,4,D5,D,5,SUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,1,3,1/25/2022,9:34,11:56,S,Uninf,STD,3,D6,D,6,SUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,5,A1,A,1,SMUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,3,A2,A,2,SMMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,1,A3,A,3,SMMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,4,A4,A,4,SMUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,2,A5,A,5,SMMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,4,A6,A,6,SMBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,2,B1,B,1,SMUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,NA,NA,NA,B2,B,2,SMNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,3,B3,B,3,SMBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,3,B4,B,4,SMMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,5,B5,B,5,SMUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,3,B6,B,6,SMUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,5,C1,C,1,SMMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,1,C2,C,2,SMUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,4,C4,C,4,SMMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,1,C5,C,5,SMBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,MID,1,C6,C,6,SMMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Blank,Blank,2,D1,D,1,SMBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Metsch,STD,4,D2,D,2,SMMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,3,D3,D,3,SMUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,2,D4,D,4,SMUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,STD,4,D5,D,5,SMUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,2,3,1/25/2022,9:34,11:56,SM,Uninf,MID,1,D6,D,6,SMUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,1,A1,A,1,MUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,A2,A,2,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,3,A3,A,3,MBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,A4,A,4,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,2,A5,A,5,MUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,STD,5,A6,A,6,MMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,B1,B,1,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,3,B2,B,2,MUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,B3,B,3,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,2,B4,B,4,MUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,3,B5,B,5,MMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,2,B6,B,6,MBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,C1,C,1,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,3,C2,C,2,MUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,1,C3,C,3,MBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,2,C4,C,4,MMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,4,C5,C,5,MUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,MID,5,C6,C,6,MUninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,1,D1,D,1,MUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,NA,NA,NA,D2,D,2,MNANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,STD,4,D3,D,3,MMetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Uninf,STD,5,D4,D,4,MUninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Metsch,MID,5,D5,D,5,MMetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,3,3,1/25/2022,12:55,15:37,M,Blank,Blank,4,D6,D,6,MBlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,3,A1,A,1,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,4,A2,A,2,M+UninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,2,A3,A,3,M+UninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,2,A4,A,4,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,5,A5,A,5,M+MetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,4,A6,A,6,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,3,B1,B,1,M+UninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,B2,B,2,M+NANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,1,B3,B,3,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,B4,B,4,M+NANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,2,B5,B,5,M+MetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,1,B6,B,6,M+MetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,4,C1,C,1,M+MetschMID,Metsch,N,dropped before respiration
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,5,C2,C,2,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,C3,C,3,M+NANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,1,C4,C,4,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,5,C5,C,5,M+MetschSTD,Metsch,Y,"all readings were done at 1 min intervals instead of 2 min intervals, may have been weak during respiration trial, noted of unhealthy look, died next day"
+3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,2,C6,C,6,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,3,D1,D,1,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,4,D2,D,2,M+MetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,MID,3,D3,D,3,M+MetschMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,5,D4,D,4,M+UninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,MID,1,D5,D,5,M+UninfMID,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,2,D6,D,6,M+MetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
