@@ -4,11 +4,15 @@
 
 
 library(ggplot2)
+library(gridExtra)
 library(dplyr)
 library(tidyverse)
 library(lubridate)
+library(EnvStats)
+library(emmeans)
 library(fs)
-install_github('colin-olito/LoLinR')
+#install_github('colin-olito/LoLinR')
+# https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html  # how to use this package link
 library(LoLinR)
 library(here)
 
@@ -350,6 +354,9 @@ RespRate <- rbind(RespRate, RespRate_Block3Day22_thinned)
 dim(RespRate)  # should be 4525 rows(4242+283)
 
 
+# remove 3 outlier blanks from the data set 
+RespRate2 <- RespRate %>%
+  filter()
 
 
 # loop through respiration calculation for each block, day, plate, and well
@@ -431,7 +438,7 @@ str(thisplate)
 
 # calculate the metabolic rate (converted to metabolic rate (J/hr) using the calorific conversion factor of 20.08 J/ml O2 (Lighton, 2008))
 RespRateCalc <- RespRateCalc %>%
-  select(Block:Column, O2.sat.per.hr:metabolic.rate, Notes) %>%
+  select(Block:Died.After.Resp, O2.sat.per.hr:metabolic.rate, Notes) %>%
   mutate(metabolic.rate = VO2 * 20.13)  # metabolic rate is J/hr (calculated as 16+5.164(RQ))
 # where RQ, the respiratory quotient, is the ratio of VCO2 to VO2, which can be assumed to be 0.8 when not measured (Lighton 2008)
 # Problem is that calculates to 20.1312. 
@@ -442,12 +449,18 @@ View(RespRateCalc)
 RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
 # save CSV file
-write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv", quote = F, row.names=FALSE))
+write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), quote = F, row.names=FALSE)
+
+
+
+# check the metabolic rate values for the animals that died during or within 24 hours of respiration trial
+Dead_animals <- filter(RespRateCalc, Died.After.Resp == "Y")
+      # 6 of the 19 animals marked in Past experiment have negative values for metabolic rate, most are low values
 
 
 
 ##############################
-# check the Oxygen saturation per hr slope calculation for a few extreme values
+# check the Oxygen saturation per hr slope calculation for a few extreme values, 
 ##############################
 
 # Block 1 day 15 plate 1 S Blank B2 - positive rate
@@ -525,6 +538,37 @@ outputRankLocRegPlot(daphniaRegs_test7) # yes, very negative slope but fits the 
 # Initial figures to explore the respiration data
 ##############################
 
+# function to make a grid plot with a shared legend
+grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, position = c("bottom", "right")) {
+  
+  plots <- list(...)
+  position <- match.arg(position)
+  g <- ggplotGrob(plots[[1]] + theme(legend.position = position))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  lwidth <- sum(legend$width)
+  gl <- lapply(plots, function(x) x + theme(legend.position="none"))
+  gl <- c(gl, ncol = ncol, nrow = nrow)
+  
+  combined <- switch(position,
+                     "bottom" = arrangeGrob(do.call(arrangeGrob, gl),
+                                            legend,
+                                            ncol = 1,
+                                            heights = unit.c(unit(1, "npc") - lheight, lheight)),
+                     "right" = arrangeGrob(do.call(arrangeGrob, gl),
+                                           legend,
+                                           ncol = 2,
+                                           widths = unit.c(unit(1, "npc") - lwidth, lwidth)))
+  
+  grid.newpage()
+  grid.draw(combined)
+  
+  # return gtable invisibly
+  invisible(combined)
+  
+}
+
+
 # diet color palette
 diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
 
@@ -537,7 +581,7 @@ plot_week1 <- ggplot(data = RespRateCalc_plot_Week1, aes(x = Parasites, y = meta
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.8)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.05), alpha = 0.4) +
-  facet_wrap(~Clone) +
+  facet_grid(~Clone) +
   scale_x_discrete(limits = c("Uninf", "Metsch", "Pasteuria", "Blank")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
@@ -605,7 +649,8 @@ plot_week2_oxysat
 # filter day to remove NAs and by week 3
 RespRateCalc_plot_Week3 <- RespRateCalc %>%
   filter(!is.na(Parasites)) %>%
-  filter(Week == 3) 
+  filter(Week == 3)  %>%
+  filter(Died.After.Resp != "Y")
 str(RespRateCalc_plot_Week3)
 sum(is.na(RespRateCalc_plot_Week3$O2.sat.per.hr))
 
@@ -643,19 +688,19 @@ plot_week3_oxysat
 ## Plot of O2 saturation over time by week (needs work still, make a treatment category that spans all weeks for a particular treatment)
 RespRateCalc_Sum.clean <- RespRateCalc %>%
   filter(!is.na(Parasites), Parasites != "Blank") %>%
-  group_by(Diet, Parasites, Clone, Week, Treatment) %>%
+  group_by(Diet, Parasites, Clone, Week, Treatment, Experiment) %>%
   summarize(N  = length(O2.sat.per.hr),
             O2.mean = mean(O2.sat.per.hr, na.rm = T),
             O2.sd   = sd(O2.sat.per.hr, na.rm = T),
             O2.se   = O2.sd / sqrt(N),
-            resp.mean = mean(metabolic.rate),
-            resp.sd   = sd(metabolic.rate),
+            resp.mean = mean(metabolic.rate, na.rm = T),
+            resp.sd   = sd(metabolic.rate, na.rm = T),
             resp.se   = resp.sd / sqrt(N))
 RespRateCalc_Sum.clean$Week <- as.factor(RespRateCalc_Sum.clean$Week)
 RespRateCalc_Sum.clean$Diet <- factor(RespRateCalc_Sum.clean$Diet, levels = c("S", "SM", "M", "M+"))
 
 
-#  IN future Split by experiment (Past vs Metsch)
+#  Grouped figures (both experiments)
 plot_byWeek <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
   geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
@@ -664,12 +709,96 @@ plot_byWeek <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = O2.mean, 
   facet_grid(Clone~Parasites) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
   ggtitle("Test plot of O2 saturation per hour by week and parasite x diet x host clone") +
   labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
   theme_classic()
 plot_byWeek
 
+plot_byWeek_resp <- ggplot(data = RespRateCalc_Sum.clean, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=2) +
+  geom_point(aes(color=Diet), size=4, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Test plot of metabolic rate per hour by week and parasite x diet x host clone") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_byWeek_resp
 
+# split figures by past and metsch experiments
+RespRateCalc_Sum.Past <- filter(RespRateCalc_Sum.clean, Experiment == "Past")
+RespRateCalc_Sum.Metsch <- filter(RespRateCalc_Sum.clean, Experiment == "Metsch")
+
+plot_byWeek_resp_past <- ggplot(data = RespRateCalc_Sum.Past, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  ylim(-0.001, 0.009) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Past Experiment Metabolic Rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_byWeek_resp_past
+
+plot_byWeek_resp_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  ylim(-0.001, 0.009) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Metsch Experiment Metabolic rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_byWeek_resp_metsch
+
+Metabolism_fig <- grid_arrange_shared_legend(plot_byWeek_resp_past, plot_byWeek_resp_metsch, nrow=1, ncol = 2, position = "right")
+ggsave(here("figures/Metabolism_byExpt.tiff"), plot = Metabolism_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
+
+
+plot_byWeek_O2_past <- ggplot(data = RespRateCalc_Sum.Past, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  ylim(-6.5, 0) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Past Experiment O2 Saturation Rate") +
+  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_byWeek_O2_past
+
+plot_byWeek_O2_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  ylim(-6.5, 0) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Metsch Experiment O2 Saturation rate") +
+  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+plot_byWeek_O2_metsch
+
+O2_fig <- grid_arrange_shared_legend(plot_byWeek_O2_past, plot_byWeek_O2_metsch, nrow=1, ncol = 2, position = "right")
+ggsave(here("figures/O2_Sat_byExpt.tiff"), plot = O2_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
 
 
@@ -678,9 +807,10 @@ Blank_data <- RespRateCalc %>%
   filter(!is.na(Parasites), Parasites == "Blank") %>%
   mutate(block_plate = paste0(Block, "_", Plate))
 Blank_data$Plate <- as.factor(Blank_data$Plate)
+Blank_data$Week <- as.factor(Blank_data$Week)
 Blank_data$Diet <- factor(Blank_data$Diet, levels = c("S", "SM", "M", "M+"))
 
-blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, group = Diet, shape = Plate)) +
+blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, group = Diet, shape = Diet)) +
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
   #geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
   #geom_line(aes(color=Diet, group = Diet), linewidth=2) +
@@ -693,4 +823,46 @@ blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, g
   labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
   theme_classic()
 blankplot_byWeek
+ggsave(here("figures/RespBlanks_byWeek_Block_plate.tiff"), plot = blankplot_byWeek, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
+
+# test for outliers in the data
+outlier_test <- rosnerTest(Blank_data$O2.sat.per.hr, k = 5)
+outlier_test$all.stats
+      # three values are considered outliers in the blank O2 saturation data
+
+# filter out outliers from blank data
+Blank_data_NoOutliers <- filter(Blank_data, O2.sat.per.hr > -5.2)
+
+
+Blank_data_Outliers <- filter(Blank_data, O2.sat.per.hr < -5.2)
+
+# model of all blank data - sig diff in Diet*Week and Block*Week
+mod <- aov(O2.sat.per.hr ~ Diet*Block*Week, data = Blank_data)
+summary(mod)
+
+# model of blank data without outliers - all interactions are significant now...
+mod2 <- aov(O2.sat.per.hr ~ Diet*Block*Week, data = Blank_data_NoOutliers)
+summary(mod2)
+
+# plot of blank data without outliers
+blankplot_byWeek2 <- ggplot(data = Blank_data_NoOutliers, aes(x = Week, y = O2.sat.per.hr, group = Diet, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  #geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
+  #geom_line(aes(color=Diet, group = Diet), linewidth=2) +
+  geom_jitter(aes(color=Diet), size=3, alpha = 0.8, width = 0.2) +
+  facet_wrap(~Block) +
+  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Plot of CONTROLS O2 saturation/hr by week and diet, No Outliers") +
+  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
+  theme_classic()
+blankplot_byWeek2
+ggsave(here("figures/RespBlanks_byWeek_Block_plate_NoOutliers.tiff"), plot = blankplot_byWeek2, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
+
+
+a <- emmeans(mod, specs = pairwise ~ Block | Week, type = "response")
+
+mod2 <- aov(O2.sat.per.hr ~ Block*Week, data = Blank_data)
+summary(mod2)
