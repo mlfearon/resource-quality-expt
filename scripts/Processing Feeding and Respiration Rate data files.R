@@ -355,8 +355,9 @@ dim(RespRate)  # should be 4525 rows(4242+283)
 
 
 # remove 3 outlier blanks from the data set 
-RespRate2 <- RespRate %>%
-  filter()
+RespRate[ RespRate$Block == 4 & RespRate$Day == 14 & RespRate$Plate == 4, "B6"] <- NA
+RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 2, "A6"] <- NA
+RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 3, "C5"] <- NA
 
 
 # loop through respiration calculation for each block, day, plate, and well
@@ -834,7 +835,7 @@ outlier_test$all.stats
 # filter out outliers from blank data
 Blank_data_NoOutliers <- filter(Blank_data, O2.sat.per.hr > -5.2)
 
-
+# identify the outlier points to remove ahead of the loop above
 Blank_data_Outliers <- filter(Blank_data, O2.sat.per.hr < -5.2)
 
 # model of all blank data - sig diff in Diet*Week and Block*Week
