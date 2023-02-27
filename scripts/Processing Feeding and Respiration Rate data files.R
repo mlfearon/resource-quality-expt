@@ -82,9 +82,18 @@ time.interval <- interval(start = FeedingRate$StartTime, end = FeedingRate$EndTi
 time.duration <- as.duration(time.interval)
 FeedingRate$Time <- as.numeric(time.duration, "hours")
 
+# for instances where the calculated time is less than 6 hours, adjust the total time to 6 hours
+# because none of the plates were stopped before 6 hours
+for(j in FeedingRate$ID){
+  if(FeedingRate$Time[j] < 6){
+    FeedingRate$Time[j] <- 6.0
+  }
+}
+
+sum(FeedingRate$Time < 6)
 
 # filter out fluorescence readings that don't have a sample associated with it
-FeedingRate <- na.omit(FeedingRate)
+FeedingRate <- filter(FeedingRate, !is.na(Clone))
 
 
 
@@ -104,19 +113,47 @@ FeedingRate_treatments <- filter(FeedingRate_treatments, Clone != "NoDaphnia")
 
 # look for outliers in data
 boxplot(FeedingRate_treatments$chlorophyll ~ FeedingRate_treatments$Diet)
+          # looks like there are at least a couple of outliers in some of the diet treatments
 
+# get data set for each diet to check for outliers within each diet treatment
+FeedingRate_S <- filter(FeedingRate_treatments, Diet == "S")
+FeedingRate_SM <- filter(FeedingRate_treatments, Diet == "SM")
+FeedingRate_M <- filter(FeedingRate_treatments, Diet == "M")
+FeedingRate_M_toxin <- filter(FeedingRate_treatments, Diet == "M+")
 
-# remove outliers
-dim(FeedingRate)
-#FeedingRate2 <- FeedingRate[FeedingRate$Block != 1 & FeedingRate$Day != 21 & FeedingRate$Plate != 1 & FeedingRate$Diet != "S" & FeedingRate$Well.x != "H5"]
+# test for outlier in S diet
+outlier_test_S <- rosnerTest(FeedingRate_S$chlorophyll, k = 10)
+outlier_test_S$all.stats
+      # one outlier in treatment data, value over 70
 
-FeedingRate <- FeedingRate[-5913, ] # not elegant but it works to remove the outlier...
+# test for outlier in SM diet
+outlier_test_SM <- rosnerTest(FeedingRate_SM$chlorophyll, k = 5)
+outlier_test_SM$all.stats
+    # one outlier in treatment data, value over 40
 
-FeedingRate <- FeedingRate %>%
-  filter(chlorophyll < 70)
+# test for outlier in M diet
+outlier_test_M <- rosnerTest(FeedingRate_M$chlorophyll, k = 5)
+outlier_test_M$all.stats
+    # one outlier in treatment data, value over 21
 
-dim(FeedingRate) # success!
+# test for outlier in M+ diet
+outlier_test_Mtoxin <- rosnerTest(FeedingRate_M_toxin$chlorophyll, k = 5)
+outlier_test_Mtoxin$all.stats
+        # test indicates that there are two outliers, values of 45 and 20. The 20 value is not that different from the other values
+        # I will remove the 45 value, but leave in the 20 value.
+
+# Look at 
 boxplot(FeedingRate$chlorophyll ~ FeedingRate$Diet)
+      
+
+###################### REMOVED ONLY THE MOST EXTRME OUTLIERS -- NEED TO DECIDE ON HOW MANY OTHERS TO REMOVE FROM THE TESTS ABOVE!
+
+# remove outliers 
+dim(FeedingRate)
+FeedingRate[ FeedingRate$Diet == "S" & FeedingRate$chlorophyll == 73, "chlorophyll"] <- NA
+FeedingRate[ FeedingRate$Diet == "M+" & FeedingRate$chlorophyll == 45, "chlorophyll"] <- NA
+FeedingRate <- filter(FeedingRate, !is.na(chlorophyll))
+dim(FeedingRate) # checked that it worked
 
 
 # get data sets with NoDaphnia and No algae controls
@@ -127,10 +164,20 @@ FeedingRate_NoDaphnia <- filter(FeedingRate, Clone == "NoDaphnia")
 boxplot(FeedingRate_NoDaphnia$chlorophyll ~ FeedingRate_NoDaphnia$Diet)
 boxplot(FeedingRate_NoAlgae$chlorophyll ~ FeedingRate_NoAlgae$Diet)
 
+# test for outlier in NoAlgae data
+outlier_test_noalgae <- rosnerTest(FeedingRate_NoAlgae$chlorophyll, k = 10)
+outlier_test_noalgae$all.stats
+# several outliers in the No Algae controls - we don't use this for any calculations so it is already left out
+
+# test for outlier in NoDaphnia data
+outlier_test_nodaph <- rosnerTest(FeedingRate_NoDaphnia$chlorophyll, k = 5)
+outlier_test_nodaph$all.stats
+      # no outliers in the No Daphnia controls
+
 
 # remove daphnia that died during feeding rate trial
 FeedingRate_died <- filter(FeedingRate, Notes == "died")
-View(FeedingRate_died)
+#View(FeedingRate_died)
 FeedingRate <- filter(FeedingRate, Notes != "died")
 dim(FeedingRate)
 
@@ -140,7 +187,7 @@ dim(FeedingRate)
     # all 8 fluorescence reading replicates are averaged together
 
 FeedingRateCalc <- FeedingRate %>%
-  group_by(Block, Day, Plate, Column, Time, Diet, Parasites, Clone, Rep) %>%
+  group_by(Experiment, Treatment, Block, Day, Plate, Column, Time, Diet, Parasites, Clone, Rep) %>%
   summarize(chlorophyll.avg = mean(chlorophyll))
 
 FeedingRateCalc_NoDaphnia <- filter(FeedingRateCalc, Clone == "NoDaphnia")
@@ -155,9 +202,9 @@ FeedingRateCalc_Treatment$Rep <- as.integer(FeedingRateCalc_Treatment$Rep)
 
 # add in bodysize for each daphnia
 ### bodysize data
-bodysize_past <- read.csv("ResourceQuality_Pasteuria_Bodysize.csv", stringsAsFactors = F)
+bodysize_past <- read.csv(here("data/ResourceQuality_Pasteuria_Bodysize.csv"), stringsAsFactors = F)
 head(bodysize_past)
-bodysize_metsch <- read.csv("ResourceQuality_Metsch_Bodysize.csv", stringsAsFactors = F)
+bodysize_metsch <- read.csv(here("data/ResourceQuality_Metsch_Bodysize.csv"), stringsAsFactors = F)
 head(bodysize_metsch)
 
 
@@ -167,7 +214,7 @@ bodysize_past_long <- bodysize_past %>%
   pivot_longer(length_7:length_38, names_to = "Day", names_prefix = "length_", values_to = "Length") %>%
   filter(!is.na(Length), Day != 38) %>%  # remove days when there are no bodysize measurements, remove last date where there are no corresponding feeding rate
   select(!Unique.code)
-View(bodysize_past_long)
+#View(bodysize_past_long)
 
 
 bodysize_metsch_long <- bodysize_metsch %>%
@@ -200,9 +247,9 @@ FeedingRateCalc_Treatment <- filter(FeedingRateCalc_Treatment, !is.na(Length), !
 FeedingRateCalc_NoDaphnia <- FeedingRateCalc_NoDaphnia %>%
   dplyr::rename(chlorophyll.nodaphnia = "chlorophyll.avg") %>%
   ungroup() %>%
-  select(-Column, -Clone, -Rep)
+  select(-Column, -Clone, -Rep, -Treatment)
 
-FeedingRateCalc_Treatment <- full_join(FeedingRateCalc_Treatment, FeedingRateCalc_NoDaphnia, by = c("Block", "Day", "Plate", "Time", "Diet"))
+FeedingRateCalc_Treatment <- full_join(FeedingRateCalc_Treatment, FeedingRateCalc_NoDaphnia, by = c("Experiment", "Block", "Day", "Plate", "Diet"))
 
 
 # add week to dataset based on day of experiment
@@ -226,6 +273,14 @@ for(i in FeedingRateCalc_Treatment$ID){
 }
 
 
+# clean up columns
+FeedingRateCalc_Treatment <- FeedingRateCalc_Treatment %>%
+  select(Experiment:Column, Week, Diet:Rep, Time.x, Length, chlorophyll.avg, chlorophyll.nodaphnia) %>%
+  dplyr::rename(Time = "Time.x", Parasites = "Parasites.x")
+
+
+
+##################################
 # Calculate feeding rate (per ml, per hr)
     # ln (mean no daphnia control/ mean remaining food in sample) * (Volume 10 mL/ length of time of the assay in hr)
 
@@ -234,12 +289,12 @@ for(i in FeedingRateCalc_Treatment$ID){
 FeedingRateCalc_Treatment$volume <- 10
 
 # (ln (mean no daphnia control) - ln (mean remaining food in sample)) * (Volume 10 mL/ length of time of the assay in hr)
-FeedingRateCalc_Treatment$Clearance <- (log(FeedingRateCalc_Treatment$chlorophyll.nodaphnia) - log(FeedingRateCalc_Treatment$chlorophyll.avg))* (FeedingRateCalc_Treatment$volume / FeedingRateCalc_Treatment$Time)
+FeedingRateCalc_Treatment$Clearance <- (log(FeedingRateCalc_Treatment$chlorophyll.nodaphnia) - log(FeedingRateCalc_Treatment$chlorophyll.avg)) * (FeedingRateCalc_Treatment$volume / FeedingRateCalc_Treatment$Time)
 
 # calculate the feeding rate for relative bodysize (mL -hr -mm)
 FeedingRateCalc_Treatment$Clearance_rel <- FeedingRateCalc_Treatment$Clearance / ((FeedingRateCalc_Treatment$Length/1000) ^ 2)
 
-ggplot(data = FeedingRateCalc_Treatment, aes( x= Diet, y = Clearance, color = Parasites.x)) +
+ggplot(data = FeedingRateCalc_Treatment, aes( x= Diet, y = Clearance, color = Parasites)) +
   geom_boxplot() +
   geom_jitter() +
   facet_grid(Clone~Week) +
@@ -248,10 +303,69 @@ ggplot(data = FeedingRateCalc_Treatment, aes( x= Diet, y = Clearance, color = Pa
 boxplot(FeedingRateCalc_Treatment$Clearance ~ FeedingRateCalc_Treatment$Diet)
 
 
-
-
-
 write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv", quote = F, row.names=FALSE)
+
+
+## Plot of Algae clearance and relative clearnace over time by week
+FeedingRateCalc_Sum.clean <- FeedingRateCalc_Treatment %>%
+  group_by(Diet, Parasites, Clone, Week, Treatment, Experiment) %>%
+  summarize(N  = length(Clearance),
+            feed.mean = mean(Clearance, na.rm = T),
+            feed.sd   = sd(Clearance, na.rm = T),
+            feed.se   = feed.sd / sqrt(N), 
+            feed.rel.mean = mean(Clearance_rel, na.rm = T),
+            feed.rel.sd   = sd(Clearance_rel, na.rm = T),
+            feed.rel.se   = feed.rel.sd / sqrt(N))
+FeedingRateCalc_Sum.clean$Week <- as.factor(FeedingRateCalc_Sum.clean$Week)
+FeedingRateCalc_Sum.clean$Diet <- factor(FeedingRateCalc_Sum.clean$Diet, levels = c("S", "SM", "M", "M+"))
+
+View(FeedingRateCalc_Sum.clean_past)
+str(FeedingRateCalc_Sum.clean_past)
+# split figures by past and metsch experiments
+FeedingRateCalc_Sum.clean_past <- as.data.frame(filter(FeedingRateCalc_Sum.clean, Experiment == "Past"))
+FeedingRateCalc_Sum.clean_metsch <- filter(FeedingRateCalc_Sum.clean, Experiment == "Metsch")
+
+plot_byWeek_feed_past <- ggplot(data = FeedingRateCalc_Sum.clean_past, aes(x = Week, y = feed.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=feed.mean-feed.se, ymax=feed.mean+feed.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  #ylim(-0.001, 0.009) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.6, ymax = 0.5,
+           alpha = .2,fill = "gray") +
+  ggtitle("Past Experiment Feeding Rate") +
+  labs(x = "Week of Experiment", y = "Clearance Rate (mL per hr)") +
+  theme_classic()
+plot_byWeek_feed_past
+ggsave(here("figures/PastFeedingRate_DietxCloneXParasite.tiff"), plot = plot_byWeek_feed_past, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
+
+plot_byWeek_feed_metsch <- ggplot(data = FeedingRateCalc_Sum.clean_metsch, aes(x = Week, y = feed.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=feed.mean-feed.se, ymax=feed.mean+feed.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Parasites) +
+  #ylim(-0.001, 0.009) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.4, ymax = 0.6,
+           alpha = .2,fill = "gray") +
+  ggtitle("Metsch Experiment Metabolic rate") +
+  labs(x = "Week of Experiment", y = "Clearance Rate (mL per hr)") +
+  theme_classic()
+plot_byWeek_feed_metsch
+ggsave(here("figures/MetschFeedingRate_DietxCloneXParasite.tiff"), plot = plot_byWeek_feed_metsch, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
+
+Feeding_fig <- grid_arrange_shared_legend(plot_byWeek_feed_past, plot_byWeek_feed_metsch, nrow=1, ncol = 2, position = "right")
+ggsave(here("figures/Feeding_byExpt.tiff"), plot = Feeding_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
+
 
 
 
@@ -355,8 +469,8 @@ dim(RespRate)  # should be 4525 rows(4242+283)
 
 
 # remove 3 outlier blanks from the data set 
+RespRate[ RespRate$Block == 1 & RespRate$Day == 29 & RespRate$Plate == 2, "D1"] <- NA
 RespRate[ RespRate$Block == 4 & RespRate$Day == 14 & RespRate$Plate == 4, "B6"] <- NA
-RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 2, "A6"] <- NA
 RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 3, "C5"] <- NA
 
 
@@ -450,14 +564,14 @@ View(RespRateCalc)
 RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
 # save CSV file
-write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), quote = F, row.names=FALSE)
+write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc_NoBlankOutliers.csv"), quote = F, row.names=FALSE)
 
 
 
 # check the metabolic rate values for the animals that died during or within 24 hours of respiration trial
 Dead_animals <- filter(RespRateCalc, Died.After.Resp == "Y")
       # 6 of the 19 animals marked in Past experiment have negative values for metabolic rate, most are low values
-
+      # 3 of the 12 animals marked in the Metsch experiment have negative values for metabolic rate
 
 
 ##############################
@@ -686,9 +800,9 @@ plot_week3_oxysat <- ggplot(data = RespRateCalc_plot_Week3, aes(x = Parasites, y
 plot_week3_oxysat
 
 
-## Plot of O2 saturation over time by week (needs work still, make a treatment category that spans all weeks for a particular treatment)
+## Plot of O2 saturation and metabolism over time by week
 RespRateCalc_Sum.clean <- RespRateCalc %>%
-  filter(!is.na(Parasites), Parasites != "Blank") %>%
+  filter(!is.na(Parasites), Parasites != "Blank", Died.After.Resp == "N") %>%
   group_by(Diet, Parasites, Clone, Week, Treatment, Experiment) %>%
   summarize(N  = length(O2.sat.per.hr),
             O2.mean = mean(O2.sat.per.hr, na.rm = T),
@@ -744,10 +858,14 @@ plot_byWeek_resp_past <- ggplot(data = RespRateCalc_Sum.Past, aes(x = Week, y = 
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.009,
+           alpha = .2,fill = "gray") +
   ggtitle("Past Experiment Metabolic Rate") +
   labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
   theme_classic()
 plot_byWeek_resp_past
+ggsave(here("figures/PastMetabolism_DietxCloneXParasite_NoBlankOutliers_NoDead.tiff"), plot = plot_byWeek_resp_past, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
 
 plot_byWeek_resp_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
@@ -759,13 +877,17 @@ plot_byWeek_resp_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, 
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.009,
+           alpha = .2,fill = "gray") +
   ggtitle("Metsch Experiment Metabolic rate") +
   labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
   theme_classic()
 plot_byWeek_resp_metsch
+ggsave(here("figures/MetschMetabolism_DietxCloneXParasite_NoBlankOutliers_NoDead.tiff"), plot = plot_byWeek_resp_metsch, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
 
 Metabolism_fig <- grid_arrange_shared_legend(plot_byWeek_resp_past, plot_byWeek_resp_metsch, nrow=1, ncol = 2, position = "right")
-ggsave(here("figures/Metabolism_byExpt.tiff"), plot = Metabolism_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
+ggsave(here("figures/Metabolism_byExpt_NoBlankOutliers_NoDead.tiff"), plot = Metabolism_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
 
 plot_byWeek_O2_past <- ggplot(data = RespRateCalc_Sum.Past, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
@@ -782,6 +904,8 @@ plot_byWeek_O2_past <- ggplot(data = RespRateCalc_Sum.Past, aes(x = Week, y = O2
   labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
   theme_classic()
 plot_byWeek_O2_past
+ggsave(here("figures/PastO2Sat_DietxCloneXParasite_NoBlankOutliers.tiff"), plot = plot_byWeek_O2_past, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
 
 plot_byWeek_O2_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, y = O2.mean, group = Treatment, shape = Diet)) +
   geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
@@ -797,9 +921,11 @@ plot_byWeek_O2_metsch <- ggplot(data = RespRateCalc_Sum.Metsch, aes(x = Week, y 
   labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
   theme_classic()
 plot_byWeek_O2_metsch
+ggsave(here("figures/MetschO2Sat_DietxCloneXParasite_NoBlankOutliers.tiff"), plot = plot_byWeek_O2_metsch, dpi = 300, width = 6, height = 6, units = "in", compression="lzw")
+
 
 O2_fig <- grid_arrange_shared_legend(plot_byWeek_O2_past, plot_byWeek_O2_metsch, nrow=1, ncol = 2, position = "right")
-ggsave(here("figures/O2_Sat_byExpt.tiff"), plot = O2_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
+ggsave(here("figures/O2_Sat_byExpt_NoBlankOutliers.tiff"), plot = O2_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
 
 
@@ -826,8 +952,57 @@ blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, g
 blankplot_byWeek
 ggsave(here("figures/RespBlanks_byWeek_Block_plate.tiff"), plot = blankplot_byWeek, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
+# read in the full data set without anything removed
+data <- read.csv(here("data/ResourceQuality_RespirationRateCalc.csv"))
+data_blank <- filter(data, Parasites == "Blank")
 
-# test for outliers in the data
+# Split the blank data by block
+Blank_data_block1 <- filter(data_blank, Block == "1")
+Blank_data_block2 <- filter(data_blank, Block == "2")
+Blank_data_block3 <- filter(data_blank, Block == "3")
+Blank_data_block4 <- filter(data_blank, Block == "4")
+
+# test for outliers in each block
+# block 1
+outlier_test_block1 <- rosnerTest(Blank_data_block1$O2.sat.per.hr, k = 5)
+outlier_test_block1$all.stats
+      # one outlier = -4.7015417
+Blank_data_block1[ Blank_data_block1$O2.sat.per.hr < -4, ]
+
+# block 2
+outlier_test_block2 <- rosnerTest(Blank_data_block2$O2.sat.per.hr, k = 5)
+outlier_test_block2$all.stats
+      # no outliers
+
+# block 3
+outlier_test_block3 <- rosnerTest(Blank_data_block3$O2.sat.per.hr, k = 5)
+outlier_test_block3$all.stats
+      # one outlier = -8.621880
+Blank_data_block3[ Blank_data_block3$O2.sat.per.hr < -8, ]
+
+# block 4
+outlier_test_block4 <- rosnerTest(Blank_data_block4$O2.sat.per.hr, k = 5)
+outlier_test_block4$all.stats
+# one outlier = -5.851114 
+Blank_data_block4[ Blank_data_block4$O2.sat.per.hr < -5, ]
+
+
+
+# Split the blank data by experiment
+Blank_data_past <- filter(Blank_data, Experiment == "Past")
+Blank_data_metsch <- filter(Blank_data, Experiment == "Metsch")
+
+# test for outliers in the Past blank data
+outlier_test_past <- rosnerTest(Blank_data_past$O2.sat.per.hr, k = 5)
+outlier_test_past$all.stats
+          # one outlier
+
+# test for outliers in the Metsch blank data
+outlier_test_metsch <- rosnerTest(Blank_data_metsch$O2.sat.per.hr, k = 5)
+outlier_test_metsch$all.stats
+        # one outlier
+
+# test for outliers in the whole blank data set
 outlier_test <- rosnerTest(Blank_data$O2.sat.per.hr, k = 5)
 outlier_test$all.stats
       # three values are considered outliers in the blank O2 saturation data
