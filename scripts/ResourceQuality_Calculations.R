@@ -215,6 +215,21 @@ microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasite, y = micr
 microcystin_plot2
 ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
 
+library(car)
+m_conc_mod2 <- lm(log(Microcystin.conc+0.01) ~ Experiment * Diet, data = microcystin_exposure)
+summary(m_conc_mod2)
+Anova(m_conc_mod2)
+plot(m_conc_mod2)  # not very linear residuals...maybe need a different model distribution
+treatment_difs2 <- emmeans(m_conc_mod2, pairwise ~ Diet | Experiment, type = "response")
+treatment_difs2  
+        # no significant differences between S, SM, and M diets within either Past or Metsch experiments
+        # M+ diet has sig higher Microcystin concentrations compared to all other dies in both experiments
+
+experiment_difs <- emmeans(m_conc_mod2, pairwise ~ Experiment | Diet, type = "response")
+experiment_difs  
+        # no significant differences between concentrations across the experiment at each diet treatment
+
+
 ## table of average Microcystin concentrations per Diet treatment in each experiment
 microcystin_exposure.sum2 <- microcystin_exposure %>%
   group_by(Experiment, Diet) %>%
@@ -244,19 +259,19 @@ metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
 past_data_short <- full_join(offspring_past_short, bodysize_past_short)
 past_data_short <- full_join(past_data_short, spores_past_short)
 View(past_data_short)
-write.csv(past_data_short, "ResourceQuality_Pasteuria_Full.csv", quote = F, row.names=FALSE)
+write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F, row.names=FALSE)
 
 
 # calculate sample sizes for water samples at each date
-past_summary <- past_data_short %>%
-  filter(Lifespan >= 17) %>%
-  group_by(Diet, Clone, Infection) %>%
-  summarise(sample.size.total = n())
-
-#View(past_summary)
-write.csv(past_summary, "ResourceQuality_Pasteuria_Samplesize_Day17.csv", quote = F, row.names=FALSE)
-
-past_summary
+# past_summary <- past_data_short %>%
+#   filter(Lifespan >= 17) %>%
+#   group_by(Diet, Clone, Infection) %>%
+#   summarise(sample.size.total = n())
+# 
+# #View(past_summary)
+# write.csv(past_summary, "data/ResourceQuality_Pasteuria_Samplesize_Day17.csv", quote = F, row.names=FALSE)
+# 
+# past_summary
 
 
 #### Join long data sets together
@@ -285,7 +300,7 @@ past_data_long <- past_data_long %>%
                            Day %% 37 == 5,
                            Day %% 38 == 5))
 
-write.csv(past_data_long, "ResourceQuality_Pasteuria_Full_ByExptDay.csv", quote = F, row.names=FALSE)
+write.csv(past_data_long, "data/ResourceQuality_Pasteuria_Full_ByExptDay.csv", quote = F, row.names=FALSE)
 
 
 
@@ -298,7 +313,7 @@ write.csv(past_data_long, "ResourceQuality_Pasteuria_Full_ByExptDay.csv", quote 
 
 
 #### lifespan, offspring, infection prevalence
-offspring_metsch <- read.csv("ResourceQuality_Metsch_Survival_Offspring.csv", stringsAsFactors = F)
+offspring_metsch <- read.csv("data/ResourceQuality_Metsch_Survival_Offspring.csv", stringsAsFactors = F)
 head(offspring_metsch)
 
 # update data classes to factor class
@@ -341,7 +356,7 @@ offspring_metsch_short <- offspring_metsch %>%
 
 
 ### bodysize data
-bodysize_metsch <- read.csv("ResourceQuality_Metsch_Bodysize.csv", stringsAsFactors = F)
+bodysize_metsch <- read.csv("data/ResourceQuality_Metsch_Bodysize.csv", stringsAsFactors = F)
 head(bodysize_metsch)
 bodysize_metsch$Diet <- as.factor(bodysize_metsch$Diet)
 bodysize_metsch$Parasites <- as.factor(bodysize_metsch$Parasites)
@@ -366,7 +381,7 @@ bodysize_metsch_short <- bodysize_metsch %>%
 
 
 # Metsch gut spore data
-gutspore_metsch <- read.csv("ResourceQuality_Metsch_GutSpores.csv", stringsAsFactors = F)
+gutspore_metsch <- read.csv("data/ResourceQuality_Metsch_GutSpores.csv", stringsAsFactors = F)
 head(gutspore_metsch)
 gutspore_metsch$Diet <- as.factor(gutspore_metsch$Diet)
 gutspore_metsch$Parasites <- as.factor(gutspore_metsch$Parasites)
@@ -388,7 +403,7 @@ View(gutspore_metsch)
 
 
 ### spore yield data
-spores_metsch <- read.csv("ResourceQuality_Metsch_SporeCounts.csv", stringsAsFactors = F)
+spores_metsch <- read.csv("data/ResourceQuality_Metsch_SporeCounts.csv", stringsAsFactors = F)
 head(spores_metsch)
 spores_metsch$Diet <- as.factor(spores_metsch$Diet)
 spores_metsch$Parasites <- as.factor(spores_metsch$Parasites)
@@ -433,7 +448,7 @@ metsch_data_short <- full_join(metsch_data_short, spores_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, gutspore_metsch)
 
 
-write.csv(metsch_data_short, "ResourceQuality_Metsch_Full.csv", quote = F, row.names=FALSE)
+write.csv(metsch_data_short, "data/ResourceQuality_Metsch_Full.csv", quote = F, row.names=FALSE)
 
 View(metsch_data_short)
 
@@ -454,5 +469,5 @@ metsch_summary <- metsch_data_short %>%
 metsch_data_long <- full_join(offspring_metsch_long, bodysize_metsch_long)
 
 
-write.csv(metsch_data_long, "ResourceQuality_Metsch_Full_ByExptDay.csv", quote = F, row.names=FALSE)
+write.csv(metsch_data_long, "data/ResourceQuality_Metsch_Full_ByExptDay.csv", quote = F, row.names=FALSE)
 
