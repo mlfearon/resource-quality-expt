@@ -227,7 +227,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,7,B4,B,4,SMMetschSTD,Metsch,N,
 4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,STD,10,B5,B,5,SMMetschSTD,Metsch,N,
 4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,STD,10,B6,B,6,SMUninfSTD,Metsch,N,
-4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,7,C1,C,1,SMMetschMID,Metsch,Y,"Molt attached during respiration, doesn't look healthy"
+4,14,2,2,1/17/2022,9:43,12:09,SM,Metsch,MID,7,C1,C,1,SMMetschMID,Metsch,N,"Molt attached during respiration, doesn't look healthy"
 4,14,2,2,1/17/2022,9:43,12:09,SM,Uninf,MID,10,C2,C,2,SMUninfMID,Metsch,N,
 4,14,2,2,1/17/2022,9:43,12:09,SM,NA,NA,NA,C3,C,3,SMNANA,Metsch,N,
 4,14,2,2,1/17/2022,9:43,12:09,SM,Blank,Blank,2,C4,C,4,SMBlankBlank,Metsch,N,
@@ -310,7 +310,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 3,15,1,2,1/18/2022,9:30,11:54,S,Uninf,MID,2,D3,D,3,SUninfMID,Metsch,N,Set up at 9:12
 3,15,1,2,1/18/2022,9:30,11:54,S,NA,NA,NA,D4,D,4,SNANA,Metsch,N,Set up at 9:12
 3,15,1,2,1/18/2022,9:30,11:54,S,Blank,Blank,2,D5,D,5,SBlankBlank,Metsch,N,Set up at 9:12
-3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,4,D6,D,6,SMetschMID,Metsch,Y,"Set up at 9:12, died over night after respiration trial (infected)"
+3,15,1,2,1/18/2022,9:30,11:54,S,Metsch,MID,4,D6,D,6,SMetschMID,Metsch,N,"Set up at 9:12, died over night after respiration trial (infected)"
 3,15,2,2,1/18/2022,9:30,11:54,SM,Metsch,MID,4,A1,A,1,SMMetschMID,Metsch,N,
 3,15,2,2,1/18/2022,9:30,11:54,SM,Blank,Blank,4,A2,A,2,SMBlankBlank,Metsch,N,
 3,15,2,2,1/18/2022,9:30,11:54,SM,Uninf,STD,2,A3,A,3,SMUninfSTD,Metsch,N,
@@ -387,7 +387,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A2,A,2,SNANA,Metsch,N,
 4,21,1,3,1/24/2022,9:38,12:04,S,NA,NA,NA,A3,A,3,SNANA,Metsch,N,
 4,21,1,3,1/24/2022,9:38,12:04,S,Uninf,STD,9,A4,A,4,SUninfSTD,Metsch,N,
-4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,10,A5,A,5,SMetschMID,Metsch,Y,"Died day after respiration trial, may have been weak "
+4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,10,A5,A,5,SMetschMID,Metsch,N,"Died day after respiration trial, may have been weak "
 4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,4,A6,A,6,SBlankBlank,Metsch,N,
 4,21,1,3,1/24/2022,9:38,12:04,S,Metsch,MID,6,B1,B,1,SMetschMID,Metsch,N,
 4,21,1,3,1/24/2022,9:38,12:04,S,Blank,Blank,3,B2,B,2,SBlankBlank,Metsch,N,
@@ -567,7 +567,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,5,C2,C,2,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
 3,22,4,3,1/25/2022,12:55,15:37,M+,NA,NA,NA,C3,C,3,M+NANA,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
 3,22,4,3,1/25/2022,12:55,15:37,M+,Uninf,STD,1,C4,C,4,M+UninfSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
-3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,5,C5,C,5,M+MetschSTD,Metsch,Y,"all readings were done at 1 min intervals instead of 2 min intervals, may have been weak during respiration trial, noted of unhealthy look, died next day"
+3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,5,C5,C,5,M+MetschSTD,Metsch,N,"all readings were done at 1 min intervals instead of 2 min intervals, may have been weak during respiration trial, noted unhealthy look, died next day"
 3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,2,C6,C,6,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
 3,22,4,3,1/25/2022,12:55,15:37,M+,Blank,Blank,3,D1,D,1,M+BlankBlank,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
 3,22,4,3,1/25/2022,12:55,15:37,M+,Metsch,STD,4,D2,D,2,M+MetschSTD,Metsch,N,all readings were done at 1 min intervals instead of 2 min intervals
