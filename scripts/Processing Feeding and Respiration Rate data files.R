@@ -44,12 +44,12 @@ FeedingRate <- file_paths %>%
   extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
   select(Well:Plate)
 
-View(FeedingRate)
+#View(FeedingRate)
 
 # recode block, day and plate to numbers
-FeedingRate$Block <- recode(FeedingRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
-FeedingRate$Day <- recode(FeedingRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
-FeedingRate$Plate <- recode(FeedingRate$Plate, Plate1 = 1, Plate2 = 2, Plate3 = 3, Plate4 = 4, Plate5 = 5, Plate6 = 6, Plate7 = 7, Plate8 = 8)
+FeedingRate$Block <- dplyr::recode(FeedingRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
+FeedingRate$Day <- dplyr::recode(FeedingRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
+FeedingRate$Plate <- dplyr::recode(FeedingRate$Plate, Plate1 = 1, Plate2 = 2, Plate3 = 3, Plate4 = 4, Plate5 = 5, Plate6 = 6, Plate7 = 7, Plate8 = 8)
 
 
 # need to join meta data to the feeding rate data
@@ -212,9 +212,9 @@ outlier_test_nodaph_M_toxin$all.stats
 
 
 # remove daphnia that died during feeding rate trial
-FeedingRate_died <- filter(FeedingRate, Notes == "died")
+FeedingRate_died <- filter(FeedingRate, Died.After.Feed == "Y")
 #View(FeedingRate_died)
-FeedingRate <- filter(FeedingRate, Notes != "died")
+FeedingRate <- filter(FeedingRate, Died.After.Feed != "Y")
 dim(FeedingRate)
 
 # quick figures to check the distribution of raw data points for each treatment across weeks
@@ -243,7 +243,7 @@ ggsave(here("figures/FeedingRateCONTROLS_DietxParasitexExperiment.tiff"), plot =
 
 FeedingRateCalc <- FeedingRate %>%
   group_by(Experiment, Treatment, Block, Day, Plate, Column, Time, Diet, Parasites, Clone, Rep) %>%
-  summarize(chlorophyll.avg = mean(chlorophyll),
+  dplyr::summarize(chlorophyll.avg = mean(chlorophyll),
             chlorophyll.med = median(chlorophyll),
             chlorophyll.sd = sd(chlorophyll))
 
@@ -252,7 +252,7 @@ FeedingRateCalc_NoAlgae <- filter(FeedingRateCalc, Clone == "NoAlgae")
 FeedingRateCalc_Treatment <- filter(FeedingRateCalc, Clone != "NoDaphnia", Clone != "NoAlgae")
 
 
-View(FeedingRateCalc_Treatment)
+#View(FeedingRateCalc_Treatment)
 class(FeedingRateCalc_Treatment$Day)
 FeedingRateCalc_Treatment$Rep <- as.integer(FeedingRateCalc_Treatment$Rep)
 
@@ -283,8 +283,8 @@ bodysize_long <- bind_rows(bodysize_past_long, bodysize_metsch_long)
  
 
 # recode Mid37 and Std labels to match feeding rate
-bodysize_long$Clone <- recode(bodysize_long$Clone, Mid37 = "MID", Standard = "STD")
-bodysize_long$Parasites <- recode(bodysize_long$Parasites, Uninfected = "Uninf")
+bodysize_long$Clone <- dplyr::recode(bodysize_long$Clone, Mid37 = "MID", Standard = "STD")
+bodysize_long$Parasites <- dplyr::recode(bodysize_long$Parasites, Uninfected = "Uninf")
 bodysize_long$Day <- as.numeric(bodysize_long$Day)
 dim(bodysize_long)
 
@@ -513,12 +513,12 @@ RespRate <- file_paths2 %>%
   #extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
   select(Block:Plate, Date.Time:D6)
 
-View(RespRate)
+#View(RespRate)
 
 # recode block, day and plate to numbers
-RespRate$Block <- recode(RespRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
-RespRate$Day <- recode(RespRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
-RespRate$Plate <- recode(RespRate$Plate, plate1 = 1, plate2 = 2, plate3 = 3, plate4 = 4)
+RespRate$Block <- dplyr::recode(RespRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
+RespRate$Day <- dplyr::recode(RespRate$Day, Day7 = 7, Day8 = 8, Day14 = 14, Day15 = 15, Day21 = 21, Day22 = 22, Day28 = 28, Day29 = 29, Day35 = 35, Day36 = 36)
+RespRate$Plate <- dplyr::recode(RespRate$Plate, plate1 = 1, plate2 = 2, plate3 = 3, plate4 = 4)
 
 # convert Date.Time column to a date and time format
 RespRate$Date.Time <- as.POSIXct(RespRate$Date.Time, tz = "EST", format = "%d.%m.%Y %H:%M%OS") # adds in today's date, but only need the start/end times relative to each other
