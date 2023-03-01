@@ -11,15 +11,20 @@ library(survival)
 #library to make survival curves
 library(rms)
 library(survminer)
+library(emmeans)
 library(ggplot2)
+library(here)
 
+
+# set the path to the script relative to the project root directory
+here::i_am("scripts/ResourceQuality_Calculations.R")
 
 ########################################
 ### Load Pasteuria data:
 ########################################
 
 #### lifespan, offspring, infection prevalence
-offspring_past <- read.csv("ResourceQuality_Pasteuria_Survival_Offspring.csv", stringsAsFactors = F)
+offspring_past <- read.csv("data/ResourceQuality_Pasteuria_Survival_Offspring.csv", stringsAsFactors = F)
 head(offspring_past)
 
 # update data classes to factor class
@@ -60,7 +65,7 @@ offspring_past_short <- offspring_past %>%
 
 
 ### bodysize data
-bodysize_past <- read.csv("ResourceQuality_Pasteuria_Bodysize.csv", stringsAsFactors = F)
+bodysize_past <- read.csv("data/ResourceQuality_Pasteuria_Bodysize.csv", stringsAsFactors = F)
 head(bodysize_past)
 bodysize_past$Diet <- as.factor(bodysize_past$Diet)
 bodysize_past$Parasites <- as.factor(bodysize_past$Parasites)
@@ -86,7 +91,7 @@ bodysize_past_short <- bodysize_past %>%
 
 
 ### spore yield data
-spores_past <- read.csv("ResourceQuality_Pasteuria_SporeCounts.csv", stringsAsFactors = F)
+spores_past <- read.csv("data/ResourceQuality_Pasteuria_SporeCounts.csv", stringsAsFactors = F)
 head(spores_past)
 spores_past$Diet <- as.factor(spores_past$Diet)
 spores_past$Parasites <- as.factor(spores_past$Parasites)
@@ -117,6 +122,122 @@ View(spores_past_short)
 #### respiration data 
   
   
+
+
+
+#### Microcystin data (both experiments)
+microcystin <- read.csv("data/Microcystin/Microcystin_ELISA_Samples.csv", stringsAsFactors = F)
+head(microcystin)
+microcystin$Diet <- factor(microcystin$Diet, levels = c("S", "SM", "M", "M+"))
+
+# check super toxin spike at day 5 of experiment
+super_spike <- microcystin %>%
+  filter(Day == 5 | Day == 8) %>%
+  filter(Diet == "M" | Diet == "M+") %>%
+  filter(Experiment == "Pasteuria") %>%
+  filter(!is.na(Microcystin.conc))
+# diet color palette
+diet_colors_micro <- c("#006837", "#1D91C0")
+super_spike$Day <- factor(super_spike$Day)
+
+Day_labels <- c("Day 5, pre-exposure", "Day 8, parasite exposure")
+names(Day_labels) <- c(5, 8)
+
+# compare the super spike concentrations to those during exposure 
+spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Diet)) +
+  geom_boxplot() +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  facet_wrap(~Day, labeller = label_both) +
+  scale_fill_manual(values = diet_colors_micro) +
+  ggtitle("Microcystin spiked concentrations, Day 5 and 8") +
+  labs(x = "Diet", y = "log Microcystin concentation (ug/L)") +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
+spike_plot
+ggsave(here("figures/Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+
+m_conc_mod <- lm(log(Microcystin.conc) ~ Day*Diet, data = super_spike)
+summary(m_conc_mod)
+plot(m_conc_mod)
+treatment_difs <- emmeans(m_conc_mod, pairwise ~ Diet * Day, type = "response")
+treatment_difs  
+        # no sig diff between M treatments on days 5 and 8.
+        # sig differences between M and M+ on day 5, M and M+ on day 8, and M+ on days 5 and 8
+
+
+
+# look at microcystin concentration across all treatments during parasite exposure (day 8)
+microcystin_exposure <- microcystin %>%
+  filter(Day == 8 & !is.na(Microcystin.conc))
+
+# diet color palette
+diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
+
+microcystin_plot <- ggplot(microcystin_exposure, aes(x = Parasite, y = Microcystin.conc+0.001, fill = Diet)) +
+  geom_boxplot(position=position_dodge()) +
+  geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
+  facet_grid(Experiment~Clone, labeller = label_both) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Microcystin concentrations during exposure, Day 8") +
+  labs(x = "Parasite Treatments", y = "log Microcystin concentation (ug/L)") +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+microcystin_plot
+ggsave(here("figures/Microcystin_exposure_at_Day8.tiff"), plot = microcystin_plot, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
+
+
+# calculate average microcystin concentration per diet,clone, parasite treatment in each experiment
+microcystin_exposure.sum <- microcystin_exposure %>%
+  group_by(Experiment, Diet, Clone, Parasite) %>%
+  dplyr::summarize(N  = length(Microcystin.conc), 
+                   microcystin.avg = mean(Microcystin.conc, na.rm = T),
+                   microcystin.sd   = sd(Microcystin.conc, na.rm = T),
+                   microcystin.se   = microcystin.sd / sqrt(N))
+microcystin_exposure.sum
+microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero
+
+
+microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasite, y = microcystin.avg)) +
+  geom_point(aes(color = Diet), position=position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin=microcystin.avg-microcystin.se, ymax=microcystin.avg+microcystin.se,color=Diet), width=0.3, position=position_dodge(width = 0.5)) + 
+  #geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
+  facet_grid(Experiment~Clone, labeller = label_both) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  #scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  #scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Microcystin concentrations during exposure, Day 8") +
+  labs(x = "Parasite Treatments", y = "log Average Microcystin concentation (ug/L)") +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+microcystin_plot2
+ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
+
+## table of average Microcystin concentrations per Diet treatment in each experiment
+microcystin_exposure.sum2 <- microcystin_exposure %>%
+  group_by(Experiment, Diet) %>%
+  dplyr::summarize(N  = length(Microcystin.conc), 
+                   microcystin.avg = mean(Microcystin.conc, na.rm = T),
+                   microcystin.sd   = sd(Microcystin.conc, na.rm = T),
+                   microcystin.se   = microcystin.sd / sqrt(N))
+microcystin_exposure.sum2
+
+
+# calculate average microcystin concentration per diet, clone, parasite infection status treatment to join with larger data set
+microcystin_exposure.sum3 <- microcystin_exposure %>%
+  group_by(Experiment, Diet, Clone, Parasite, Infection.Status) %>%
+  dplyr::summarize(N  = length(Microcystin.conc), 
+                   microcystin.avg = mean(Microcystin.conc, na.rm = T),
+                   microcystin.sd   = sd(Microcystin.conc, na.rm = T),
+                   microcystin.se   = microcystin.sd / sqrt(N))
+View(microcystin_exposure.sum3)
+
+past_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Pasteuria")
+metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
+
+
 
 
 ##### Join short data sets together
@@ -298,6 +419,11 @@ View(spores_metsch_short)
 
 #### respiration data 
 
+
+
+#### Microcystin data
+
+      # see above in the Pasteuria section for figures and calculations of averages per treatment
 
 
 
