@@ -120,8 +120,19 @@ View(spores_past_short)
 
 
 #### respiration data 
-  
-  
+resp_data <- read.csv("data/ResourceQuality_RespirationRateCalc.csv", stringsAsFactors = F)  
+head(resp_data)
+
+# filter by experiment, and remove dead animals and blanks, generate short and long versions of data
+resp_past_data_long <- resp_data %>% 
+  filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank") %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate)
+
+resp_past_data_short <- resp_data %>% 
+  filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate) %>%
+  dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
+
 
 
 
@@ -433,6 +444,18 @@ View(spores_metsch_short)
 
 
 #### respiration data 
+      # data was loaded in above, just need to filter by Metsch experiment 
+unique(resp_data$Experiment)
+# filter by experiment, and remove dead animals and blanks, generate short and long versions of data
+resp_metsch_data_long <- resp_data %>% 
+  filter(Experiment == "Metsch", Died.After.Resp != "Y",Clone != "Blank") %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate)
+
+resp_metsch_data_short <- resp_data %>% 
+  filter(Experiment == "Metsch", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate) %>%
+  dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
+
 
 
 
