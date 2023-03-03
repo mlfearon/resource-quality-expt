@@ -34,7 +34,6 @@ Pasteuria and Metsch (and their associated Control treatments) with both host ge
 
 
 ```{r, set directory and load libraries, results='hide', warning=FALSE, message=FALSE}
-setwd("C:/Users/mlfea/OneDrive/Documents/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code")
 
 library(dplyr)
 library(tidyr)
@@ -51,19 +50,23 @@ library(survminer)
 library(ggplot2)
 library(viridis)
 library(RColorBrewer)
+library(here)
+
+# set the path to the script relative to the project root directory
+#here::i_am("scripts/ResourceQuality_Analysis.R")
 ```
 
 Import Data
 ```{r, import data}
 # Pasteuria data
-p_data <- read.csv("ResourceQuality_Pasteuria_Full.csv", stringsAsFactors = F)
-p_longdata <- read.csv("ResourceQuality_Pasteuria_Full_ByExptDay.csv", stringsAsFactors = F)
-p_lifetable <- read.csv("ResourceQuality_Pasteuria_LifeTableResults.csv", stringsAsFactors = F)
+p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
+p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptDay.csv"), stringsAsFactors = F)
+p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
 
 # Metsch data
-m_data <- read.csv("ResourceQuality_Metsch_Full.csv", stringsAsFactors = F)
-m_longdata <- read.csv("ResourceQuality_Metsch_Full_ByExptDay.csv", stringsAsFactors = F)
-m_lifetable <- read.csv("ResourceQuality_Metsch_LifeTableResults.csv", stringsAsFactors = F)
+m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
+m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptDay.csv"), stringsAsFactors = F)
+m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
 
 ```
 
@@ -149,7 +152,7 @@ p_prev_fig2 <- plot(past_prev, dodge = 0.5, show.title = F) +
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig2
 
-ggsave("PasteuriaPrev_DietxClone.tiff", plot = p_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/PasteuriaPrev_DietxClone.tiff", plot = p_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -188,7 +191,7 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig3
 
-ggsave("PasteuriaPrevCalcualtions_DietxClone.tiff", plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/PasteuriaPrevCalcualtions_DietxClone.tiff", plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 ```
 
 There is a significant difference in prevalence based on clone, but not based on diet nor the interaction between the two. Standards were generally more resistant to this strain of Pasteuria compared to Mid37s. For Mid37s, there is lower Pasteuria prevalence for the M and M+ treatments, but it is not a significant difference. Maybe since we only have the 10 reps, our prevalence has rather large error bars. 
@@ -238,7 +241,7 @@ m_prev_fig2 <- plot(metsch_prev, dodge = 0.5, show.title = F) +
         axis.title.x = element_text(size=9, color="black"))
 m_prev_fig2
 
-ggsave("MetschPrev_DietxClone.tiff", plot = m_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/MetschPrev_DietxClone.tiff", plot = m_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -277,7 +280,7 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 m_prev_fig3
 
-ggsave("MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 ```
@@ -380,7 +383,7 @@ p_maturespore_fig3 <- plot(past_maturespores, dodge = 0.5, add.data = T, show.ti
         axis.title.x = element_text(size=9, color="black"))
 p_maturespore_fig3
 
-ggsave("PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -548,7 +551,7 @@ m_maturespore_fig3 <- plot(metsch_maturespores, dodge = 0.5, add.data = T, show.
         axis.title.x = element_text(size=9, color="black"))
 m_maturespore_fig3
 
-ggsave("MetschMatureSpores_DietxClone.tiff", plot = m_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/MetschMatureSpores_DietxClone.tiff", plot = m_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -566,7 +569,7 @@ m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) 
   theme_classic()
 m_maturespore_fig2
 
-ggsave("MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave("figures/MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 ```
 
 Results are similar to the total spore yield analyses. There is not a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments.
@@ -742,7 +745,7 @@ m_totgutspores_fig3 <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)
         axis.title.x = element_text(size=9, color="black"))
 m_totgutspores_fig3
 
-ggsave("MetschGutSpores_DietxClone.tiff", plot = m_totgutspores_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschGutSpores_DietxClone.tiff", plot = m_totgutspores_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -825,7 +828,7 @@ m_hemocytes_fig2 <- ggplot(m_data_hemocytes, aes(x = Diet, y = Hemocytes)) +
         axis.title.x = element_text(size=9, color="black"))
 m_hemocytes_fig2
 
-ggsave("Hemocytes_DietxClone.tiff", plot = m_hemocytes_fig2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+ggsave("figures/Hemocytes_DietxClone.tiff", plot = m_hemocytes_fig2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
 
 
@@ -885,7 +888,7 @@ m_hemocytesperspore_fig3 <- ggplot(m_data_hemocytes, aes(x = Diet, y = Hemocytes
         axis.title.x = element_text(size=9, color="black"))
 m_hemocytesperspore_fig3
 
-ggsave("HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
 
 ```
@@ -1005,7 +1008,7 @@ p_fecund_tot2 <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
         axis.title.x = element_text(size=9, color="black"))
 p_fecund_tot2
 
-ggsave("PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 
 ```
@@ -1055,7 +1058,7 @@ m_fecund_tot2 <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
         axis.title.x = element_text(size=9, color="black"))
 m_fecund_tot2
 
-ggsave("MetschTotalFecundity_DietxClonexInfection.tiff", plot = m_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschTotalFecundity_DietxClonexInfection.tiff", plot = m_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1115,7 +1118,7 @@ p_little_r2 <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
         axis.title.x = element_text(size=9, color="black"))
 p_little_r2
 
-ggsave("PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1154,7 +1157,7 @@ m_little_r2 <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
         axis.title.x = element_text(size=9, color="black"))
 m_little_r2
 
-ggsave("MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1214,7 +1217,7 @@ p_growth2 <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
         axis.title.x = element_text(size=9, color="black"))
 p_growth2
 
-ggsave("PastGrowthRate_DietxClonexInfection.tiff", plot = p_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/PastGrowthRate_DietxClonexInfection.tiff", plot = p_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 Since this is growth rate early on in the experiment, there would not have been signs of infection yet. There doesn't seem to be large differences between the infection status categories nor host clone. There are only significant differences consistently based on diet quality, where growth rate declines with poorer quality diet.
@@ -1271,7 +1274,7 @@ m_growth2 <- ggplot(m_data_growth, aes(x = Infection, y = GrowthRate)) +
         axis.title.x = element_text(size=9, color="black"))
 m_growth2
 
-ggsave("MetschGrowthRate_DietxClonexInfection.tiff", plot = m_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschGrowthRate_DietxClonexInfection.tiff", plot = m_growth2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 ```
 
 There are significant differences for Diet, infection status, and host clone, but no sig interactions between any of those factors. As with the Pasteuria experiment, growth rate declined with poorer quality diets, Growth rate is lower in exposed or infected animals compared to uninfected animals, more so for the M and M+ treatments in Mid37s (less so for Standards).
@@ -1300,7 +1303,7 @@ Need to remove some animals from data set? Which ones? Depending on whether we g
 Need to separate data based on host clone to make the plots easier to look at.
 
 ```{r, parse pasteuria data by host clone}
-p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data_std$Diet))
+p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(p_data_std$Diet))
 p_data$Diet2 <- factor(p_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
 
 p_data$SurvObj <- with(p_data, Surv(lifespan.days, Status))
@@ -1356,7 +1359,7 @@ ggforest(cox.diet_infstatus_std2, data = p_data_std)
 # forest plot for presentation
 past_cox <- ggforest(cox.diet_infstatus_clone, data = p_data, cpositions = c(0.02, 0.15, 0.35))
 past_cox
-ggsave("PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
+ggsave("figures/PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
 
 # NOTE: the forest plot has a problem plotting the reference if it starts with the same letter as another factor in the same variable (e.g. S and SM), but the analysis runs correctly
 
@@ -1452,7 +1455,7 @@ ggforest(cox.m_diet_infstatus_std2, data = m_data_std)
 # forest plot for presentation
 metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
 metsch_cox
-ggsave("MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
 
 
 
@@ -1521,7 +1524,7 @@ p_lifespan <- ggplot(p_data_lifespan, aes(x = Infection, y = Lifespan)) +
         axis.title.x = element_text(size=9, color="black"))
 p_lifespan
 
-ggsave("PastLifespan_DietxClonexInfection.tiff", plot = p_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/PastLifespan_DietxClonexInfection.tiff", plot = p_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1549,7 +1552,7 @@ m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
         axis.title.x = element_text(size=9, color="black"))
 m_lifespan
 
-ggsave("MetschLifespan_DietxClonexInfection.tiff", plot = m_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+ggsave("figures/MetschLifespan_DietxClonexInfection.tiff", plot = m_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 ```
 
 
