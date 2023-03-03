@@ -673,7 +673,7 @@ View(RespRateCalc)
 RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
 # save CSV file
-write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc_NoBlankOutliers.csv"), quote = F, row.names=FALSE)
+write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), quote = F, row.names=FALSE)
 
 
 
