@@ -1,6 +1,8 @@
+# This code combines all sources of experimental data into single data sets for the Resource Quality with Pasteuria and Metschnikowia experiments
+# Both short and long (by experimental day) versions of the data are created for use in different analyses.
 
-setwd("C:/Users/mlfea/OneDrive/Documents/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code")
-
+# Code written by: Michelle Fearon
+# Last updated: March 2, 2023
 
 # load libraries
 library(dplyr)
@@ -77,7 +79,31 @@ bodysize_past$Block <- as.factor(bodysize_past$Block)
 # create a long version of the data set based on experimental day
 bodysize_past_long <- bodysize_past %>%
   pivot_longer(length_7:length_38, names_to = "Day", names_prefix = "length_", values_to = "Length")
-View(bodysize_past_long)  
+  
+
+# add week to dataset based on day of experiment
+bodysize_past_long$ID <- 1:length(bodysize_past_long$Block)
+bodysize_past_long$Week <- NA
+
+for(i in bodysize_past_long$ID){
+  if(bodysize_past_long$Day[i] == 7 | bodysize_past_long$Day[i] == 8){
+    bodysize_past_long$Week[i] <- 1
+  }else if(bodysize_past_long$Day[i] == 14 | bodysize_past_long$Day[i] == 15){
+    bodysize_past_long$Week[i] <- 2
+  }else if(bodysize_past_long$Day[i] == 21 | bodysize_past_long$Day[i] == 22){
+    bodysize_past_long$Week[i] <- 3
+  }else if(bodysize_past_long$Day[i] == 28 | bodysize_past_long$Day[i] == 29){
+    bodysize_past_long$Week[i] <- 4
+  }else if(bodysize_past_long$Day[i] == 35 | bodysize_past_long$Day[i] == 36){
+    bodysize_past_long$Week[i] <- 5
+  }else if(bodysize_past_long$Day[i] == 38){
+    bodysize_past_long$Week[i] <- 5.5
+    }else{
+    bodysize_past_long$Week[i] <- NA
+  }
+}
+View(bodysize_past_long)
+bodysize_past_long$Week <- as.factor(bodysize_past_long$Week)
 
 
 # create short version of the data set with one row per replicate
@@ -115,6 +141,24 @@ View(spores_past_short)
 
 
 ### feeding rate data
+feed_data <- read.csv("data/ResourceQuality_FeedingRateCalc.csv", stringsAsFactors = F)  
+head(feed_data)
+feed_data$Diet <- as.factor(feed_data$Diet)
+feed_data$Parasites <- as.factor(dplyr::recode(feed_data$Parasites, Uninf = "Uninfected"))
+feed_data$Clone <- as.factor(dplyr::recode(feed_data$Clone, MID = "Mid37", STD = "Standard"))
+feed_data$Rep <- as.factor(feed_data$Rep)
+feed_data$Block <- as.factor(feed_data$Block)
+feed_data$Week <- as.factor(feed_data$Week)
+
+# filter by experiment, and remove dead animals and blanks, generate short and long versions of data
+feed_past_data_long <- feed_data %>% 
+  filter(Experiment == "Past") %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel)
+
+feed_past_data_short <- feed_data %>% 
+  filter(Experiment == "Past", Week == 1) %>%
+  select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
+  dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
 
@@ -122,6 +166,12 @@ View(spores_past_short)
 #### respiration data 
 resp_data <- read.csv("data/ResourceQuality_RespirationRateCalc.csv", stringsAsFactors = F)  
 head(resp_data)
+resp_data$Diet <- as.factor(resp_data$Diet)
+resp_data$Parasites <- as.factor(dplyr::recode(resp_data$Parasites, Uninf = "Uninfected"))
+resp_data$Clone <- as.factor(dplyr::recode(resp_data$Clone, MID = "Mid37", STD = "Standard"))
+resp_data$Rep <- as.factor(resp_data$Rep)
+resp_data$Block <- as.factor(resp_data$Block)
+resp_data$Week <- as.factor(resp_data$Week)
 
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 resp_past_data_long <- resp_data %>% 
@@ -130,7 +180,7 @@ resp_past_data_long <- resp_data %>%
 
 resp_past_data_short <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate) %>%
+  select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
   dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
 
 
@@ -139,7 +189,14 @@ resp_past_data_short <- resp_data %>%
 #### Microcystin data (both experiments)
 microcystin <- read.csv("data/Microcystin/Microcystin_ELISA_Samples.csv", stringsAsFactors = F)
 head(microcystin)
+microcystin$Diet <- as.factor(microcystin$Diet)
 microcystin$Diet <- factor(microcystin$Diet, levels = c("S", "SM", "M", "M+"))
+microcystin$Parasites <- as.factor(dplyr::recode(microcystin$Parasite, Uninf = "Uninfected"))
+microcystin$Infection <- as.factor(dplyr::recode(microcystin$Infection.Status, Uninf = "Uninfected"))
+microcystin$Clone <- as.factor(dplyr::recode(microcystin$Clone, MID = "Mid37", STD = "Standard"))
+microcystin$Rep <- as.factor(microcystin$Rep)
+
+
 
 # check super toxin spike at day 5 of experiment
 super_spike <- microcystin %>%
@@ -151,8 +208,6 @@ super_spike <- microcystin %>%
 diet_colors_micro <- c("#006837", "#1D91C0")
 super_spike$Day <- factor(super_spike$Day)
 
-Day_labels <- c("Day 5, pre-exposure", "Day 8, parasite exposure")
-names(Day_labels) <- c(5, 8)
 
 # compare the super spike concentrations to those during exposure 
 spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Diet)) +
@@ -201,7 +256,7 @@ ggsave(here("figures/Microcystin_exposure_at_Day8.tiff"), plot = microcystin_plo
 
 # calculate average microcystin concentration per diet,clone, parasite treatment in each experiment
 microcystin_exposure.sum <- microcystin_exposure %>%
-  group_by(Experiment, Diet, Clone, Parasite) %>%
+  group_by(Experiment, Diet, Clone, Parasites) %>%
   dplyr::summarize(N  = length(Microcystin.conc), 
                    microcystin.avg = mean(Microcystin.conc, na.rm = T),
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
@@ -253,14 +308,18 @@ microcystin_exposure.sum2
 
 # calculate average microcystin concentration per diet, clone, parasite infection status treatment to join with larger data set
 microcystin_exposure.sum3 <- microcystin_exposure %>%
-  group_by(Experiment, Diet, Clone, Parasite, Infection.Status) %>%
+  group_by(Experiment, Diet, Clone, Parasites, Infection) %>%
   dplyr::summarize(N  = length(Microcystin.conc), 
                    microcystin.avg = mean(Microcystin.conc, na.rm = T),
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
                    microcystin.se   = microcystin.sd / sqrt(N))
 View(microcystin_exposure.sum3)
 
-past_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Pasteuria")
+past_microcystin <- microcystin_exposure.sum3 %>% 
+  filter(Experiment == "Pasteuria") %>%
+  ungroup() %>%
+  select(Diet:Infection, microcystin.avg)
+
 metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
 
 
@@ -269,6 +328,9 @@ metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
 ##### Join short data sets together
 past_data_short <- full_join(offspring_past_short, bodysize_past_short)
 past_data_short <- full_join(past_data_short, spores_past_short)
+past_data_short <- full_join(past_data_short, feed_past_data_short)
+past_data_short <- full_join(past_data_short, resp_past_data_short)
+past_data_short <- full_join(past_data_short, past_microcystin)
 View(past_data_short)
 write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F, row.names=FALSE)
 
@@ -287,6 +349,8 @@ write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F,
 
 #### Join long data sets together
 past_data_long <- full_join(offspring_past_long, bodysize_past_long)
+past_data_long <- full_join(offspring_past_long, feed_past_long)
+past_data_long <- full_join(offspring_past_long, resp_past_long)
 head(past_data_long)
 
 past_data_long <- past_data_long %>% 
@@ -439,8 +503,17 @@ View(spores_metsch_short)
 
 
 ### feeding rate data
+        # data was loaded in above, just need to filter by Metsch experiment 
 
+# filter by experiment, and remove dead animals and blanks, generate short and long versions of data
+feed_metsch_data_long <- feed_data %>% 
+  filter(Experiment == "Metsch") %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel)
 
+feed_metsch_data_short <- feed_data %>% 
+  filter(Experiment == "Metsch", Week == 1) %>%
+  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel) %>%
+  dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
 #### respiration data 
@@ -462,6 +535,10 @@ resp_metsch_data_short <- resp_data %>%
 #### Microcystin data
 
       # see above in the Pasteuria section for figures and calculations of averages per treatment
+metsch_microcystin <- microcystin_exposure.sum3 %>% 
+  filter(Experiment == "Metsch") %>%
+  ungroup() %>%
+  select(Diet:Infection, microcystin.avg)
 
 
 
