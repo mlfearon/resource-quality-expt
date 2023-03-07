@@ -55,14 +55,58 @@ offspring_past$SurvObj <- with(offspring_past, Surv(lifespan.days, Status))
 # create a long version of the data set based on experimental day
 offspring_past_long <- offspring_past %>%
   select(Unique.code:Block,lifespan.days, Infection, InfectionStatus, Babies_7:Babies_38) %>%
-  pivot_longer(Babies_7:Babies_38, names_to = "Day", names_prefix = "Babies_", values_to = "Offspring")
-View(offspring_past_long)  
+  pivot_longer(Babies_7:Babies_38, names_to = "Day", names_prefix = "Babies_", values_to = "Offspring") #%>%
+  #mutate(CumulativeOffspring = cumsum(Offspring))   ADDS IN DAILY CUMULATIVE SUM OF OFFSPRING< BUT FAILS WITH NAs
+ 
+
+# add week to dataset based on day of experiment
+offspring_past_long$ID <- 1:length(offspring_past_long$Block)
+offspring_past_long$Week <- NA
+
+for(i in offspring_past_long$ID){
+  if(offspring_past_long$Day[i] == 7 | offspring_past_long$Day[i] == 8){
+    offspring_past_long$Week[i] <- 1
+  }else if(offspring_past_long$Day[i] > 8 | offspring_past_long$Day[i] <= 15){
+    offspring_past_long$Week[i] <- 2
+  }else if(offspring_past_long$Day[i] > 15 & offspring_past_long$Day[i] <= 22){
+    offspring_past_long$Week[i] <- 3
+  }else if(offspring_past_long$Day[i] > 22 & offspring_past_long$Day[i] <= 29){
+    offspring_past_long$Week[i] <- 4
+  }else if(offspring_past_long$Day[i] > 29 & offspring_past_long$Day[i] <= 36){
+    offspring_past_long$Week[i] <- 5
+  }else if(offspring_past_long$Day[i] > 36){
+    offspring_past_long$Week[i] <- 5.5
+  }else{
+    offspring_past_long$Week[i] <- NA
+  }
+}
+
+View(offspring_past_long) 
+
+# remove day and offspring by day from this data set
+offspring_past_long2 <- select(offspring_past_long, Unique.code:InfectionStatus, Week)
+
+# Calculate the number of offspring produced each week and cumulatively by week
+offspring_past_longWeek <- offspring_past_long %>%
+  group_by(Unique.code, Diet, Parasites, Clone, Rep, Block, Week) %>%
+  dplyr::summarize(WeeklyOffspring = sum(Offspring, na.rm = T)) %>%
+  mutate(CumulativeWeeklyOffspring = cumsum(WeeklyOffspring))
+
+# join data with other lifespan data
+offspring_past_longWeek <- left_join(offspring_past_longWeek, offspring_past_long2)
+
+# re-order columns and remove duplicates
+offspring_past_longWeek <- offspring_past_longWeek %>%
+  select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
+  distinct()
+dim(offspring_past_longWeek)
+offspring_past_longWeek$Week <- as.factor(offspring_past_longWeek$Week)
+#View(offspring_past_longWeek)
 
 
 # create short version of the data set with one row per replicate
 offspring_past_short <- offspring_past %>%
   select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
-
 
 
 
@@ -103,7 +147,14 @@ for(i in bodysize_past_long$ID){
   }
 }
 View(bodysize_past_long)
-bodysize_past_long$Week <- as.factor(bodysize_past_long$Week)
+
+bodysize_past_longWeek <- bodysize_past_long %>%
+  group_by(Unique.code, Diet, Parasites, Clone, Rep, Block, Week) %>%
+  dplyr::summarize(WeeklyLength = mean(Length, na.rm = T)) %>%
+  mutate(WeeklyLength = ifelse(is.nan(WeeklyLength), NA, WeeklyLength))
+View(bodysize_past_longWeek)
+bodysize_past_longWeek$Week <- as.factor(bodysize_past_longWeek$Week)
+#bodysize_past_long$Week <- as.factor(bodysize_past_long$Week)
 
 
 # create short version of the data set with one row per replicate
@@ -153,7 +204,7 @@ feed_data$Week <- as.factor(feed_data$Week)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 feed_past_data_long <- feed_data %>% 
   filter(Experiment == "Past") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel)
+  select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
 
 feed_past_data_short <- feed_data %>% 
   filter(Experiment == "Past", Week == 1) %>%
@@ -176,7 +227,7 @@ resp_data$Week <- as.factor(resp_data$Week)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 resp_past_data_long <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate)
+  select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
 
 resp_past_data_short <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
@@ -348,34 +399,14 @@ write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F,
 
 
 #### Join long data sets together
-past_data_long <- full_join(offspring_past_long, bodysize_past_long)
-past_data_long <- full_join(offspring_past_long, feed_past_long)
-past_data_long <- full_join(offspring_past_long, resp_past_long)
-head(past_data_long)
+past_data_longWeek <- full_join(offspring_past_longWeek, bodysize_past_longWeek)
+past_data_longWeek <- full_join(past_data_longWeek, feed_past_data_long)
+past_data_longWeek <- full_join(past_data_longWeek, resp_past_data_long)
+head(past_data_longWeek)
+dim(past_data_longWeek)
+View(past_data_longWeek)
 
-past_data_long <- past_data_long %>% 
-  mutate( Week = case_when(Day %% 7 == 0 ~ "fizz buzz" 1, 
-                           Day %% 8 == 1,
-                           Day %% 10 == 1,
-                           Day %% 12 == 1,
-                           Day %% 14 == 2,
-                           Day %% 15 == 2,
-                           Day %% 16 == 2,
-                           Day %% 19 == 2,
-                           Day %% 21 == 3,
-                           Day %% 22 == 3,
-                           Day %% 23 == 3,
-                           Day %% 26 == 3,
-                           Day %% 28 == 4,
-                           Day %% 29 == 4,
-                           Day %% 30 == 4,
-                           Day %% 33 == 4,
-                           Day %% 35 == 5,
-                           Day %% 36 == 5,
-                           Day %% 37 == 5,
-                           Day %% 38 == 5))
-
-write.csv(past_data_long, "data/ResourceQuality_Pasteuria_Full_ByExptDay.csv", quote = F, row.names=FALSE)
+write.csv(past_data_longWeek, "data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv", quote = F, row.names=FALSE)
 
 
 
