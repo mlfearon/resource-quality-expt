@@ -154,7 +154,7 @@ bodysize_past_longWeek <- bodysize_past_long %>%
   mutate(WeeklyLength = ifelse(is.nan(WeeklyLength), NA, WeeklyLength))
 View(bodysize_past_longWeek)
 bodysize_past_longWeek$Week <- as.factor(bodysize_past_longWeek$Week)
-#bodysize_past_long$Week <- as.factor(bodysize_past_long$Week)
+
 
 
 # create short version of the data set with one row per replicate
@@ -452,6 +452,49 @@ offspring_metsch_long <- offspring_metsch %>%
 View(offspring_metsch_long)  
 
 
+
+# add week to dataset based on day of experiment
+offspring_metsch_long$ID <- 1:length(offspring_metsch_long$Block)
+offspring_metsch_long$Week <- NA
+
+for(i in offspring_metsch_long$ID){
+  if(offspring_metsch_long$Day[i] == 7 | offspring_metsch_long$Day[i] == 8){
+    offspring_metsch_long$Week[i] <- 1
+  }else if(offspring_metsch_long$Day[i] > 8 | offspring_metsch_long$Day[i] <= 15){
+    offspring_metsch_long$Week[i] <- 2
+  }else if(offspring_metsch_long$Day[i] > 15 & offspring_metsch_long$Day[i] <= 22){
+    offspring_metsch_long$Week[i] <- 3
+  }else if(offspring_metsch_long$Day[i] > 22){
+    offspring_metsch_long$Week[i] <- 3.5
+  }else{
+    offspring_metsch_long$Week[i] <- NA
+  }
+}
+
+View(offspring_metsch_long) 
+
+# remove day and offspring by day from this data set
+offspring_metsch_long2 <- select(offspring_metsch_long, Unique.code:InfectionStatus, Week)
+
+# Calculate the number of offspring produced each week and cumulatively by week
+offspring_metsch_longWeek <- offspring_metsch_long %>%
+  group_by(Unique.code, Diet, Parasites, Clone, Rep, Block, Week) %>%
+  dplyr::summarize(WeeklyOffspring = sum(Offspring, na.rm = T)) %>%
+  mutate(CumulativeWeeklyOffspring = cumsum(WeeklyOffspring))
+
+# join data with other lifespan data
+offspring_metsch_longWeek <- left_join(offspring_metsch_longWeek, offspring_metsch_long2)
+
+# re-order columns and remove duplicates
+offspring_metsch_longWeek <- offspring_metsch_longWeek %>%
+  select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
+  distinct()
+dim(offspring_metsch_longWeek)
+offspring_metsch_longWeek$Week <- as.factor(offspring_metsch_longWeek$Week)
+#View(offspring_metsch_longWeek)
+
+
+
 # create short version of the data set with one row per replicate
 offspring_metsch_short <- offspring_metsch %>%
   select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
@@ -475,6 +518,33 @@ bodysize_metsch$Block <- as.factor(bodysize_metsch$Block)
 bodysize_metsch_long <- bodysize_metsch %>%
   pivot_longer(length_7:length_24, names_to = "Day", names_prefix = "length_", values_to = "Length")
 View(bodysize_metsch_long)  
+
+
+# add week to dataset based on day of experiment
+bodysize_metsch_long$ID <- 1:length(bodysize_metsch_long$Block)
+bodysize_metsch_long$Week <- NA
+
+for(i in bodysize_metsch_long$ID){
+  if(bodysize_metsch_long$Day[i] == 7 | bodysize_metsch_long$Day[i] == 8){
+    bodysize_metsch_long$Week[i] <- 1
+  }else if(bodysize_metsch_long$Day[i] == 14 | bodysize_metsch_long$Day[i] == 15){
+    bodysize_metsch_long$Week[i] <- 2
+  }else if(bodysize_metsch_long$Day[i] == 21 | bodysize_metsch_long$Day[i] == 22){
+    bodysize_metsch_long$Week[i] <- 3
+  }else if(bodysize_metsch_long$Day[i] == 24){
+    bodysize_metsch_long$Week[i] <- 3.5
+  }else{
+    bodysize_metsch_long$Week[i] <- NA
+  }
+}
+View(bodysize_metsch_long)
+
+bodysize_metsch_longWeek <- bodysize_metsch_long %>%
+  group_by(Unique.code, Diet, Parasites, Clone, Rep, Block, Week) %>%
+  dplyr::summarize(WeeklyLength = mean(Length, na.rm = T)) %>%
+  mutate(WeeklyLength = ifelse(is.nan(WeeklyLength), NA, WeeklyLength))
+View(bodysize_metsch_longWeek)
+bodysize_metsch_longWeek$Week <- as.factor(bodysize_metsch_longWeek$Week)
 
 
 # create short version of the data set with one row per replicate
@@ -539,11 +609,11 @@ View(spores_metsch_short)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 feed_metsch_data_long <- feed_data %>% 
   filter(Experiment == "Metsch") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel)
+  select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
 
 feed_metsch_data_short <- feed_data %>% 
   filter(Experiment == "Metsch", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, Clearance, Clearance_rel) %>%
+  select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
   dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
@@ -553,11 +623,11 @@ unique(resp_data$Experiment)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 resp_metsch_data_long <- resp_data %>% 
   filter(Experiment == "Metsch", Died.After.Resp != "Y",Clone != "Blank") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate)
+  select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
 
 resp_metsch_data_short <- resp_data %>% 
   filter(Experiment == "Metsch", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, Day, Week, metabolic.rate) %>%
+  select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
   dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
 
 
@@ -577,7 +647,9 @@ metsch_microcystin <- microcystin_exposure.sum3 %>%
 metsch_data_short <- full_join(offspring_metsch_short, bodysize_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, spores_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, gutspore_metsch)
-
+metsch_data_short <- full_join(metsch_data_short, feed_metsch_data_short)
+metsch_data_short <- full_join(metsch_data_short, resp_metsch_data_short)
+metsch_data_short <- full_join(metsch_data_short, metsch_microcystin)
 
 write.csv(metsch_data_short, "data/ResourceQuality_Metsch_Full.csv", quote = F, row.names=FALSE)
 
@@ -585,20 +657,22 @@ View(metsch_data_short)
 
 
 # calculate sample sizes for water samples at each date
-metsch_data_short$Rep2 <- as.integer(metsch_data_short$Rep)
-
-metsch_summary <- metsch_data_short %>%
-  filter(Rep2 < 11, Lifespan > 6) %>%
-  group_by(Diet, Clone, Infection) %>%
-  summarise(sample.size.total = n())
+# metsch_data_short$Rep2 <- as.integer(metsch_data_short$Rep)
+# 
+# metsch_summary <- metsch_data_short %>%
+#   filter(Rep2 < 11, Lifespan > 6) %>%
+#   group_by(Diet, Clone, Infection) %>%
+#   summarise(sample.size.total = n())
 
 #View(metsch_summary)
 #write.csv(metsch_summary, "ResourceQuality_Metsch_Samplesize_Day6.csv", quote = F, row.names=FALSE)
 
 
 #### Join long data sets together
-metsch_data_long <- full_join(offspring_metsch_long, bodysize_metsch_long)
-
-
-write.csv(metsch_data_long, "data/ResourceQuality_Metsch_Full_ByExptDay.csv", quote = F, row.names=FALSE)
+metsch_data_longWeek <- full_join(offspring_metsch_longWeek, bodysize_metsch_longWeek)
+metsch_data_longWeek <- full_join(metsch_data_longWeek, feed_metsch_data_long)
+metsch_data_longWeek <- full_join(metsch_data_longWeek, resp_metsch_data_long)
+head(metsch_data_longWeek)
+View(metsch_data_longWeek)
+write.csv(metsch_data_longWeek, "data/ResourceQuality_Metsch_Full_ByExptWeek.csv", quote = F, row.names=FALSE)
 
