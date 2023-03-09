@@ -67,7 +67,7 @@ M Past MID 5,M,Pasteuria,Mid37,5,1,11/9/2021,11/30/2021,21,,1,Y,Exposed,0,9,0,0,
 M Past MID 6,M,Pasteuria,Mid37,6,2,11/9/2021,11/25/2021,16,,1,Y,Exposed,0,9,0,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/24 - 1 dead baby; died naturally
 M Past MID 7,M,Pasteuria,Mid37,7,2,11/9/2021,12/2/2021,23,,1,Y,Exposed,0,9,0,0,0,0,0,0,0,0,,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Past MID 8,M,Pasteuria,Mid37,8,2,11/9/2021,12/16/2021,37,censored,0,Y,Infected,1,10,0,0,0,0,0,0,0,0,,0,0,0,,0,0,0,,0,0,0,0,
-M Past MID 9,M,Pasteuria,Mid37,9,2,11/9/2021,11/28/2021,19,,1,Y,Exposed,0,9,0,0,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Past MID 9,M,Pasteuria,Mid37,9,2,11/9/2021,11/28/2021,19,,1,Y,Infected,1,9,0,0,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Past MID 10,M,Pasteuria,Mid37,10,2,11/9/2021,12/1/2021,22,,1,Y,Exposed,0,9,0,0,0,0,0,0,0,0,,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/30 - looks unhealthy; found dead 12/1
 M+ Past MID 1,M+,Pasteuria,Mid37,1,1,11/9/2021,11/24/2021,15,,1,Y,Exposed,0,11,0,0,0,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,
 M+ Past MID 2,M+,Pasteuria,Mid37,2,1,11/9/2021,11/29/2021,20,,1,Y,Exposed,0,11,0,0,0,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/28 - looks unhealthy; died 11/29 overnight
@@ -127,11 +127,11 @@ S Past STD 5,S,Pasteuria,Standard,5,1,11/9/2021,12/16/2021,37,,1,Y,Exposed,0,18,
 S Past STD 6,S,Pasteuria,Standard,6,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,18,0,0,0,2,,0,5,0,,0,1,6,,0,4,10,,0,3,0,31,
 S Past STD 7,S,Pasteuria,Standard,7,2,11/9/2021,11/23/2021,14,,1,Y,Exposed,0,18,0,0,0,2,,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,8,Died overnight after respriation trial
 S Past STD 8,S,Pasteuria,Standard,8,2,11/9/2021,11/15/2021,6,censored,0,N,Exposed,NA,18,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,smashed
-S Past STD 9,S,Pasteuria,Standard,9,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,18,0,0,0,2,,0,3,0,5,0,2,5,,0,10,5,,0,3,0,35,
+S Past STD 9,S,Pasteuria,Standard,9,2,11/9/2021,12/16/2021,37,censored,0,Y,Infected,1,18,0,0,0,2,,0,3,0,5,0,2,5,,0,10,5,,0,3,0,35,
 S Past STD 10,S,Pasteuria,Standard,10,2,11/9/2021,11/27/2021,18,,1,Y,Exposed,0,18,0,0,0,3,2,0,0,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,11,animal degraded; saved parts of the animal
 S:M Past STD 1,SM,Pasteuria,Standard,1,1,11/9/2021,11/16/2021,7,,1,Y,Exposed,NA,19,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
-S:M Past STD 2,SM,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,19,0,0,0,2,1,0,0,2,0,,6,2,0,,2,3,0,,2,2,22,
-S:M Past STD 3,SM,Pasteuria,Standard,3,1,11/9/2021,11/28/2021,19,,1,Y,Exposed,0,19,0,0,0,0,0,0,2,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,6,
+S:M Past STD 2,SM,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,37,censored,0,Y,Infected,1,19,0,0,0,2,1,0,0,2,0,,6,2,0,,2,3,0,,2,2,22,
+S:M Past STD 3,SM,Pasteuria,Standard,3,1,11/9/2021,11/28/2021,19,,1,Y,Infected,1,19,0,0,0,0,0,0,2,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,6,
 S:M Past STD 4,SM,Pasteuria,Standard,4,1,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,19,0,0,0,3,0,0,5,5,0,,2,3,0,,3,2,0,,6,1,30,
 S:M Past STD 5,SM,Pasteuria,Standard,5,1,11/9/2021,12/15/2021,36,,1,Y,Exposed,0,19,0,0,0,0,0,0,5,4,0,,1,1,0,,3,0,0,,4,NA,18,11/27 - 1 dead baby; double check infection status with spore count
 S:M Past STD 6,SM,Pasteuria,Standard,6,2,11/9/2021,11/23/2021,14,,1,Y,Exposed,0,19,0,0,0,2,,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,5,Died overnight after respriation trial
@@ -142,19 +142,19 @@ S:M Past STD 10,SM,Pasteuria,Standard,10,2,11/9/2021,12/16/2021,37,censored,0,Y,
 M Past STD 1,M,Pasteuria,Standard,1,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,20,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Past STD 2,M,Pasteuria,Standard,2,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,20,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,very dessicated
 M Past STD 3,M,Pasteuria,Standard,3,1,11/9/2021,11/29/2021,20,,1,Y,Exposed,0,20,0,0,0,0,0,0,2,4,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,12,died during feeding rate
-M Past STD 4,M,Pasteuria,Standard,4,1,11/9/2021,11/23/2021,14,,1,Y,Exposed,0,20,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during respiration
+M Past STD 4,M,Pasteuria,Standard,4,1,11/9/2021,11/23/2021,14,,1,Y,Infected,1,20,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during respiration
 M Past STD 5,M,Pasteuria,Standard,5,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,20,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Past STD 6,M,Pasteuria,Standard,6,2,11/9/2021,11/22/2021,13,,1,Y,Exposed,0,20,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NOT SAVED; died of natural causes
 M Past STD 7,M,Pasteuria,Standard,7,2,11/9/2021,11/15/2021,6,censored,0,N,Exposed,0,20,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,smashed
 M Past STD 8,M,Pasteuria,Standard,8,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,20,0,0,0,0,1,0,0,3,,2,3,2,,0,0,7,,0,1,0,19,11/24 - 1 dead baby
 M Past STD 9,M,Pasteuria,Standard,9,2,11/9/2021,12/1/2021,22,,1,Y,Exposed,0,20,0,0,0,0,1,0,2,3,3,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,9,11/30 - looks unhealthy
 M Past STD 10,M,Pasteuria,Standard,10,2,11/9/2021,12/2/2021,23,,1,Y,Exposed,0,20,0,0,0,0,0,0,0,2,,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,3,
-M+ Past STD 1,M+,Pasteuria,Standard,1,1,11/9/2021,11/28/2021,19,,1,Y,Exposed,0,21,0,0,0,0,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,
+M+ Past STD 1,M+,Pasteuria,Standard,1,1,11/9/2021,11/28/2021,19,,1,Y,Infected,1,21,0,0,0,0,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,
 M+ Past STD 2,M+,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,21,0,0,0,1,0,0,2,0,0,,4,4,0,,6,1,0,,2,0,20,
 M+ Past STD 3,M+,Pasteuria,Standard,3,1,11/9/2021,11/22/2021,13,,1,Y,Exposed,0,21,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/20 - 2 dead babies
 M+ Past STD 4,M+,Pasteuria,Standard,4,1,11/9/2021,12/8/2021,29,,1,Y,Infected,1,22,0,0,0,0,0,0,1,0,0,,0,0,0,,0,NA,NA,NA,NA,NA,1,"11/20 - 1 dead baby; 12/1 - 1 dead baby, check for infection with spore counts"
 M+ Past STD 5,M+,Pasteuria,Standard,5,1,11/9/2021,11/30/2021,21,,1,Y,Exposed,0,21,0,0,0,0,0,0,0,2,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,2,"11'24 - 1 dead baby; 11/29 looks unhealthy, died 11/30"
-M+ Past STD 6,M+,Pasteuria,Standard,6,2,11/9/2021,11/27/2021,18,,1,Y,Exposed,0,21,0,0,0,1,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,2,
+M+ Past STD 6,M+,Pasteuria,Standard,6,2,11/9/2021,11/27/2021,18,,1,Y,Infected,1,21,0,0,0,1,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,2,
 M+ Past STD 7,M+,Pasteuria,Standard,7,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,21,0,0,0,0,1,0,0,3,3,0,0,4,,2,2,4,,0,5,0,24,
 M+ Past STD 8,M+,Pasteuria,Standard,8,2,11/9/2021,11/24/2021,15,,1,Y,Exposed,0,21,0,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,died naturally
 M+ Past STD 9,M+,Pasteuria,Standard,9,2,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,

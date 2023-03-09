@@ -129,7 +129,7 @@ S Met STD 7,S,Metsch,Standard,7,4,1/4/2022,1/20/2022,16,,1,Y,Infected,1,14,0,0,0
 S Met STD 8,S,Metsch,Standard,8,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,14,0,0,0,1,,0,4,0,NA,NA,NA,NA,5,"collected very nearly dead, not swimming anymore"
 S Met STD 9,S,Metsch,Standard,9,4,1/4/2022,1/23/2022,19,,1,Y,Infected,1,14,0,0,0,1,,0,5,1,NA,NA,NA,NA,7,
 S Met STD 10,S,Metsch,Standard,10,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,14,0,0,0,4,,0,12,0,NA,NA,NA,NA,16,
-S:M Met STD 1,SM,Metsch,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,0,0,,3,4,0,,2,0,9,
+S:M Met STD 1,SM,Metsch,Standard,1,3,1/4/2022,1/27/2022,23,censored,0,Y,Infected,1,15,0,0,0,0,0,,3,4,0,,2,0,9,
 S:M Met STD 2,SM,Metsch,Standard,2,3,1/4/2022,1/26/2022,22,,1,Y,Exposed,0,15,0,0,0,1,1,,2,5,0,,2,NA,11,1/26 - 1 dead baby
 S:M Met STD 3,SM,Metsch,Standard,3,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,1,0,,2,4,0,,5,7,19,
 S:M Met STD 4,SM,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,15,0,0,0,2,0,2,1,5,0,,11,0,21,1/26 - 1 dead baby
@@ -142,7 +142,7 @@ S:M Met STD 10,SM,Metsch,Standard,10,4,1/4/2022,1/22/2022,18,,1,Y,Infected,1,16,
 M Met STD 1,M,Metsch,Standard,1,3,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Met STD 2,M,Metsch,Standard,2,3,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,
 M Met STD 3,M,Metsch,Standard,3,3,1/4/2022,1/17/2022,13,,1,Y,Exposed,NA,17,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,0,died overnight
-M Met STD 4,M,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,1,,0,1,0,5,3,1,11,
+M Met STD 4,M,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Infected,1,17,0,0,0,0,1,,0,1,0,5,3,1,11,
 M Met STD 5,M,Metsch,Standard,5,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,0,0,,2,2,3,,0,6,13,
 M Met STD 6,M,Metsch,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,17,0,0,0,1,,0,1,6,,0,6,0,14,
 M Met STD 7,M,Metsch,Standard,7,4,1/4/2022,1/11/2022,7,,1,Y,Exposed,NA,17,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during the feeding rate protocol
@@ -156,12 +156,12 @@ M+ Met STD 4,M+,Metsch,Standard,4,3,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0
 M+ Met STD 5,M+,Metsch,Standard,5,3,1/4/2022,1/26/2022,22,,1,Y,Exposed,0,18,0,0,0,0,0,,3,3,0,,5,NA,11,"alive but dying, body is kicked out from carapace."
 M+ Met STD 6,M+,Metsch,Standard,6,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,0,3,4,,0,4,4,15,
 M+ Met STD 7,M+,Metsch,Standard,7,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,1,,0,1,3,,0,6,7,18,
-M+ Met STD 8,M+,Metsch,Standard,8,4,1/4/2022,1/24/2022,20,censored,0,N,Exposed,0,18,0,0,0,0,,0,2,2,4,NA,NA,NA,8,MLF smashed after respiration
+M+ Met STD 8,M+,Metsch,Standard,8,4,1/4/2022,1/24/2022,20,censored,0,N,Infected,1,18,0,0,0,0,,0,2,2,4,NA,NA,NA,8,MLF smashed after respiration
 M+ Met STD 9,M+,Metsch,Standard,9,4,1/4/2022,1/27/2022,23,censored,0,Y,Exposed,0,18,0,0,0,0,,0,2,2,,0,5,6,15,
 M+ Met STD 10,M+,Metsch,Standard,10,4,1/4/2022,1/19/2022,15,,1,Y,Exposed,0,18,0,0,0,0,,0,1,NA,NA,NA,NA,NA,1,
 S Met MID 11,S,Metsch,Mid37,11,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
 S Met MID 12,S,Metsch,Mid37,12,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
-S Met MID 13,S,Metsch,Mid37,13,5,1/4/2022,1/18/2022,14,,1,Y,Exposed,NA,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,1/16 looks unhealthy
+S Met MID 13,S,Metsch,Mid37,13,5,1/4/2022,1/18/2022,14,,1,Y,Infected,1,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,1/16 looks unhealthy
 S Met MID 14,S,Metsch,Mid37,14,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
 S Met MID 15,S,Metsch,Mid37,15,5,1/4/2022,1/13/2022,9,,1,N,Exposed,NA,6,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died day after gut spore count
 S Met MID 16,S,Metsch,Mid37,16,5,1/4/2022,1/15/2022,11,,1,Y,Exposed,NA,6,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,1,
