@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 require("knitr")
-#opts_knit$set(root.dir = "/resource-quality-expt/")
+opts_knit$set(root.dir = "C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code/resource-quality-expt")
 getwd()
 ```
 
@@ -53,21 +53,15 @@ library(survminer)
 library(ggplot2)
 library(viridis)
 library(RColorBrewer)
-# #library(here)
-# here()
-# #setwd(file.path(project_path, "scripts"))
-# # set the path to the script relative to the project root directory
-# here::i_am("ResourceQuality_Analysis.Rmd")
-
 ```
 
 Import Data
 ```{r, import data, echo=FALSE}
 library(here)
-here()
+
 # set the path to the script relative to the project root directory
 here::i_am("scripts/ResourceQuality_Analysis.Rmd")
-
+setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code/resource-quality-expt")
 # Pasteuria data
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
 p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
@@ -162,7 +156,7 @@ p_prev_fig2 <- plot(past_prev, dodge = 0.5, show.title = F) +
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig2
 
-ggsave("figures/PasteuriaPrev_DietxClone.tiff", plot = p_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave(here("figures/PasteuriaPrev_DietxClone.tiff"), plot = p_prev_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -202,7 +196,7 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig3
 
-ggsave("figures/PasteuriaPrevCalcualtions_DietxClone.tiff", plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 ```
 
 There is a significant difference in prevalence based on clone, but not based on diet nor the interaction between the two. Standards were generally more resistant to this strain of Pasteuria compared to Mid37s. For Mid37s, there is lower Pasteuria prevalence for the M and M+ treatments, but it is not a significant difference. Maybe since we only have the 10 reps, our prevalence has rather large error bars. 
@@ -228,6 +222,9 @@ AIC(mprevmod)
 
 mprevmod_contrasts <- emmeans(mprevmod, specs = pairwise ~ Diet | Clone, type = "response")
 mprevmod_contrasts
+
+mprevmod_contrasts2 <- emmeans(mprevmod, specs = pairwise ~ Clone | Diet, type = "response")
+mprevmod_contrasts2
 
 # test a model with only S and SM diets to remove treatments with no infection (except Std M+ did have a little infection)
 m_data_prev2 <- filter(m_data_prev, Diet == "S" | Diet == "SM")
@@ -276,7 +273,7 @@ metsch_prev_sum <- m_data_prev %>%
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
 
 
-m_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
+m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Clone, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2, position = position_dodge(width = 0.7)) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, position = position_dodge(width = 0.7)) + 
   scale_color_manual(values = diet_colors) +
@@ -331,6 +328,7 @@ AIC(ptotsporemod)
 ptotsporemod_contrasts <- emmeans(ptotsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 ptotsporemod_contrasts
 
+range(p_data_spores$total_spores)
 ```
 
 ```{r, figure of Pasteuria total spore yield by treatment}
@@ -383,6 +381,7 @@ AIC(pmaturesporemod)
 pmaturesporemod_contrasts <- emmeans(pmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 pmaturesporemod_contrasts
 
+range(p_data_spores$mature_spores)
 ```
 
 ```{r, figure of Pasteuria mature spore yield by treatment}
@@ -402,7 +401,7 @@ p_maturespore_fig3 <- plot(past_maturespores, dodge = 0.5, add.data = T, show.ti
   scale_color_manual(values = diet_colors) +
   #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
   labs(x = "Host Clone", y = "Mature Bacteria Spore Yield (log scale)") +
-  scale_y_log10(labels = scales::comma) +
+  scale_y_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
@@ -412,24 +411,65 @@ ggsave("figures/PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dp
 
 
 
-p_maturespore_fig2 <- ggplot(p_data_spores, aes(x = Diet, y = mature_spores+1)) +
+p_maturespore_fig2 <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spores)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge()) +
   geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
   facet_wrap(~Clone) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
-  ylim(0,300000) +
-  scale_y_log10(labels = scales::comma) +
-  ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
+  #ylim(0,1000000) +
+  scale_y_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
+  #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
   labs(x = "Diet", y = "Pasteuria spore yield (log scaled)") +
   theme_classic()
 p_maturespore_fig2
+ggsave("figures/PastMatureSpores_DietxClone2.tiff", plot = p_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
 ```
 
 
 Results are similar to the total spore yield analyses. There is a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments. Mid37s are susceptible to Pasteuria, while Standards do not appear to be very susceptible.
 
+
+```{r, model of Mature Past spore yield by microcystin concentration}
+pmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + Diet + Clone + (1|Block), data = p_data_spores_mature)
+pmaturesporemod2 <- lmer(mature_spores_log ~ microcystin.avg * Diet + (1|Block), data = p_data_spores)
+#overdisp_fun(pmaturesporemod2)
+summary(pmaturesporemod2)
+Anova(pmaturesporemod2)
+AIC(pmaturesporemod2)
+plot(pmaturesporemod2)
+qqnorm(resid(pmaturesporemod2))
+qqline(resid(pmaturesporemod2))
+
+# try model without M+ samples (outliers b/c so much higher than all other samples, see if there is a pattern )
+p_data_spores_noM_tox <- filter(p_data_spores_mature, Diet != "M+")
+p_data_spores_noM_tox$mature_spores_log <- log(p_data_spores_noM_tox$mature_spores+1)
+pmaturesporemod3 <- lmer(log(mature_spores+1) ~ microcystin.avg * Diet + (1|Block), data = p_data_spores_noM_tox)
+pmaturesporemod3 <- lmer(mature_spores_log ~ microcystin.avg * Diet * Clone + (1|Block), data = p_data_spores_noM_tox)
+summary(pmaturesporemod3)
+Anova(pmaturesporemod3)
+
+```
+
+```{r, figure of Mature Past spore yield by microcystin concentration}
+# Marginal effects from best model with Abundance on the x axis
+past_maturespores2 <- ggpredict(pmaturesporemod2, c("microcystin.avg", "Diet", "Clone"))
+plot(past_maturespores2, add.data = T)
+
+
+p_maturespore_mc_fig <- plot(past_maturespores2, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Pasteuria Spore Yield by microcstin + diet") +
+  labs(x = "Microcystin conc (ug/L)", y = "log Bacteria Spore Yield") +
+  scale_y_log10(labels = scales::comma, limits = c(1,1000000)) +
+  theme_classic()
+
+p_maturespore_mc_fig
+
+```
 
 
 
@@ -447,6 +487,7 @@ AIC(pimmaturesporemod)
 
 pimmaturesporemod_contrasts <- emmeans(pimmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 pimmaturesporemod_contrasts
+
 
 ```
 
@@ -551,6 +592,7 @@ AIC(mmaturesporemod)
 mmaturesporemod_contrasts <- emmeans(mmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mmaturesporemod_contrasts
 
+range(m_data_spores$mature_spores)
 ```
 
 ```{r, figure of Metsch mature spore yield by treatment}
@@ -601,6 +643,52 @@ ggsave("figures/MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2,
 
 Results are similar to the total spore yield analyses. There is not a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments.
 
+
+```{r, model of Mature Metsch spore yield by microcystin concentration}
+mmaturesporemod2 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores)
+overdisp_fun(mmaturesporemod2)
+summary(mmaturesporemod2)
+Anova(mmaturesporemod2)
+AIC(mmaturesporemod2)
+
+# try model without M+ samples (outliers b/c so much higher than all other samples, see if there is a pattern )
+m_data_spores_noM_tox <- filter(m_data_spores, Diet != "M+")
+m_data_spores_noM_tox$mature_spores_log <- log(m_data_spores_noM_tox$mature_spores+1)
+mmaturesporemod3 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores_noM_tox)
+mmaturesporemod3 <- lmer(mature_spores_log ~ microcystin.avg + Diet + (1|Block), data = m_data_spores_noM_tox)
+summary(mmaturesporemod3)
+Anova(mmaturesporemod3)
+mmaturesporemod2 <- glmer(round(mature_spores) ~ microcystin.avg + Diet + (1|Block) + (1|Unique.code), family = poisson, data = m_data_spores)
+
+# also try with M+ from extra treatment with microcystin avg added in (COMPARE ONLY M AND M+ TREATMENTS)
+m_data_spores[28, "microcystin.avg"] <- 14.58926751 # added in value of microcystin average for other M+ std metsch exposed and infected treatments
+mmaturesporemod2 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores)
+summary(mmaturesporemod2)
+Anova(mmaturesporemod3)
+plot(mmaturesporemod2)
+qqnorm(resid(mmaturesporemod2))
+qqline(resid(mmaturesporemod2))
+
+```
+
+```{r, figure of Mature Metsch spore yield by microcystin concentration}
+# Marginal effects from best model with Abundance on the x axis
+metsch_maturespores2 <- ggpredict(mmaturesporemod2, c("microcystin.avg", "Diet"))
+plot(metsch_maturespores2, add.data = T)
+
+
+m_maturespore_mc_fig <- plot(metsch_maturespores2, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  scale_fill_manual(values = diet_colors) +
+  ggtitle("Metsch Pasteuria Spore Yield by microcstin + diet") +
+  labs(x = "Microcystin conc (ug/L)", y = "log Metsch Spore Yield") +
+  #scale_y_log10(labels = scales::comma) +
+  theme_classic()
+m_maturespore_mc_fig
+
+```
+
+Microcystin concentration does not have a significant impact on Metsch mature spore yield. There are too few infected animals in the M and M+ treatments to be able to test specifically for an effect of toxin alone with the diet controlled. I looked at microcystin and diet effects across both clones together (more power and little genotype differences), and did not find any sig effect of Microcystin concentration in the whole data set or in a subset of the data excluding the M+ treatments (only two so the microcystin concentrations are outliers compared to all others)
 
 
 ### Comparison of Immature Metsch spore yield based on diet and host clone.
@@ -788,7 +876,7 @@ Tara Stewart Merrill looked at the proportion of attacking spores and a few othe
 
 We counted the number of hemocytes that were attached to metsch spores that had punctured or penetrated into the haemoceol of the daphnia. We then calculated the number of hemocytes per punctured or haemoceol spore by dividing the number of hemocytes counted by the total number of punctured and haemoceol spores ("TotalPunctSpores" column).
 
-**Needed to filter data to remove animals where there were no punctured spores because then there would also not be any hemocytes counted, so there would to separation in the data.**
+**Needed to filter data to remove animals where there were no punctured spores because then there would also not be any hemocytes counted, so there would be separation in the data.**
 
 ```{r, model of hemocytes per Metsch attacking gut spores by treatment}
 m_data_hemocytes <- m_data_gutspore %>% filter(TotalGutSpores > 0) 
@@ -1483,9 +1571,6 @@ ggforest(cox.m_diet_infstatus_std2, data = m_data_std)
 metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
 metsch_cox
 ggsave("figures/MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
-
-
-
 
 ```
 
