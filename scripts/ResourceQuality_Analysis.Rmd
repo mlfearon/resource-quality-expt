@@ -7,6 +7,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+#opts_knit$set(root.dir = "/resource-quality-expt/")
+getwd()
 ```
 
 ## Background
@@ -50,22 +53,29 @@ library(survminer)
 library(ggplot2)
 library(viridis)
 library(RColorBrewer)
-library(here)
+# #library(here)
+# here()
+# #setwd(file.path(project_path, "scripts"))
+# # set the path to the script relative to the project root directory
+# here::i_am("ResourceQuality_Analysis.Rmd")
 
-# set the path to the script relative to the project root directory
-#here::i_am("scripts/ResourceQuality_Analysis.R")
 ```
 
 Import Data
-```{r, import data}
+```{r, import data, echo=FALSE}
+library(here)
+here()
+# set the path to the script relative to the project root directory
+here::i_am("scripts/ResourceQuality_Analysis.Rmd")
+
 # Pasteuria data
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
-p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptDay.csv"), stringsAsFactors = F)
+p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
 p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
 
 # Metsch data
 m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
-m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptDay.csv"), stringsAsFactors = F)
+m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptWeek.csv"), stringsAsFactors = F)
 m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
 
 ```
@@ -167,7 +177,7 @@ past_prev_sum <- p_data_prev %>%
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
 
-# figures for presentation
+
 p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2, position = position_dodge(width = 0.7)) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, position = position_dodge(width = 0.7)) + 
@@ -179,6 +189,7 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig3
 
+# figures for presentation (calcuated prevalence)
 p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
@@ -218,6 +229,15 @@ AIC(mprevmod)
 mprevmod_contrasts <- emmeans(mprevmod, specs = pairwise ~ Diet | Clone, type = "response")
 mprevmod_contrasts
 
+# test a model with only S and SM diets to remove treatments with no infection (except Std M+ did have a little infection)
+m_data_prev2 <- filter(m_data_prev, Diet == "S" | Diet == "SM")
+
+mprevmod2 <- glmer(InfectionStatus ~ Diet * Clone + (1|Block), family = binomial, data = m_data_prev2)
+summary(mprevmod2)  # block random effect does work in this model
+Anova(mprevmod2)
+overdisp_fun(mprevmod2)
+AIC(mprevmod2)
+
 ```
 
 ```{r, figure of Metsch prevalence by treatment}
@@ -245,7 +265,6 @@ ggsave("figures/MetschPrev_DietxClone.tiff", plot = m_prev_fig2, dpi = 600, widt
 
 
 
-
 # calculate prevalence for each diet and clone
 m_data_prev$Rep <- as.character(m_data_prev$Rep)
 
@@ -256,7 +275,7 @@ metsch_prev_sum <- m_data_prev %>%
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
 
-# figures for presentation
+
 m_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2, position = position_dodge(width = 0.7)) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, position = position_dodge(width = 0.7)) + 
@@ -268,6 +287,7 @@ m_prev_fig3 <- ggplot(past_prev_sum, aes(x = Clone, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 m_prev_fig3
 
+# figures for presentation (calcuated prevalence)
 m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
@@ -286,9 +306,12 @@ ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi
 ```
 
 
-The separation in the data (categories with all zeros or all ones) is causing problems for this analysis in the M treatment. Clearly in both clones there are significant differences in the diet treatments with S having MUCH higher infection than all other diets. No significant differences between clones, nor is there an interaction between clone and diet (removed the interaction term from the model). It seems that the presence of Microcystis in the diet seems to really protect against Metsch infection!  
+The separation in the data (categories with all zeros or all ones) is causing problems for this analysis in the M treatment. Clearly in both clones there are significant differences in the diet treatments with S having MUCH higher infection than all other diets. No significant differences between clones, nor is there an interaction between clone and diet (could remove the interaction term from the model). It seems that the presence of Microcystis in the diet seems to really protect against Metsch infection!  
 
-In comparison to Kristel's 2019 Proc B paper, we similarly see a large decrease in infection prevalence when comparing the high quality Scenedesmus diet to the low quality Micorcystis diet. We don't see much of a change in infection prevalence between the Microcystis and the toxin spiked Microcosytis treatments though. 
+In comparison to Kristel's 2019 Proc B paper, we similarly see a large decrease in infection prevalence when comparing the high quality Scenedesmus diet to the low quality Micorcystis diet. We don't see much of a change in infection prevalence between the Microcystis and the toxin spiked Microcosytis treatments in this experiment because prevalence is already so low from the microcystis diet alone.  
+
+*NEED TO COME BACK TO FIX SEPARATION IN DATA*
+I tried removing the M and M+ treatments (the treatments with data separation, no infection except for STD M+ has one infected animal). That model runs better and allows for including the block random effect. There is a sig dif in diet, but not clone or diet x clone.
 
 
 ## Spore Yield
@@ -298,7 +321,7 @@ In comparison to Kristel's 2019 Proc B paper, we similarly see a large decrease 
 ```{r, model of Total Pasteuria spore yield by treatments}
 # remove animals that died during exposure and remove uninfected treatments and remove animals with no spores detected
 p_data_spores <- p_data %>% filter(!is.na(InfectionStatus) & Parasites == "Pasteuria" & total_spores > 0) 
-
+View(p_data_spores)
 
 ptotsporemod <- lmer(log(total_spores) ~ Diet * Clone + (1|Block), data = p_data_spores)
 summary(ptotsporemod)
@@ -350,7 +373,9 @@ There is a significant difference in spore yield based on clone, but not based o
 Note that there is one standard animal that had zero mature spores but did have one immature spore detected in the S treatment, which is included in this data set. 
 
 ```{r, model of Mature Pasteuria spore yield by treatments}
-pmaturesporemod <- lmer(log(mature_spores+1) ~ Diet * Clone + (1|Block), data = p_data_spores)
+p_data_spores$mature_spores_log <- log(p_data_spores$mature_spores+1)
+p_data_spores_mature <- filter(p_data_spores, mature_spores > 0) # remove the one sample without mature spores
+pmaturesporemod <- lmer(log(mature_spores) ~ Diet * Clone + (1|Block), data = p_data_spores_mature)
 summary(pmaturesporemod)
 Anova(pmaturesporemod)
 AIC(pmaturesporemod)
@@ -403,7 +428,7 @@ p_maturespore_fig2
 ```
 
 
-Results are similar to the total spore yield analyses. There is a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments. In the Mid37s 
+Results are similar to the total spore yield analyses. There is a sig difference between clones, but there is not a sig difference in mature spore yield among the different diet treatments. Mid37s are susceptible to Pasteuria, while Standards do not appear to be very susceptible.
 
 
 
@@ -413,7 +438,9 @@ Results are similar to the total spore yield analyses. There is a sig difference
 Most animals did not have any immature spores detected, so there will be a lot of zeros in this data set. I did not detect any cauliflower stage Pasteuria, so I did not run any models/figures for that parasite developmental stage.
 
 ```{r, model of Immature Pasteuria spore yield by treatments}
-pimmaturesporemod <- lmer(log(immature_spores+1) ~ Diet * Clone + (1|Block), data = p_data_spores)
+p_data_spores$immature_spores_log <- log(p_data_spores$immature_spores+1)
+p_data_spores_immature <- filter(p_data_spores, immature_spores > 0) # remove the one sample without mature spores
+pimmaturesporemod <- lmer(immature_spores_log ~ Diet * Clone + (1|Block), data = p_data_spores)
 summary(pimmaturesporemod)
 Anova(pimmaturesporemod)
 AIC(pimmaturesporemod)
@@ -451,10 +478,10 @@ p_immaturespore_fig2
 ```
 
 
-Overall there are many fewer immature spores compared to mature spores in the infected animals. There is very wide variation in the number of immature spores in M and M+ treatments in Mid37s. May want to think about which data to acutally keep in this data set since there are a lot of zeros...
+Overall there are many fewer immature spores compared to mature spores in the infected animals. There is very wide variation in the number of immature spores in M and M+ treatments in Mid37s. May want to think about which data to acutally keep in this data set since there are a lot of zeros... When all zeros for immature spores are removed, then there are no significant main effects (diet, clone, diet*clone).
 
 
-I did not find any spores at the cauliflower stage.
+I did not find any spores at the cauliflower stage so that model was not run.
 
 
 
@@ -507,7 +534,7 @@ m_totspore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = total_spores)) +
 m_totspore_fig2
 ```
 
-There is not a significant difference in spore yield based on clone (but somewhat close p = 0.088), nor based on diet. The intereaction between the diet and clone was not significant and oversaturated the model so I removed it. Overall, S treatment had many more infected animals and on average higher than the other diet treatments but since there are so few samples in the other diet treatments it is hard to determine if that is a real difference. 
+There is not a significant difference in spore yield based on clone, but diet does have a significant difference (which is driven by the single Standard M spore count which is very low). The interaction between the diet and clone was not significant and oversaturated the model so I removed it. Model was struggling with lack of data in M and M+ diets for each clone. Need to think of a better way to model this data. Spore yield is very correlated with whether or not the animal got infected in the first place. Overall, S treatment had many more infected animals and on average higher than the other diet treatments but since there are so few samples in the other diet treatments it is hard to determine if that is a real difference. 
 
 **NOTE** There is something not working quite right for the predicted figure with points and error bars because the data points for mid37 are shifted, and there are predicted values for M and M+ in mid37s when there aren't any data points for those treatments... USE THE BOXPLOT FIGURE!
 
@@ -529,7 +556,7 @@ mmaturesporemod_contrasts
 ```{r, figure of Metsch mature spore yield by treatment}
 # Marginal effects from best model with Abundance on the x axis
 metsch_maturespores <- ggpredict(mmaturesporemod, c("Clone", "Diet"))
-View(metsch_maturespores)
+#View(metsch_maturespores)
 
 m_maturespore_fig <- plot(metsch_maturespores, dodge = 0.5, add.data = T, jitter = 0.05) +
   scale_color_manual(values = diet_colors) +
@@ -564,7 +591,7 @@ m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) 
   scale_color_manual(values = c(rep("black", 4))) +
   ylim(0,300000) +
   scale_y_log10(labels = scales::comma) +
-  ggtitle("Mature Metsch Spore Yield by diet x host clone") +
+  #ggtitle("Mature Metsch Spore Yield by diet x host clone") +
   labs(x = "Diet", y = "Mature Fungal Spore Yield (log scaled)") +
   theme_classic()
 m_maturespore_fig2
@@ -1303,7 +1330,7 @@ Need to remove some animals from data set? Which ones? Depending on whether we g
 Need to separate data based on host clone to make the plots easier to look at.
 
 ```{r, parse pasteuria data by host clone}
-p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(p_data_std$Diet))
+p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(p_data$Diet2))
 p_data$Diet2 <- factor(p_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
 
 p_data$SurvObj <- with(p_data, Surv(lifespan.days, Status))
@@ -1403,7 +1430,7 @@ Interestingly, pasteuria exposed animals suffered more mortality than then infec
 ### Metsch survival analyses
 
 ```{r, parse metsch data by host clone}
-m_data$Diet2 = recode_factor(m_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data_std$Diet))
+m_data$Diet2 = recode_factor(m_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data$Diet))
 m_data$Diet2 <- factor(m_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
 
 m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
