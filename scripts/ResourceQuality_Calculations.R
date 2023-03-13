@@ -232,7 +232,7 @@ resp_past_data_long <- resp_data %>%
 resp_past_data_short <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
   select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
-  dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
+  dplyr::rename(metabolic.rate.Week1 = metabolic.rate)
 
 
 
@@ -316,7 +316,7 @@ microcystin_exposure.sum
 microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero
 
 
-microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasite, y = microcystin.avg)) +
+microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasites, y = microcystin.avg)) +
   geom_point(aes(color = Diet), position=position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin=microcystin.avg-microcystin.se, ymax=microcystin.avg+microcystin.se,color=Diet), width=0.3, position=position_dodge(width = 0.5)) + 
   #geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
@@ -628,7 +628,7 @@ resp_metsch_data_long <- resp_data %>%
 resp_metsch_data_short <- resp_data %>% 
   filter(Experiment == "Metsch", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
   select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
-  dplyr::rename(metabloc.rate.Week1 = metabolic.rate)
+  dplyr::rename(metabolic.rate.Week1 = metabolic.rate)
 
 
 
