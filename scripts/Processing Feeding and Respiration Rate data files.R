@@ -637,8 +637,8 @@ for(i in block){
       temp_controls <-  filter(temp_plate, Parasites == "Blank") 
       
       # calculated the mean of the wells with controls only (mc = per run average rate of change for the blank controls)
-      control <- mean(temp_controls$O2.sat.per.hr)
-      control.sd <- sd(temp_controls$O2.sat.per.hr)
+      control <- mean(temp_controls$O2.sat.per.hr, na.rm = T)
+      control.sd <- sd(temp_controls$O2.sat.per.hr, na.rm = T)
       
       # Calculate the rate of oxygen consumption (VO2) (mL O2/hr)
       # VO2=−1×[(ma−mc)∕100]×V×𝛽O2
