@@ -166,7 +166,7 @@ p_data_prev$Rep <- as.character(p_data_prev$Rep)
 
 past_prev_sum <- p_data_prev %>%
   group_by(Diet, Clone) %>%
-  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), .groups = "rowwise") %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T), .groups = "rowwise") %>%
   mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
@@ -197,6 +197,23 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
 p_prev_fig3
 
 ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+p_prev_feed_fig <- ggplot(past_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.01) + 
+  geom_smooth(method = "lm", color = "black") +
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Mean Relative Feeding Rate (mL per hr per mm)", y = "Bacteria Prevalence (%)") +
+  ylim(-20, 100) +
+  facet_wrap(~Clone) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_prev_feed_fig
+ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate.tiff"), plot = p_prev_feed_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
 ```
 
 There is a significant difference in prevalence based on clone, but not based on diet nor the interaction between the two. Standards were generally more resistant to this strain of Pasteuria compared to Mid37s. For Mid37s, there is lower Pasteuria prevalence for the M and M+ treatments, but it is not a significant difference. Maybe since we only have the 10 reps, our prevalence has rather large error bars. 
@@ -267,7 +284,7 @@ m_data_prev$Rep <- as.character(m_data_prev$Rep)
 
 metsch_prev_sum <- m_data_prev %>%
   group_by(Diet, Clone) %>%
-  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), .groups = "rowwise") %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T), .groups = "rowwise") %>%
   mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
@@ -298,6 +315,21 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
 m_prev_fig3
 
 ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+
+
+m_prev_feed_fig <- ggplot(metsch_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalence)) +
+  geom_point(aes(color = Diet), size = 2) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.01) + 
+  geom_smooth(method = "lm", color = "black") +
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Mean Relative Feeding Rate (mL per hr per mm)", y = "Fungus Prevalence (%)") +
+  ylim(0, 100) +
+  facet_wrap(~Clone) +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_prev_feed_fig
+ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate2.tiff"), plot = m_prev_feed_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
 
 
 ```
@@ -809,7 +841,9 @@ AIC(mgutsporemod2)
 mgutsporemod_contrasts <- emmeans(mgutsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mgutsporemod_contrasts
 
+
 ```
+
 ```{r, figure of Metsch total gut spore by treatment}
 # Marginal effects from best model with Abundance on the x axis
 metsch_totgutspores <- ggpredict(mgutsporemod2, c("length.um", "Diet", "Clone"))
@@ -1407,6 +1441,373 @@ Need to do this still...
 Need to do this still...
 
 
+## Feeding Rate analyses
+
+### Pasteuria feeding rate analyses
+
+```{r, model of feeding rate for Past week 1 only}
+p_data_feeding <- p_data %>% filter(!is.na(Clearance.Week1))
+hist(p_data_feeding$Clearance.Week1) # wow normal data!!
+hist(p_data_feeding$Clearance_rel.Week1) # wow normal data!! 
+
+# Feeding rate (not bodysize controlled)
+pfeedmod <- lmer(Clearance.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
+summary(pfeedmod)
+Anova(pfeedmod)
+AIC(pfeedmod)
+plot(pfeedmod)
+qqnorm(resid(pfeedmod))
+qqline(resid(pfeedmod))
+
+# Relative Feeding rate (bodysize controlled)
+pfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
+summary(pfeedmod2)
+Anova(pfeedmod2)
+AIC(pfeedmod2)
+plot(pfeedmod2)
+qqnorm(resid(pfeedmod2))
+qqline(resid(pfeedmod2))
+
+pfeedmod_contrasts <- emmeans(pfeedmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+pfeedmod_contrasts
+
+```
+```{r, figure of past feeding rate week 1}
+# Marginal effects
+past_feed <- ggpredict(pfeedmod2, c("Infection", "Diet", "Clone"))
+plot(past_feed)
+
+# figure with bodysize
+p_feeding_fig <- plot(past_feed, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
+  theme_classic()
+p_feeding_fig
+ggsave("figures/PastFeedingRate_DietxClonexInfection2.tiff", plot = p_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# figure for presentation
+p_feeding2 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_feeding2
+
+ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+```
+ 
+ The relative body size feeding rate seems like the better model because ti controls for differences between clones that are likely just due to body size differences, while diet effects are sig in both models indicating that it high quality diet fed animals are eating more relative to their bodysize.
+
+
+
+### Metsch feeding rate analyses
+
+```{r, model of feeding rate for Metsch week 1 only}
+m_data_feeding <- m_data %>% filter(!is.na(Clearance.Week1))
+hist(m_data_feeding$Clearance.Week1) # wow normal data!! 
+hist(m_data_feeding$Clearance_rel.Week1) # wow normal data!! 
+
+mfeedmod <- lmer(Clearance.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
+# removed the three-way interaction
+summary(mfeedmod)
+Anova(mfeedmod)
+AIC(mfeedmod)
+
+
+# Relative Feeding rate (bodysize controlled)
+mfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
+summary(mfeedmod2)
+Anova(mfeedmod2) 
+AIC(mfeedmod2)   # AIC is negative???
+plot(mfeedmod2)
+qqnorm(resid(mfeedmod2))
+qqline(resid(mfeedmod2))
+
+mfeedmod_contrasts <- emmeans(mfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+mfeedmod_contrasts
+
+```
+
+
+```{r, figure of Metsch feeding rate week 1}
+# Marginal effects
+metsch_feed <- ggpredict(mfeedmod2, c("Infection", "Diet", "Clone"))
+plot(metsch_feed)
+
+# figure with bodysize
+m_feeding_fig <- plot(metsch_feed, dodge = 0.4, add.data = T) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
+  theme_classic()
+m_feeding_fig
+ggsave("figures/MetschFeedingRate_DietxClonexInfection2.tiff", plot = m_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# figure for presentation
+m_feeding2 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_feeding2
+
+ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+```
+
+
+
+## Respiration Rate analyses
+
+### Pasteuria respiration rate analyses
+
+```{r, model of respiration rate for Past week 1 only and over time}
+# NEED TO COME BACK TO FIX NAME OF METABOLIC RATE!!!!
+p_data_resp <- p_data %>% dplyr::filter(!is.na(metabolic.rate.Week1))
+hist(as.numeric(p_data_resp$metabolic.rate.Week1)) # pretty close to normal, a tad right skewed
+range(p_data_resp$metabolic.rate.Week1)
+
+# Respiration rate during week 1 (exposure period) only
+prespmod <- lmer(metabolic.rate.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_resp)
+summary(prespmod)
+Anova(prespmod)
+AIC(prespmod)
+plot(prespmod)
+qqnorm(resid(prespmod))
+qqline(resid(prespmod))
+
+prespmod_contrasts <- emmeans(prespmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+prespmod_contrasts
+
+
+# Use long data set for time series data of respiration rate
+p_longdata_resp <- p_longdata %>% dplyr::filter(!is.na(metabolic.rate))
+hist(as.numeric(p_longdata_resp$metabolic.rate)) # a bit right skewed
+range(p_longdata_resp$metabolic.rate)
+
+# Respiration rate over whole experiment
+prespmod2 <- lmer(metabolic.rate ~ Diet * Infection + Clone + Week + (1|Block), data = p_longdata_resp)
+summary(prespmod2)
+Anova(prespmod2)
+AIC(prespmod2)
+plot(prespmod2)
+qqnorm(resid(prespmod2))
+qqline(resid(prespmod2))
+
+## NEED TO WORK ON THE CORRECT DISTRIBUTION FOR THIS MODEL
+  # LOOKS LIKE A GAMMA DIST BUT HAS NEGATIVE VALUES (transformed by adding value to metabolic rate to make all positive, seems to have same outcome as linear model with a bit better fit, though not great still) family = Gamma("inverse")
+  # COULD ALSO TRY THE LAPLACE DISTRIBUTION
+
+
+```
+
+```{r, figure of past respiration rate week 1 and over time}
+# Marginal effects
+past_resp <- ggpredict(prespmod, c("Infection", "Diet", "Clone"))
+plot(past_resp)
+
+# figure of respiration rate in week 1
+p_resp_fig <- plot(past_resp, dodge = 0.6, add.data = F, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Respiration Rate (J/hr)") +
+  labs(x = "Parasite Exposure", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+p_resp_fig
+ggsave("figures/PastMetabolicRate_DietxClonexInfection2_Week1.tiff", plot = p_resp_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# Boxplot of week 1 metabolic rate
+# figure for presentation
+p_resp_fig2 <- ggplot(p_data_resp, aes(x = Infection, y = metabloc.rate.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Metabolic Rate (J/hr)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_resp_fig2
+ggsave("figures/PastMetabolicRate_DietxClonexInfection_Week1.tiff", plot = p_resp_fig2, dpi = 600, width = 5.25, height = 4, units = "in", compression="lzw")
+
+
+
+# figures over time
+## Plot of O2 saturation and metabolism over time by week
+p_longdata_resp_sum <- p_longdata_resp %>%
+  group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(metabolic.rate),
+            resp.mean = mean(metabolic.rate, na.rm = T),
+            resp.sd   = sd(metabolic.rate, na.rm = T),
+            resp.se   = resp.sd / sqrt(N)) %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+p_longdata_resp_sum$Week <- as.factor(p_longdata_resp_sum$Week)
+p_longdata_resp_sum$Diet <- factor(p_longdata_resp_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+plot_byWeek_resp_past <- ggplot(data = p_longdata_resp_sum, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Infection) +
+  ylim(-0.002, 0.01) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.01,
+           alpha = .2,fill = "gray") +
+  #ggtitle("Past Experiment Metabolic Rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_byWeek_resp_past
+ggsave(here("figures/PastMetabolism_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_resp_past, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+```
+
+During Week 1 (exposure period), only diet affects the metabolic rate, and there is no differences among clone or infection status (uninf, exposed, infected). 
+
+In the model evaluating metabolic rate over time in the experiment, diet, clone, and week (positive) are all significant predictors of metabolic rate. There may be a sig 3 way interaction, but we don't have enough power to test that effectively. None of the two way interactions were significant. 
+
+**NOTE** The model over time still needs some adjustment, the distribution is not normal and needs to be optimized still.
+
+
+### Metsch respiration rate analyses
+
+
+```{r, model of respiration rate for metsch week 1 only and over time}
+# NEED TO COME BACK TO FIX NAME OF METABOLIC RATE!!!!
+m_data_resp <- m_data %>% dplyr::filter(!is.na(metabolic.rate.Week1))
+hist(as.numeric(m_data_resp$metabolic.rate.Week1)) # More right skewed than I would like
+range(m_data_resp$metabolic.rate.Week1)
+
+# Respiration rate during week 1 (exposure period) only
+mrespmod <- lmer(metabolic.rate.Week1 ~ Diet + Infection * Clone +(1|Block), data = m_data_resp)
+summary(mrespmod)
+Anova(mrespmod)
+AIC(mrespmod)
+plot(mrespmod)
+qqnorm(resid(mrespmod)) # doesn't look too bad
+qqline(resid(mrespmod))
+
+mrespmod_contrasts <- emmeans(mrespmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+mrespmod_contrasts
+
+
+# Use long data set for time series data of respiration rate
+m_longdata_resp <- m_longdata %>% dplyr::filter(!is.na(metabolic.rate))
+hist(as.numeric(m_longdata_resp$metabolic.rate)) # more normal than above, though a bit right skewed
+range(m_longdata_resp$metabolic.rate)
+
+# Respiration rate over whole experiment
+mrespmod2 <- lmer(metabolic.rate ~ Diet * Infection * Clone + Week + (1|Block), data = m_longdata_resp)
+summary(mrespmod2)
+Anova(mrespmod2)
+AIC(mrespmod2)
+plot(mrespmod2)
+qqnorm(resid(mrespmod2))  # doesn't look as good as I hoped
+qqline(resid(mrespmod2))
+
+## NEED TO WORK ON THE CORRECT DISTRIBUTION FOR THIS MODEL
+  # LOOKS LIKE A GAMMA DIST BUT HAS NEGATIVE VALUES (transformed by adding value to metabolic rate to make all positive, seems to have same outcome as linear model with a bit better fit, though not great still) family = Gamma("inverse")
+  # COULD ALSO TRY THE LAPLACE DISTRIBUTION
+
+
+```
+
+```{r, figure of metsch respiration rate week 1 and over time}
+# Marginal effects
+metsch_resp <- ggpredict(mrespmod, c("Infection", "Diet", "Clone"))
+plot(metsch_resp)
+
+# figure of respiration rate in week 1
+m_resp_fig <- plot(metsch_resp, dodge = 0.6, add.data = F, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Respiration Rate (J/hr)") +
+  labs(x = "Parasite Exposure", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+m_resp_fig
+ggsave("figures/MetschMetabolicRate_DietxClonexInfection2_Week1.tiff", plot = m_resp_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# Boxplot of week 1 metabolic rate
+# figure for presentation
+m_resp_fig2 <- ggplot(m_data_resp, aes(x = Infection, y = metabolic.rate.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Parasite Exposure", y = bquote("Metabolic Rate (J/hr)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_resp_fig2
+ggsave("figures/MetschMetabolicRate_DietxClonexInfection_Week1.tiff", plot = m_resp_fig2, dpi = 600, width = 5.25, height = 4, units = "in", compression="lzw")
+
+
+
+# figures over time
+## Plot of O2 saturation and metabolism over time by week
+m_longdata_resp_sum <- m_longdata_resp %>%
+  group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(metabolic.rate),
+            resp.mean = mean(metabolic.rate, na.rm = T),
+            resp.sd   = sd(metabolic.rate, na.rm = T),
+            resp.se   = resp.sd / sqrt(N)) %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+m_longdata_resp_sum$Week <- as.factor(m_longdata_resp_sum$Week)
+m_longdata_resp_sum$Diet <- factor(m_longdata_resp_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+plot_byWeek_resp_metsch <- ggplot(data = m_longdata_resp_sum, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
+  geom_point(aes(color=Diet), size=3, alpha = 0.8) +
+  facet_grid(Clone~Infection) +
+  ylim(-0.002, 0.01) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.01,
+           alpha = .2,fill = "gray") +
+  #ggtitle("Metsch Experiment Metabolic Rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic()
+plot_byWeek_resp_metsch
+ggsave(here("figures/MetschMetabolism_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_resp_metsch, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+```
+
+
+
+
+During the parasite exposure period in week 1, metabolic rate is significantly different among diets and clones, but not infection status. 
+
+Metabolic rate over the whole experiment differs significantly by diet, clone and week, but not infection status. Interaction were not significant, but also rank deficient to investigate the interactions rigorously.
 
 
 ## Survival analyses
