@@ -639,9 +639,9 @@ resp_metsch_data_short <- resp_data %>%
 metsch_microcystin <- microcystin_exposure.sum3 %>% 
   filter(Experiment == "Metsch") %>%
   ungroup() %>%
-  select(Diet:Infection, microcystin.avg)
-
-
+  select(Diet:Clone, Infection, microcystin.avg)
+unique(metsch_microcystin$Clone)
+View(metsch_microcystin)
 
 ##### Join short data sets together
 metsch_data_short <- full_join(offspring_metsch_short, bodysize_metsch_short)
@@ -649,8 +649,8 @@ metsch_data_short <- full_join(metsch_data_short, spores_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, gutspore_metsch)
 metsch_data_short <- full_join(metsch_data_short, feed_metsch_data_short)
 metsch_data_short <- full_join(metsch_data_short, resp_metsch_data_short)
-metsch_data_short <- full_join(metsch_data_short, metsch_microcystin)
-
+metsch_data_short <- left_join(metsch_data_short, metsch_microcystin, by = c(c("Diet", "Clone", "Infection")))
+unique(metsch_data_short$Clone)
 write.csv(metsch_data_short, "data/ResourceQuality_Metsch_Full.csv", quote = F, row.names=FALSE)
 
 View(metsch_data_short)
