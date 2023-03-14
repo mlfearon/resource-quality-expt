@@ -465,7 +465,7 @@ Results are similar to the total spore yield analyses. There is a sig difference
 
 
 ```{r, model of Mature Past spore yield by microcystin concentration}
-pmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + Diet + Clone + (1|Block), data = p_data_spores_mature)
+pmaturesporemod2 <- lmer(log(mature_spores) ~ log(microcystin.avg+1) + Diet + Clone + (1|Block), data = p_data_spores_mature)
 pmaturesporemod2 <- lmer(mature_spores_log ~ microcystin.avg * Diet + (1|Block), data = p_data_spores)
 #overdisp_fun(pmaturesporemod2)
 summary(pmaturesporemod2)
@@ -483,13 +483,19 @@ pmaturesporemod3 <- lmer(mature_spores_log ~ microcystin.avg * Diet * Clone + (1
 summary(pmaturesporemod3)
 Anova(pmaturesporemod3)
 
+# Remove other diets to only compare M and M+ diets
+p_data_spores_M_tox <- filter(p_data_spores_mature, Diet == "M" | Diet == "M+")
+pmaturesporemod4 <- lmer(log(mature_spores) ~ log(microcystin.avg+1) * Clone + (1|Block), data = p_data_spores_M_tox)
+summary(pmaturesporemod4)
+Anova(pmaturesporemod4)
+qqnorm(resid(pmaturesporemod4))
+qqline(resid(pmaturesporemod4))
 ```
 
 ```{r, figure of Mature Past spore yield by microcystin concentration}
 # Marginal effects from best model with Abundance on the x axis
-past_maturespores2 <- ggpredict(pmaturesporemod2, c("microcystin.avg", "Diet", "Clone"))
+past_maturespores2 <- ggpredict(pmaturesporemod2, c("microcystin.avg", "Diet", "Clone"), ci = F)
 plot(past_maturespores2, add.data = T)
-
 
 p_maturespore_mc_fig <- plot(past_maturespores2, add.data = T) +
   scale_color_manual(values = diet_colors) +
@@ -498,8 +504,24 @@ p_maturespore_mc_fig <- plot(past_maturespores2, add.data = T) +
   labs(x = "Microcystin conc (ug/L)", y = "log Bacteria Spore Yield") +
   scale_y_log10(labels = scales::comma, limits = c(1,1000000)) +
   theme_classic()
-
 p_maturespore_mc_fig
+
+mc_diets <- c("#006837", "#1D91C0")
+p_maturespore_mc_fig2 <- ggplot(p_data_spores_M_tox, aes(x = microcystin.avg+1, y = mature_spores)) +
+  geom_point(aes(color=Diet, shape = Clone), size=2) +
+  geom_smooth(method = "lm", color = "black") +
+  #facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10(breaks = c(1, 3, 5, 10, 20), labels = c(1, 3, 5, 10, 20)) +
+  #xlim(0,20) +
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "log Bacteria spore yield") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_maturespore_mc_fig2
+ggsave("figures/PastMatureSpore_MicrocystinxClone.tiff", plot = p_maturespore_mc_fig2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -616,8 +638,9 @@ There is not a significant difference in spore yield based on clone, but diet do
 
 
 ```{r, model of Mature Metsch spore yield by treatments}
+m_data_maturespores <- m_data_spores %>% filter(mature_spores > 0) 
 mmaturesporemod <- lmer(log(mature_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
-summary(mmaturesporemod)
+summary(mmaturesporemod) # not enough data to run the Diet x Clone interaction
 Anova(mmaturesporemod)
 AIC(mmaturesporemod)
 
@@ -677,11 +700,14 @@ Results are similar to the total spore yield analyses. There is not a sig differ
 
 
 ```{r, model of Mature Metsch spore yield by microcystin concentration}
-mmaturesporemod2 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores)
+mmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + Clone + Diet + (1|Block), data = m_data_maturespores)
+mmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + (1|Block), data = m_data_maturespores)
 overdisp_fun(mmaturesporemod2)
 summary(mmaturesporemod2)
 Anova(mmaturesporemod2)
 AIC(mmaturesporemod2)
+qqnorm(resid(mmaturesporemod2))
+qqline(resid(mmaturesporemod2))
 
 # try model without M+ samples (outliers b/c so much higher than all other samples, see if there is a pattern )
 m_data_spores_noM_tox <- filter(m_data_spores, Diet != "M+")
@@ -693,19 +719,26 @@ Anova(mmaturesporemod3)
 mmaturesporemod2 <- glmer(round(mature_spores) ~ microcystin.avg + Diet + (1|Block) + (1|Unique.code), family = poisson, data = m_data_spores)
 
 # also try with M+ from extra treatment with microcystin avg added in (COMPARE ONLY M AND M+ TREATMENTS)
-m_data_spores[28, "microcystin.avg"] <- 14.58926751 # added in value of microcystin average for other M+ std metsch exposed and infected treatments
 mmaturesporemod2 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores)
 summary(mmaturesporemod2)
 Anova(mmaturesporemod3)
 plot(mmaturesporemod2)
-qqnorm(resid(mmaturesporemod2))
-qqline(resid(mmaturesporemod2))
+
+
+# Remove other diets to only compare M and M+ diets
+m_data_spores_M_tox <- filter(m_data_maturespores, Diet == "M" | Diet == "M+")
+mmaturesporemod4 <- lm(log(mature_spores) ~ log(microcystin.avg+1), data = m_data_spores_M_tox)
+summary(mmaturesporemod4)
+Anova(mmaturesporemod4)
+qqnorm(resid(mmaturesporemod4))
+qqline(resid(mmaturesporemod4))
+
 
 ```
 
 ```{r, figure of Mature Metsch spore yield by microcystin concentration}
 # Marginal effects from best model with Abundance on the x axis
-metsch_maturespores2 <- ggpredict(mmaturesporemod2, c("microcystin.avg", "Diet"))
+metsch_maturespores2 <- ggpredict(mmaturesporemod2, c("microcystin.avg"), ci = F)
 plot(metsch_maturespores2, add.data = T)
 
 
@@ -714,9 +747,30 @@ m_maturespore_mc_fig <- plot(metsch_maturespores2, add.data = T) +
   scale_fill_manual(values = diet_colors) +
   ggtitle("Metsch Pasteuria Spore Yield by microcstin + diet") +
   labs(x = "Microcystin conc (ug/L)", y = "log Metsch Spore Yield") +
-  #scale_y_log10(labels = scales::comma) +
+  scale_y_log10() +
+  scale_x_log10() +
   theme_classic()
 m_maturespore_mc_fig
+ggsave("figures/MetschMatureSpore_Microcystin_allData.tiff", plot = m_maturespore_mc_fig, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+mc_diets <- c("#006837", "#1D91C0")
+m_maturespore_mc_fig2 <- ggplot(m_data_spores_M_tox, aes(x = microcystin.avg+1, y = mature_spores)) +
+  geom_point(aes(color=Diet, shape = Clone), size=2) +
+  geom_smooth(method = "lm", color = "black") +
+  #facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10(breaks = c(1, 3, 5, 10, 20), labels = c(1, 3, 5, 10, 20)) +
+  ylim(0,50000) +
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "log Fungus spore yield") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_maturespore_mc_fig2
+ggsave("figures/MetschMatureSpore_MicrocystinxClone.tiff", plot = m_maturespore_mc_fig2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
 
 ```
 
@@ -1119,9 +1173,24 @@ pfecundmod <- lmer(log(Total.Babies+1) ~ Diet * Infection * Clone + (1|Block), d
 summary(pfecundmod)
 Anova(pfecundmod)
 overdisp_fun(pfecundmod)
+AIC(pfecundmod)
+plot(pfecundmod)
+qqnorm(resid(pfecundmod))
+qqline(resid(pfecundmod))
 
 pfecundmod_contrasts <- emmeans(pfecundmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 pfecundmod_contrasts
+
+# test of microcystin effect on offspring production
+p_data_fecund_toxintest <- filter(p_data_fecund, Diet == "M" | Diet == "M+")
+pfecundmod2 <- lmer(log(Total.Babies+1) ~ log(microcystin.avg+1) * Infection * Clone + (1|Block), data = p_data_fecund_toxintest)
+summary(pfecundmod2)
+Anova(pfecundmod2)
+overdisp_fun(pfecundmod2)
+AIC(pfecundmod2)
+plot(pfecundmod2)
+qqnorm(resid(pfecundmod2))
+qqline(resid(pfecundmod2))
 
 ```
 
@@ -1159,6 +1228,22 @@ p_fecund_tot2
 
 ggsave("figures/PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
+mc_diets <- c("#006837", "#1D91C0")
+p_fecund_tot3 <- ggplot(p_data_fecund_toxintest, aes(x = microcystin.avg+1, y = Total.Babies+1)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10() +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_tot3
+ggsave("figures/PastTotalFecundity_MicrocystinxClonexInfection.tiff", plot = p_fecund_tot3, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1182,12 +1267,28 @@ m_data_fecund <- m_data %>% filter(!is.na(Total.Babies) & lifespan.days > 11)
 hist(m_data$Total.Babies) 
 hist(log(m_data$Total.Babies+1)) 
 
-mfecundmod <- lmer(log(Total.Babies+1) ~ Diet * Infection * Clone + (1|Block), data = m_data_fecund)
+mfecundmod <- lmer(log(Total.Babies+1) ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), data = m_data_fecund)
 summary(mfecundmod)
-Anova(mfecundmod)
+Anova(mfecundmod) # model doesn't have enough power for the 3 way interaction
+AIC(mfecundmod)
+plot(mfecundmod)
+qqnorm(resid(mfecundmod))
+qqline(resid(mfecundmod))  # doesn't look great
 
 mfecundmod_contrasts <- emmeans(mfecundmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 mfecundmod_contrasts
+
+
+# test of microcystin effect on offspring production
+m_data_fecund_toxintest <- filter(m_data_fecund, Diet == "M" | Diet == "M+")
+mfecundmod2 <- lmer(log(Total.Babies+1) ~ log(microcystin.avg+1) + Infection + Clone + Infection:Clone + (1|Block), data = m_data_fecund_toxintest)
+summary(mfecundmod2)
+Anova(mfecundmod2)   # technically rank deficient to handle interactions, but infection x clone is sig anyways????
+overdisp_fun(mfecundmod2)
+AIC(mfecundmod2)
+plot(mfecundmod2)
+qqnorm(resid(mfecundmod2))
+qqline(resid(mfecundmod2))
 ```
 
 ```{r, total fecunity by treatment for metsch}
@@ -1208,6 +1309,27 @@ m_fecund_tot2 <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies+1)) +
 m_fecund_tot2
 
 ggsave("figures/MetschTotalFecundity_DietxClonexInfection.tiff", plot = m_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+mc_diets <- c("#006837", "#1D91C0")
+m_fecund_tot3 <- ggplot(m_data_fecund_toxintest, aes(x = microcystin.avg+1, y = Total.Babies+1)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10() +
+  ylim(0.9, 30) + 
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_tot3
+ggsave("figures/MetschTotalFecundity_MicrocystinxClonexInfection.tiff", plot = m_fecund_tot3, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
 
 ```
 
@@ -1698,13 +1820,12 @@ In the model evaluating metabolic rate over time in the experiment, diet, clone,
 
 
 ```{r, model of respiration rate for metsch week 1 only and over time}
-# NEED TO COME BACK TO FIX NAME OF METABOLIC RATE!!!!
 m_data_resp <- m_data %>% dplyr::filter(!is.na(metabolic.rate.Week1))
 hist(as.numeric(m_data_resp$metabolic.rate.Week1)) # More right skewed than I would like
 range(m_data_resp$metabolic.rate.Week1)
 
 # Respiration rate during week 1 (exposure period) only
-mrespmod <- lmer(metabolic.rate.Week1 ~ Diet + Infection * Clone +(1|Block), data = m_data_resp)
+mrespmod <- lmer(metabolic.rate.Week1 ~ Diet + Infection * Clone + Diet:Infection + Diet:Clone +(1|Block), data = m_data_resp)
 summary(mrespmod)
 Anova(mrespmod)
 AIC(mrespmod)
@@ -1722,7 +1843,7 @@ hist(as.numeric(m_longdata_resp$metabolic.rate)) # more normal than above, thoug
 range(m_longdata_resp$metabolic.rate)
 
 # Respiration rate over whole experiment
-mrespmod2 <- lmer(metabolic.rate ~ Diet * Infection * Clone + Week + (1|Block), data = m_longdata_resp)
+mrespmod2 <- lmer(metabolic.rate ~ Diet + Infection + Clone + Week + Diet:Infection + Infection:Clone + (1|Block), data = m_longdata_resp)
 summary(mrespmod2)
 Anova(mrespmod2)
 AIC(mrespmod2)
@@ -1773,12 +1894,14 @@ ggsave("figures/MetschMetabolicRate_DietxClonexInfection_Week1.tiff", plot = m_r
 
 # figures over time
 ## Plot of O2 saturation and metabolism over time by week
+m_longdata_resp$Week <- as.factor(m_longdata_resp$Week)
+m_longdata_resp$Diet <- factor(m_longdata_resp$Diet, levels = c("S", "SM", "M", "M+"))
 m_longdata_resp_sum <- m_longdata_resp %>%
-  group_by(Diet, Infection, Clone, Week) %>%
+  ungroup() %>% dplyr::group_by(Diet, Infection, Clone, Week) %>%
   dplyr::summarize(N  = length(metabolic.rate),
             resp.mean = mean(metabolic.rate, na.rm = T),
             resp.sd   = sd(metabolic.rate, na.rm = T),
-            resp.se   = resp.sd / sqrt(N)) %>%
+            resp.se   = resp.sd / sqrt(N), .groups = "keep") %>%
   mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
 m_longdata_resp_sum$Week <- as.factor(m_longdata_resp_sum$Week)
 m_longdata_resp_sum$Diet <- factor(m_longdata_resp_sum$Diet, levels = c("S", "SM", "M", "M+"))
