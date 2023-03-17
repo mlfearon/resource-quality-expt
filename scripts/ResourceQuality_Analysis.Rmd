@@ -166,7 +166,12 @@ p_data_prev$Rep <- as.character(p_data_prev$Rep)
 
 past_prev_sum <- p_data_prev %>%
   group_by(Diet, Clone) %>%
-  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T), .groups = "rowwise") %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), 
+            N  = length(Clearance_rel.Week1), 
+            Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T),
+            clearance.rel.sd   = sd(Clearance_rel.Week1, na.rm = T),
+            clearance.rel.se   = clearance.rel.sd / sqrt(N), 
+            .groups = "rowwise") %>%
   mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
@@ -195,13 +200,21 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
 p_prev_fig3
-
 ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
+
+p_prev_feed_model <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = past_prev_sum)
+summary(p_prev_feed_model)
+Anova(p_prev_feed_model)
+library(rsq)
+rsq(p_prev_feed_model)
+
+
 p_prev_feed_fig <- ggplot(past_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalence)) +
-  geom_point(aes(color = Diet), size = 2) +
+  geom_point(aes(color = Diet, shape = Clone), size = 2) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.01) + 
+  geom_errorbarh(aes(xmin = Mean_Clearance_rel-clearance.rel.se, xmax = Mean_Clearance_rel+clearance.rel.se, color = Diet), width = 0.01) + 
   geom_smooth(method = "lm", color = "black") +
   scale_color_manual(values = diet_colors) +
   labs(x = "Mean Relative Feeding Rate (mL per hr per mm)", y = "Bacteria Prevalence (%)") +
@@ -211,7 +224,7 @@ p_prev_feed_fig <- ggplot(past_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalen
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
 p_prev_feed_fig
-ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate.tiff"), plot = p_prev_feed_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate2.tiff"), plot = p_prev_feed_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 ```
@@ -284,7 +297,12 @@ m_data_prev$Rep <- as.character(m_data_prev$Rep)
 
 metsch_prev_sum <- m_data_prev %>%
   group_by(Diet, Clone) %>%
-  summarise(Infected = sum(InfectionStatus), Tested = length(Rep), Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T), .groups = "rowwise") %>%
+  summarise(Infected = sum(InfectionStatus), Tested = length(Rep),
+            N  = length(Clearance_rel.Week1), 
+            Mean_Clearance_rel = mean(Clearance_rel.Week1, na.rm = T),
+            clearance.rel.sd   = sd(Clearance_rel.Week1, na.rm = T),
+            clearance.rel.se   = clearance.rel.sd / sqrt(N),
+            .groups = "rowwise") %>%
   mutate(Prevalence = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[1],
          Prev_Lower = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[2],
          Prev_Upper = unlist(epi.prev(Infected, Tested, method = "blaker", conf.level = 0.95, sp = 1, se = 0.95))[3])
@@ -317,9 +335,17 @@ m_prev_fig3
 ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
+m_prev_feed_model <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = metsch_prev_sum)
+summary(m_prev_feed_model) 
+Anova(m_prev_feed_model)
+overdisp_fun(m_prev_feed_model)
+library(rsq)
+rsq.glmm(m_prev_feed_model)
+
 m_prev_feed_fig <- ggplot(metsch_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalence)) +
-  geom_point(aes(color = Diet), size = 2) +
+  geom_point(aes(color = Diet, shape = Clone), size = 2) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.01) + 
+  geom_errorbarh(aes(xmin = Mean_Clearance_rel-clearance.rel.se, xmax = Mean_Clearance_rel+clearance.rel.se, color = Diet), width = 0.01) + 
   geom_smooth(method = "lm", color = "black") +
   scale_color_manual(values = diet_colors) +
   labs(x = "Mean Relative Feeding Rate (mL per hr per mm)", y = "Fungus Prevalence (%)") +
@@ -329,7 +355,7 @@ m_prev_feed_fig <- ggplot(metsch_prev_sum, aes(x = Mean_Clearance_rel, y= Preval
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
 m_prev_feed_fig
-ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate2.tiff"), plot = m_prev_feed_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
+ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate3.tiff"), plot = m_prev_feed_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
 
 
 ```
@@ -689,7 +715,7 @@ m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) 
   ylim(0,300000) +
   scale_y_log10(labels = scales::comma) +
   #ggtitle("Mature Metsch Spore Yield by diet x host clone") +
-  labs(x = "Diet", y = "Mature Fungal Spore Yield (log scaled)") +
+  labs(x = "Diet", y = "Mature Fungus Spore Yield (log+1 scaled)") +
   theme_classic()
 m_maturespore_fig2
 
@@ -896,6 +922,9 @@ mgutsporemod_contrasts <- emmeans(mgutsporemod, specs = pairwise ~ Diet | Clone,
 mgutsporemod_contrasts
 
 
+mgutsporemod3 <- glm(TotalGutSpores ~ Clone * length.um, family = poisson, data = m_data_gutspore)
+summary(mgutsporemod3)
+Anova(mgutsporemod3)
 ```
 
 ```{r, figure of Metsch total gut spore by treatment}
@@ -977,6 +1006,7 @@ hist(m_data_hemocytes$HemocytesPerSpore)
 
 # Number of hemocytes
 mhemocytemod <- glmer(Hemocytes ~ Diet * Clone + TotalPunctSpores + (1|Unique.code), family = "poisson", data = m_data_hemocytes, control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
+mhemocytemod <- glmer(Hemocytes ~ Diet * Clone + (1|Unique.code), family = "poisson", data = m_data_hemocytes, control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
 summary(mhemocytemod)
 Anova(mhemocytemod)
 overdisp_fun(mhemocytemod) 
@@ -1118,7 +1148,7 @@ dim(m_data_gutspore)
 dim(m_data_inf)
 
 mprevmod2 <- glm(InfectionStatus ~ Diet + Clone + TotalPunctSpores + Hemocytes, family = "binomial", data = m_data_inf)
-summary(mprevmod2)
+summary(mprevmod2)  # try putting diet and/or clone as a random effect?
 Anova(mprevmod2)
 overdisp_fun(mprevmod2)
 
@@ -1502,7 +1532,7 @@ Compare differences in total fecundity in the Pasteuria experiment based on infe
 m_data_growth <- m_data %>% filter(!is.na(GrowthRate))
 hist(m_data_growth$GrowthRate) # wow normal data!! 
 
-mgrowthmod <- lmer(GrowthRate ~ Diet * Infection * Clone +(1|Block), data = m_data_growth)
+mgrowthmod <- lmer(GrowthRate ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone  + Infection:Clone +(1|Block), data = m_data_growth)
 # Model had problems when all interactions and random effect included, but none of the interactions are significant
 # so I removed the interactions and kept the random effect
 summary(mgrowthmod)
@@ -1590,8 +1620,11 @@ plot(pfeedmod2)
 qqnorm(resid(pfeedmod2))
 qqline(resid(pfeedmod2))
 
-pfeedmod_contrasts <- emmeans(pfeedmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+pfeedmod_contrasts <- emmeans(pfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 pfeedmod_contrasts
+
+pfeedmod_contrasts2 <- emmeans(pfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+pfeedmod_contrasts2
 
 ```
 ```{r, figure of past feeding rate week 1}
@@ -1600,9 +1633,9 @@ past_feed <- ggpredict(pfeedmod2, c("Infection", "Diet", "Clone"))
 plot(past_feed)
 
 # figure with bodysize
-p_feeding_fig <- plot(past_feed, dodge = 0.4, add.data = T) +
+p_feeding_fig <- plot(past_feed, dodge = 0.6, add.data = T, show.title = F) +
   scale_color_manual(values = diet_colors) +
-  ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
   labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
   theme_classic()
 p_feeding_fig
@@ -1659,6 +1692,9 @@ qqline(resid(mfeedmod2))
 mfeedmod_contrasts <- emmeans(mfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 mfeedmod_contrasts
 
+mfeedmod_contrasts2 <- emmeans(mfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+mfeedmod_contrasts2
+
 ```
 
 
@@ -1668,9 +1704,9 @@ metsch_feed <- ggpredict(mfeedmod2, c("Infection", "Diet", "Clone"))
 plot(metsch_feed)
 
 # figure with bodysize
-m_feeding_fig <- plot(metsch_feed, dodge = 0.4, add.data = T) +
+m_feeding_fig <- plot(metsch_feed, dodge = 0.6, add.data = T, show.title = F) +
   scale_color_manual(values = diet_colors) +
-  ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
   labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
   theme_classic()
 m_feeding_fig
@@ -1704,7 +1740,6 @@ ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_feeding2,
 ### Pasteuria respiration rate analyses
 
 ```{r, model of respiration rate for Past week 1 only and over time}
-# NEED TO COME BACK TO FIX NAME OF METABOLIC RATE!!!!
 p_data_resp <- p_data %>% dplyr::filter(!is.na(metabolic.rate.Week1))
 hist(as.numeric(p_data_resp$metabolic.rate.Week1)) # pretty close to normal, a tad right skewed
 range(p_data_resp$metabolic.rate.Week1)
