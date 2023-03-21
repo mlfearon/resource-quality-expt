@@ -59,7 +59,7 @@ M Past MID 9,M,Pasteuria,Mid37,9,2,3,Infected,1,19,0,0,NA,NA,NA,NA
 M Past MID 9,M,Pasteuria,Mid37,9,2,4,Infected,1,19,0,0,NA,NA,NA,NA
 M Past MID 9,M,Pasteuria,Mid37,9,2,5,Infected,1,19,0,0,NA,NA,NA,NA
 M Past MID 9,M,Pasteuria,Mid37,9,2,5.5,Infected,1,19,0,0,NA,NA,NA,NA
-M Past STD 1,M,Pasteuria,Standard,1,1,1,Exposed,0,9,0,0,909.56,-0.079658579809059,-0.0962874872450034,NA
+M Past STD 1,M,Pasteuria,Standard,1,1,1,Exposed,0,9,0,0,909.56,-0.079658579809059,-0.0962874872450034,0.00018439075771451
 M Past STD 1,M,Pasteuria,Standard,1,1,2,Exposed,0,9,0,0,NA,NA,NA,NA
 M Past STD 1,M,Pasteuria,Standard,1,1,3,Exposed,0,9,0,0,NA,NA,NA,NA
 M Past STD 1,M,Pasteuria,Standard,1,1,4,Exposed,0,9,0,0,NA,NA,NA,NA
@@ -78,7 +78,6 @@ M Past STD 2,M,Pasteuria,Standard,2,1,4,Exposed,0,9,0,0,NA,NA,NA,NA
 M Past STD 2,M,Pasteuria,Standard,2,1,5,Exposed,0,9,0,0,NA,NA,NA,NA
 M Past STD 2,M,Pasteuria,Standard,2,1,5.5,Exposed,0,9,0,0,NA,NA,NA,NA
 M Past STD 3,M,Pasteuria,Standard,3,1,1,Exposed,0,20,0,0,978.33,-0.079658579809059,-0.0832265356048685,0.000860986392247205
-M Past STD 3,M,Pasteuria,Standard,3,1,1,Exposed,0,20,0,0,978.33,-0.079658579809059,-0.0832265356048685,0.00018439075771451
 M Past STD 3,M,Pasteuria,Standard,3,1,2,Exposed,0,20,0,0,1270.19,-0.318756425262363,-0.197570258988833,0.00228866581872994
 M Past STD 3,M,Pasteuria,Standard,3,1,3,Exposed,0,20,12,12,NA,NA,NA,NA
 M Past STD 3,M,Pasteuria,Standard,3,1,4,Exposed,0,20,0,12,NA,NA,NA,NA
