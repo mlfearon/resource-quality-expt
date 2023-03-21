@@ -1423,7 +1423,7 @@ ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi 
 
 ```
 
-High quality diets produce the largest little r instanteous growth rates, and decreases with poorer quality diet. Exposure to Pasteuria, but not getting infected seems to reduce the little r for Mid37s a bit, but not for standards. Infection with Pasteuria results in castration, so those animals have very low little r's. Overall, there is not much of a difference in little r for M vs spiked toxin M treatments, except for exposed Mid37s, which have a very low little r with a wide standard error. This effect is not seen for Standards.
+High quality diets produce the largest little r instantaneous growth rates, and decreases with poorer quality diet. Exposure to Pasteuria, but not getting infected seems to reduce the little r for Mid37s a bit, but not for standards. Infection with Pasteuria results in castration, so those animals have very low little r's. Overall, there is not much of a difference in little r for M vs spiked toxin M treatments, except for exposed Mid37s, which have a very low little r with a wide standard error. This effect is not seen for Standards.
 
 
 ### Little r by treatment for Metsch experiment
