@@ -1795,7 +1795,7 @@ ggsave("figures/PastMetabolicRate_DietxClonexInfection2_Week1.tiff", plot = p_re
 
 # Boxplot of week 1 metabolic rate
 # figure for presentation
-p_resp_fig2 <- ggplot(p_data_resp, aes(x = Infection, y = metabloc.rate.Week1)) +
+p_resp_fig2 <- ggplot(p_data_resp, aes(x = Infection, y = metabolic.rate.Week1)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
   facet_wrap(~Clone) +
