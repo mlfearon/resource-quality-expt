@@ -151,7 +151,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 1,8,3,1,11/16/2021,13:26,15:48,M,Uninf,MID,2,A6,A,6,MUninfMID,Past,N,
 1,8,3,1,11/16/2021,13:26,15:48,M,Uninf,STD,5,B1,B,1,MUninfSTD,Past,N,
 1,8,3,1,11/16/2021,13:26,15:48,M,Uninf,MID,3,B2,B,2,MUninfMID,Past,N,
-1,8,3,1,11/16/2021,13:26,15:48,M,Pasteuria,STD,3,B3,B,3,MPasteuriaSTD,Past,N,
+1,8,3,1,11/16/2021,13:26,15:48,M,Pasteuria,STD,1,B3,B,3,MPasteuriaSTD,Past,N,
 1,8,3,1,11/16/2021,13:26,15:48,M,Pasteuria,STD,5,B4,B,4,MPasteuriaSTD,Past,N,
 1,8,3,1,11/16/2021,13:26,15:48,M,Blank,Blank,1,B5,B,5,MBlankBlank,Past,N,
 1,8,3,1,11/16/2021,13:26,15:48,M,Pasteuria,MID,5,B6,B,6,MPasteuriaMID,Past,N,
