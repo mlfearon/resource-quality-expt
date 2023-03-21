@@ -81,7 +81,7 @@ for(i in offspring_past_long$ID){
   }
 }
 
-View(offspring_past_long) 
+#View(offspring_past_long) 
 
 # remove day and offspring by day from this data set
 offspring_past_long2 <- select(offspring_past_long, Unique.code:InfectionStatus, Week)
@@ -146,13 +146,13 @@ for(i in bodysize_past_long$ID){
     bodysize_past_long$Week[i] <- NA
   }
 }
-View(bodysize_past_long)
+#View(bodysize_past_long)
 
 bodysize_past_longWeek <- bodysize_past_long %>%
   group_by(Unique.code, Diet, Parasites, Clone, Rep, Block, Week) %>%
   dplyr::summarize(WeeklyLength = mean(Length, na.rm = T)) %>%
   mutate(WeeklyLength = ifelse(is.nan(WeeklyLength), NA, WeeklyLength))
-View(bodysize_past_longWeek)
+#View(bodysize_past_longWeek)
 bodysize_past_longWeek$Week <- as.factor(bodysize_past_longWeek$Week)
 
 
@@ -186,7 +186,7 @@ spores_past_short <- spores_past %>%
          caul_spores = (rowSums(select(., contains("caul")))/4) *1000, 
          total_spores = (rowSums(select(., contains("total")))/4) *1000) %>%
   select(Unique.code:Block, mature_spores:total_spores)
-View(spores_past_short)
+#View(spores_past_short)
 
 
 
