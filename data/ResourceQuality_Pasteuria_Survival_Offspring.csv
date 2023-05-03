@@ -139,23 +139,23 @@ S:M Past STD 7,SM,Pasteuria,Standard,7,2,11/9/2021,12/16/2021,37,censored,0,Y,Ex
 S:M Past STD 8,SM,Pasteuria,Standard,8,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,20,0,0,0,0,1,4,4,3,,0,4,4,,0,4,5,,0,4,9,42,
 S:M Past STD 9,SM,Pasteuria,Standard,9,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,20,0,0,0,2,,0,4,5,,0,2,2,,0,9,5,,0,4,0,33,
 S:M Past STD 10,SM,Pasteuria,Standard,10,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,20,0,0,0,2,,0,6,4,,0,5,7,,0,5,7,,0,2,9,47,
-M Past STD 1,M,Pasteuria,Standard,1,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
-M Past STD 2,M,Pasteuria,Standard,2,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,very dessicated
+M Past STD 1,M,Pasteuria,Standard,1,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,NA,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Past STD 2,M,Pasteuria,Standard,2,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,NA,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,very dessicated
 M Past STD 3,M,Pasteuria,Standard,3,1,11/9/2021,11/29/2021,20,,1,Y,Exposed,0,21,0,0,0,0,0,0,2,4,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,12,died during feeding rate
 M Past STD 4,M,Pasteuria,Standard,4,1,11/9/2021,11/23/2021,14,,1,Y,Infected,1,,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,died during respiration
-M Past STD 5,M,Pasteuria,Standard,5,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
-M Past STD 6,M,Pasteuria,Standard,6,2,11/9/2021,11/22/2021,13,,1,Y,Exposed,0,21,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NOT SAVED; died of natural causes
-M Past STD 7,M,Pasteuria,Standard,7,2,11/9/2021,11/15/2021,6,censored,0,N,Exposed,0,21,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,smashed
+M Past STD 5,M,Pasteuria,Standard,5,1,11/9/2021,11/18/2021,9,,1,Y,Exposed,NA,21,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M Past STD 6,M,Pasteuria,Standard,6,2,11/9/2021,11/22/2021,13,,1,Y,Exposed,NA,21,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,NOT SAVED; died of natural causes
+M Past STD 7,M,Pasteuria,Standard,7,2,11/9/2021,11/15/2021,6,censored,0,N,Exposed,NA,21,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,smashed
 M Past STD 8,M,Pasteuria,Standard,8,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,21,0,0,0,0,1,0,0,3,,2,3,2,,0,0,7,,0,1,0,19,11/24 - 1 dead baby
 M Past STD 9,M,Pasteuria,Standard,9,2,11/9/2021,12/1/2021,22,,1,Y,Exposed,0,21,0,0,0,0,1,0,2,3,3,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,9,11/30 - looks unhealthy
 M Past STD 10,M,Pasteuria,Standard,10,2,11/9/2021,12/2/2021,23,,1,Y,Exposed,0,21,0,0,0,0,0,0,0,2,,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,3,
 M+ Past STD 1,M+,Pasteuria,Standard,1,1,11/9/2021,11/28/2021,19,,1,Y,Infected,1,22,0,0,0,0,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,
 M+ Past STD 2,M+,Pasteuria,Standard,2,1,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,23,0,0,0,1,0,0,2,0,0,,4,4,0,,6,1,0,,2,0,20,
-M+ Past STD 3,M+,Pasteuria,Standard,3,1,11/9/2021,11/22/2021,13,,1,Y,Exposed,0,23,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/20 - 2 dead babies
+M+ Past STD 3,M+,Pasteuria,Standard,3,1,11/9/2021,11/22/2021,13,,1,Y,Exposed,NA,23,0,0,0,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,11/20 - 2 dead babies
 M+ Past STD 4,M+,Pasteuria,Standard,4,1,11/9/2021,12/8/2021,29,,1,Y,Infected,1,22,0,0,0,0,0,0,1,0,0,,0,0,0,,0,NA,NA,NA,NA,NA,1,"11/20 - 1 dead baby; 12/1 - 1 dead baby, check for infection with spore counts"
 M+ Past STD 5,M+,Pasteuria,Standard,5,1,11/9/2021,11/30/2021,21,,1,Y,Exposed,0,23,0,0,0,0,0,0,0,2,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,2,"11'24 - 1 dead baby; 11/29 looks unhealthy, died 11/30"
 M+ Past STD 6,M+,Pasteuria,Standard,6,2,11/9/2021,11/27/2021,18,,1,Y,Infected,1,22,0,0,0,1,0,0,0,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,2,
 M+ Past STD 7,M+,Pasteuria,Standard,7,2,11/9/2021,12/16/2021,37,censored,0,Y,Exposed,0,23,0,0,0,0,1,0,0,3,3,0,0,4,,2,2,4,,0,5,0,24,
 M+ Past STD 8,M+,Pasteuria,Standard,8,2,11/9/2021,11/24/2021,15,,1,Y,Exposed,0,23,0,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,died naturally
-M+ Past STD 9,M+,Pasteuria,Standard,9,2,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,23,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
-M+ Past STD 10,M+,Pasteuria,Standard,10,2,11/9/2021,11/18/2021,9,,1,Y,Exposed,0,23,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M+ Past STD 9,M+,Pasteuria,Standard,9,2,11/9/2021,11/18/2021,9,,1,Y,Exposed,NA,23,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
+M+ Past STD 10,M+,Pasteuria,Standard,10,2,11/9/2021,11/18/2021,9,,1,Y,Exposed,NA,23,0,0,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,
