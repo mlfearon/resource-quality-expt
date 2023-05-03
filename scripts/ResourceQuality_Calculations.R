@@ -2,11 +2,11 @@
 # Both short and long (by experimental day) versions of the data are created for use in different analyses.
 
 # Code written by: Michelle Fearon
-# Last updated: March 2, 2023
+# Last updated: May 3, 2023
 
 # load libraries
-library(dplyr)
 library(tidyr)
+library(dplyr)
 library(lubridate)
 #library to do survival analyses
 library(survival)
@@ -15,6 +15,11 @@ library(rms)
 library(survminer)
 library(emmeans)
 library(ggplot2)
+library(car)
+library(olsrr)
+library(fitdistrplus)
+library(DHARMa)
+library(glmmTMB)
 library(here)
 
 
@@ -54,7 +59,7 @@ offspring_past$SurvObj <- with(offspring_past, Surv(lifespan.days, Status))
 
 # create a long version of the data set based on experimental day
 offspring_past_long <- offspring_past %>%
-  select(Unique.code:Block,lifespan.days, Infection, InfectionStatus, Babies_7:Babies_38) %>%
+  dplyr::select(Unique.code:Block,lifespan.days, Infection, InfectionStatus, Babies_7:Babies_38) %>%
   pivot_longer(Babies_7:Babies_38, names_to = "Day", names_prefix = "Babies_", values_to = "Offspring") #%>%
   #mutate(CumulativeOffspring = cumsum(Offspring))   ADDS IN DAILY CUMULATIVE SUM OF OFFSPRING< BUT FAILS WITH NAs
  
@@ -84,7 +89,7 @@ for(i in offspring_past_long$ID){
 #View(offspring_past_long) 
 
 # remove day and offspring by day from this data set
-offspring_past_long2 <- select(offspring_past_long, Unique.code:InfectionStatus, Week)
+offspring_past_long2 <- dplyr::select(offspring_past_long, Unique.code:InfectionStatus, Week)
 
 # Calculate the number of offspring produced each week and cumulatively by week
 offspring_past_longWeek <- offspring_past_long %>%
@@ -97,7 +102,7 @@ offspring_past_longWeek <- left_join(offspring_past_longWeek, offspring_past_lon
 
 # re-order columns and remove duplicates
 offspring_past_longWeek <- offspring_past_longWeek %>%
-  select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
+  dplyr::select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
   distinct()
 dim(offspring_past_longWeek)
 offspring_past_longWeek$Week <- as.factor(offspring_past_longWeek$Week)
@@ -106,7 +111,7 @@ offspring_past_longWeek$Week <- as.factor(offspring_past_longWeek$Week)
 
 # create short version of the data set with one row per replicate
 offspring_past_short <- offspring_past %>%
-  select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
+  dplyr::select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
 
 
 
@@ -161,7 +166,7 @@ bodysize_past_longWeek$Week <- as.factor(bodysize_past_longWeek$Week)
         # calculate growth rate between the first and second week of experiment ( 7 to 14 and 8 to 15, respectively)
 bodysize_past_short <- bodysize_past %>%
   mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1)) %>%
-  select(Unique.code:Block, GrowthRate)
+  dplyr::select(Unique.code:Block, GrowthRate)
 
 
 
@@ -179,15 +184,57 @@ spores_past$Block <- as.factor(spores_past$Block)
 
 spores_past_short <- spores_past %>% 
   # create total spores column for each quadrant counted
-  mutate(total_1 = rowSums(select(., contains("_1"))), total_2 = rowSums(select(., contains("_2"))), total_3 = rowSums(select(., contains("_3"))), total_4 = rowSums(select(., contains("_4")))) %>%
+  mutate(total_1 = rowSums(dplyr::select(., contains("_1"))), total_2 = rowSums(dplyr::select(., contains("_2"))), total_3 = rowSums(dplyr::select(., contains("_3"))), total_4 = rowSums(dplyr::select(., contains("_4")))) %>%
   # average spore counts across four quadrants for each developmental stage, then multiply by 10,000 to get spores/mL, then multiply by 0.1 mL (10,000 x 0.1 = 1000) = # spores per animal
-  mutate(mature_spores = (rowSums(select(., starts_with("mature")))/4) *1000,
-         immature_spores = (rowSums(select(., contains("immature")))/4) *1000, 
-         caul_spores = (rowSums(select(., contains("caul")))/4) *1000, 
-         total_spores = (rowSums(select(., contains("total")))/4) *1000) %>%
-  select(Unique.code:Block, mature_spores:total_spores)
+  mutate(mature_spores = (rowSums(dplyr::select(., starts_with("mature")))/4) *1000,
+         immature_spores = (rowSums(dplyr::select(., contains("immature")))/4) *1000, 
+         caul_spores = (rowSums(dplyr::select(., contains("caul")))/4) *1000, 
+         total_spores = (rowSums(dplyr::select(., contains("total")))/4) *1000) %>%
+  dplyr::select(Unique.code:Block, mature_spores:total_spores)
 #View(spores_past_short)
 
+
+### Spore size
+sporesize_past <- read.csv("data/ResourceQuality_Pasteuria_SporeSize.csv", stringsAsFactors = F)
+head(sporesize_past)
+sporesize_past$Diet <- as.factor(sporesize_past$Diet)
+sporesize_past$Diet <- factor(sporesize_past$Diet, levels = c("S", "SM", "M", "M+"))
+sporesize_past$Parasites <- as.factor(sporesize_past$Parasites)
+sporesize_past$Clone <- as.factor(sporesize_past$Clone)
+sporesize_past$Rep <- as.factor(sporesize_past$Rep)
+
+
+
+sporesize_past_sum <- sporesize_past %>%
+  mutate(SporeArea = pi  * (HorizontalDiameter/2) * (VerticalDiameter/2)) %>%
+  filter(!is.na(SporeArea)) %>%
+  dplyr::group_by(Diet, Parasites, Clone, Rep) %>%
+  dplyr::summarize(AvgSporeSize = mean(SporeArea))
+sporesize_past_sum$Diet <- factor(sporesize_past_sum$Diet, levels = c("S", "SM", "M", "M+"))
+hist(sporesize_past_sum$AvgSporeSize)
+
+# quick model of spores size
+sporesize_mod <- lm(AvgSporeSize ~ Diet, data = sporesize_past_sum)
+summary(sporesize_mod)
+Anova(sporesize_mod)
+AIC(sporesize_mod)
+#plot(sporesize_mod)
+qqnorm(resid(sporesize_mod))
+qqline(resid(sporesize_mod)) # looks ok, not the best
+ols_test_normality(sporesize_mod)  # shapiro-wilk is not significant, normal distribution should be fine
+ols_plot_resid_fit(sporesize_mod)
+
+# quick figure of spores size
+diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
+sporesize_plot <- ggplot(sporesize_past_sum, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
+  geom_boxplot() +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  #facet_wrap(~Clone) +
+  scale_fill_manual(values = diet_colors) +
+  #ggtitle("Pasteuria spore size based on diet") +
+  labs(x = "Diet", y = bquote("Mean Bacteria Spore Area " ~ (m^2)))
+sporesize_plot
+ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 
 
@@ -204,11 +251,11 @@ feed_data$Week <- as.factor(feed_data$Week)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 feed_past_data_long <- feed_data %>% 
   filter(Experiment == "Past") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
 
 feed_past_data_short <- feed_data %>% 
   filter(Experiment == "Past", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
   dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
@@ -227,11 +274,11 @@ resp_data$Week <- as.factor(resp_data$Week)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 resp_past_data_long <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
 
 resp_past_data_short <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
   dplyr::rename(metabolic.rate.Week1 = metabolic.rate)
 
 
@@ -266,15 +313,16 @@ spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Die
   geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
   facet_wrap(~Day, labeller = label_both) +
   scale_fill_manual(values = diet_colors_micro) +
-  ggtitle("Microcystin spiked concentrations, Day 5 and 8") +
-  labs(x = "Diet", y = "log Microcystin concentation (ug/L)") +
+  #ggtitle("Microcystin spiked concentrations, Day 5 and 8") +
+  labs(x = "Diet", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
 spike_plot
 ggsave(here("figures/Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 m_conc_mod <- lm(log(Microcystin.conc) ~ Day*Diet, data = super_spike)
 summary(m_conc_mod)
-plot(m_conc_mod)
+Anova(m_conc_mod)
+#plot(m_conc_mod)
 treatment_difs <- emmeans(m_conc_mod, pairwise ~ Diet * Day, type = "response")
 treatment_difs  
         # no sig diff between M treatments on days 5 and 8.
@@ -312,11 +360,14 @@ microcystin_exposure.sum <- microcystin_exposure %>%
                    microcystin.avg = mean(Microcystin.conc, na.rm = T),
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
                    microcystin.se   = microcystin.sd / sqrt(N))
+microcystin_exposure.sum$Exposure <- as.factor(dplyr::recode(microcystin_exposure.sum$Parasites, Metsch = "Parasite", Pasteuria = "Parasite"))
+microcystin_exposure.sum$Experiment <- as.factor(dplyr::recode(microcystin_exposure.sum$Experiment, Metsch = "Fungus", Pasteuria = "Bacteria"))
 microcystin_exposure.sum
-microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero
+write.csv(microcystin_exposure.sum, "tables/MicrocystinConc_DuringExposure.csv", quote = F, row.names=FALSE)
+microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero (to be able to log transform the y axis in the figure below)
 
 
-microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasites, y = microcystin.avg)) +
+microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Exposure, y = microcystin.avg)) +
   geom_point(aes(color = Diet), position=position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin=microcystin.avg-microcystin.se, ymax=microcystin.avg+microcystin.se,color=Diet), width=0.3, position=position_dodge(width = 0.5)) + 
   #geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
@@ -325,22 +376,33 @@ microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Parasites, y = mic
   #scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   #scale_shape_manual(values=c(15,16,17,18)) +
-  ggtitle("Microcystin concentrations during exposure, Day 8") +
-  labs(x = "Parasite Treatments", y = "log Average Microcystin concentation (ug/L)") +
+  #ggtitle("Microcystin concentrations during exposure, Day 8") +
+  labs(x = "Parasite Treatments", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
 microcystin_plot2
-ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
+ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
 
-library(car)
-m_conc_mod2 <- lm(log(Microcystin.conc+0.01) ~ Experiment * Diet, data = microcystin_exposure)
+
+hist(microcystin_exposure$Microcystin.conc)
+# adjust zero values to be very low but non-zero to be able to run the gamma distribution
+microcystin_exposure$Microcystin.conc[ microcystin_exposure$Microcystin.conc == 0] <- 0.01
+
+m_conc_mod2 <- glmmTMB(Microcystin.conc ~ Experiment * Diet, ziformula = ~1, family = ziGamma(), data = microcystin_exposure)
 summary(m_conc_mod2)
 Anova(m_conc_mod2)
-plot(m_conc_mod2)  # not very linear residuals...maybe need a different model distribution
+
+testDispersion(m_conc_mod2)
+testZeroInflation(m_conc_mod2)
+micro_simResid <- simulateResiduals(fittedModel = m_conc_mod2)
+plot(micro_simResid)  # not a perfect fit, but better than the linear model...
+
 treatment_difs2 <- emmeans(m_conc_mod2, pairwise ~ Diet | Experiment, type = "response")
 treatment_difs2  
         # no significant differences between S, SM, and M diets within either Past or Metsch experiments
-        # M+ diet has sig higher Microcystin concentrations compared to all other dies in both experiments
+        # M+ diet has sig higher Microcystin concentrations compared to all other diets in both experiments
 
 experiment_difs <- emmeans(m_conc_mod2, pairwise ~ Experiment | Diet, type = "response")
 experiment_difs  
@@ -348,13 +410,14 @@ experiment_difs
 
 
 ## table of average Microcystin concentrations per Diet treatment in each experiment
+microcystin_exposure$Diet2 <- as.factor(dplyr::recode(microcystin_exposure$Diet, S = "non-toxin", SM = "non-toxin", M = "non-toxin"))
 microcystin_exposure.sum2 <- microcystin_exposure %>%
-  group_by(Experiment, Diet) %>%
+  group_by(Experiment, Diet2) %>%
   dplyr::summarize(N  = length(Microcystin.conc), 
                    microcystin.avg = mean(Microcystin.conc, na.rm = T),
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
                    microcystin.se   = microcystin.sd / sqrt(N))
-microcystin_exposure.sum2
+View(microcystin_exposure.sum2)
 
 
 # calculate average microcystin concentration per diet, clone, parasite infection status treatment to join with larger data set
@@ -369,7 +432,7 @@ View(microcystin_exposure.sum3)
 past_microcystin <- microcystin_exposure.sum3 %>% 
   filter(Experiment == "Pasteuria") %>%
   ungroup() %>%
-  select(Diet:Infection, microcystin.avg)
+  dplyr::select(Diet:Infection, microcystin.avg)
 
 metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
 
@@ -379,6 +442,7 @@ metsch_microcystin <- filter(microcystin_exposure.sum3, Experiment == "Metsch")
 ##### Join short data sets together
 past_data_short <- full_join(offspring_past_short, bodysize_past_short)
 past_data_short <- full_join(past_data_short, spores_past_short)
+past_data_short <- full_join(past_data_short, sporesize_past_sum)
 past_data_short <- full_join(past_data_short, feed_past_data_short)
 past_data_short <- full_join(past_data_short, resp_past_data_short)
 past_data_short <- full_join(past_data_short, past_microcystin)
@@ -447,7 +511,7 @@ offspring_metsch$SurvObj <- with(offspring_metsch, Surv(lifespan.days, Status))
 
 # create a long version of the data set based on experimental day
 offspring_metsch_long <- offspring_metsch %>%
-  select(Unique.code:Block,lifespan.days, Infection, InfectionStatus, Babies_7:Babies_24) %>%
+  dplyr::select(Unique.code:Block,lifespan.days, Infection, InfectionStatus, Babies_7:Babies_24) %>%
   pivot_longer(Babies_7:Babies_24, names_to = "Day", names_prefix = "Babies_", values_to = "Offspring")
 View(offspring_metsch_long)  
 
@@ -474,7 +538,7 @@ for(i in offspring_metsch_long$ID){
 View(offspring_metsch_long) 
 
 # remove day and offspring by day from this data set
-offspring_metsch_long2 <- select(offspring_metsch_long, Unique.code:InfectionStatus, Week)
+offspring_metsch_long2 <- dplyr::select(offspring_metsch_long, Unique.code:InfectionStatus, Week)
 
 # Calculate the number of offspring produced each week and cumulatively by week
 offspring_metsch_longWeek <- offspring_metsch_long %>%
@@ -487,7 +551,7 @@ offspring_metsch_longWeek <- left_join(offspring_metsch_longWeek, offspring_mets
 
 # re-order columns and remove duplicates
 offspring_metsch_longWeek <- offspring_metsch_longWeek %>%
-  select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
+  dplyr::select(Unique.code:Week, Infection, InfectionStatus, lifespan.days, WeeklyOffspring, CumulativeWeeklyOffspring) %>%
   distinct()
 dim(offspring_metsch_longWeek)
 offspring_metsch_longWeek$Week <- as.factor(offspring_metsch_longWeek$Week)
@@ -497,7 +561,7 @@ offspring_metsch_longWeek$Week <- as.factor(offspring_metsch_longWeek$Week)
 
 # create short version of the data set with one row per replicate
 offspring_metsch_short <- offspring_metsch %>%
-  select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
+  dplyr::select(Unique.code:Treatment, Total.Babies, lifespan.days, SurvObj)
 
 
 
@@ -551,7 +615,7 @@ bodysize_metsch_longWeek$Week <- as.factor(bodysize_metsch_longWeek$Week)
 # calculate growth rate between the first and second week of experiment (7 to 14 and 8 to 15, respectively)
 bodysize_metsch_short <- bodysize_metsch %>%
   mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1)) %>%
-  select(Unique.code:Block, GrowthRate)
+  dplyr::select(Unique.code:Block, GrowthRate)
 
 
 
@@ -571,7 +635,7 @@ gutspore_metsch <- gutspore_metsch %>%
          TotalPunctSpores = Punctured.spores + Haemoceol.spores,
          HemocytesPerSpore = if_else(TotalPunctSpores > 0, Hemocytes/TotalPunctSpores, 0)) %>%
   filter(Notes != "not exposed") %>%
-  select(!Notes)
+  dplyr::select(!Notes)
 
 
 View(gutspore_metsch)
@@ -590,16 +654,16 @@ spores_metsch$Block <- as.factor(spores_metsch$Block)
 
 spores_metsch <- spores_metsch %>% 
   # create total spores column for each quadrant counted
-  mutate(total_1 = rowSums(select(., contains("_1"))), total_2 = rowSums(select(., contains("_2"))), total_3 = rowSums(select(., contains("_3"))), total_4 = rowSums(select(., contains("_4")))) %>%
+  mutate(total_1 = rowSums(dplyr::select(., contains("_1"))), total_2 = rowSums(dplyr::select(., contains("_2"))), total_3 = rowSums(dplyr::select(., contains("_3"))), total_4 = rowSums(dplyr::select(., contains("_4")))) %>%
   # average spore counts across four quadrants for each developmental stage, then multiply by 10,000 to get spores/mL, then multiply by 0.1 mL (10,000 x 0.1 = 1000) = # spores per animal
-  mutate(mature_spores = (rowSums(select(., starts_with("mature")))/4) * (10000 * Volume),
-         immature_spores = (rowSums(select(., contains("immature")))/4) * (10000 * Volume), 
-         bud_spores = (rowSums(select(., contains("bud")))/4) * (10000 * Volume), 
-         total_spores = (rowSums(select(., contains("total")))/4) * (10000 * Volume))
+  mutate(mature_spores = (rowSums(dplyr::select(., starts_with("mature")))/4) * (10000 * Volume),
+         immature_spores = (rowSums(dplyr::select(., contains("immature")))/4) * (10000 * Volume), 
+         bud_spores = (rowSums(dplyr::select(., contains("bud")))/4) * (10000 * Volume), 
+         total_spores = (rowSums(dplyr::select(., contains("total")))/4) * (10000 * Volume))
 
 
 spores_metsch_short <- spores_metsch %>%
-  select(Unique.code:Block, mature_spores:total_spores)
+  dplyr::select(Unique.code:Block, mature_spores:total_spores)
 View(spores_metsch_short)
 
 
@@ -609,11 +673,11 @@ View(spores_metsch_short)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 feed_metsch_data_long <- feed_data %>% 
   filter(Experiment == "Metsch") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Week, Clearance, Clearance_rel)
 
 feed_metsch_data_short <- feed_data %>% 
   filter(Experiment == "Metsch", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Clearance, Clearance_rel) %>%
   dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
@@ -623,11 +687,11 @@ unique(resp_data$Experiment)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
 resp_metsch_data_long <- resp_data %>% 
   filter(Experiment == "Metsch", Died.After.Resp != "Y",Clone != "Blank") %>%
-  select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
 
 resp_metsch_data_short <- resp_data %>% 
   filter(Experiment == "Metsch", Died.After.Resp == "N", Clone != "Blank", Week == 1) %>%
-  select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
+  dplyr::select(Diet, Parasites, Clone, Rep, Block, metabolic.rate) %>%
   dplyr::rename(metabolic.rate.Week1 = metabolic.rate)
 
 
@@ -639,7 +703,7 @@ resp_metsch_data_short <- resp_data %>%
 metsch_microcystin <- microcystin_exposure.sum3 %>% 
   filter(Experiment == "Metsch") %>%
   ungroup() %>%
-  select(Diet:Clone, Infection, microcystin.avg)
+  dplyr::select(Diet:Clone, Infection, microcystin.avg)
 unique(metsch_microcystin$Clone)
 View(metsch_microcystin)
 
