@@ -1199,6 +1199,7 @@ Compare differences in total fecundity in the Pasteuria experiment based on infe
 p_data_fecund <- p_data %>% filter(!is.na(Total.Babies)  & lifespan.days > 11)
 hist(p_data$Total.Babies) 
 
+# try poisson or zero inflated poisson
 pfecundmod <- lmer(log(Total.Babies+1) ~ Diet * Infection * Clone + (1|Block), data = p_data_fecund)
 summary(pfecundmod)
 Anova(pfecundmod)
@@ -1538,9 +1539,27 @@ mgrowthmod <- lmer(GrowthRate ~ Diet + Infection + Clone + Diet:Infection + Diet
 summary(mgrowthmod)
 Anova(mgrowthmod)
 AIC(mgrowthmod)
+plot(mgrowthmod)
+qqnorm(resid(mgrowthmod))
+qqline(resid(mgrowthmod))
+
 
 mgrowthmod_contrasts <- emmeans(mgrowthmod, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 mgrowthmod_contrasts
+
+
+# check if there is a sig interaction for infection x clone when only including uninfected and exposed animals
+m_data_growth_noInf <- filter(m_data_growth, Infection != "Infected")
+mgrowthmod2 <- lmer(GrowthRate ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone  + Infection:Clone +(1|Block), data = m_data_growth_noInf)
+summary(mgrowthmod2)
+Anova(mgrowthmod2)
+AIC(mgrowthmod2)
+plot(mgrowthmod2)
+qqnorm(resid(mgrowthmod2))
+qqline(resid(mgrowthmod2))
+
+mgrowthmod_contrasts2 <- emmeans(mgrowthmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+mgrowthmod_contrasts2
 
 ```
 Model AIC is a bit lower without including all the interactions
@@ -1660,6 +1679,23 @@ p_feeding2
 
 ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
+# figure for Meg (week 1 feeding rate - NOT body size corrected)
+p_feeding3 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Parasite Exposure", y = bquote("Feeding Rate (mL per hr)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_feeding3
+
+ggsave("figures/PastFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = p_feeding3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
 ```
  
  The relative body size feeding rate seems like the better model because ti controls for differences between clones that are likely just due to body size differences, while diet effects are sig in both models indicating that it high quality diet fed animals are eating more relative to their bodysize.
@@ -1731,6 +1767,23 @@ m_feeding2
 
 ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
+
+# figure for Meg (week 1 feeding rate - NOT body size corrected)
+m_feeding3 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Parasite Exposure", y = bquote("Feeding Rate (mL per hr)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_feeding3
+
+ggsave("figures/MetschFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = m_feeding3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 ```
 
 
@@ -2197,6 +2250,35 @@ p_lifespan
 
 ggsave("figures/PastLifespan_DietxClonexInfection.tiff", plot = p_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
+
+
+# does fecundity data explain differences in lifespan?
+p_fecund_lifespan <- ggplot(p_data_lifespan, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_lifespan
+
+# same plot as above but only for S treatment
+p_data_lifespan_S <- filter(p_data_lifespan, Diet == "S")
+p_fecund_lifespan_S <- ggplot(p_data_lifespan_S, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_lifespan_S
+
 ```
 
 
@@ -2216,7 +2298,6 @@ m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Past Expt") +
   labs(x = "Parasite Exposure", y = "Lifespan") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -2224,6 +2305,36 @@ m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
 m_lifespan
 
 ggsave("figures/MetschLifespan_DietxClonexInfection.tiff", plot = m_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+# does fecundity data explain differences in lifespan?
+m_fecund_lifespan <- ggplot(m_data_lifespan, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_lifespan
+
+# same plot as above but only for S treatment
+m_data_lifespan_S <- filter(m_data_lifespan, Diet == "S" | Diet == "SM")
+m_fecund_lifespan_S <- ggplot(m_data_lifespan_S, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_lifespan_S
+
 ```
 
 
