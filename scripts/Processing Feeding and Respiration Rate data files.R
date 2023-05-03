@@ -347,10 +347,10 @@ FeedingRateCalc_Treatment$volume <- 10
 
 # (ln (mean no daphnia control) - ln (mean remaining food in sample)) * (Volume 10 mL/ length of time of the assay in hr)
 FeedingRateCalc_Treatment$Clearance <- (log(FeedingRateCalc_Treatment$chlorophyll.nodaphnia) - log(FeedingRateCalc_Treatment$chlorophyll.avg)) * (FeedingRateCalc_Treatment$volume / FeedingRateCalc_Treatment$Time)
-FeedingRateCalc_Treatment$Clearance2 <- (log(FeedingRateCalc_Treatment$chlorophyll.nodaphnia.med) - log(FeedingRateCalc_Treatment$chlorophyll.med)) * (FeedingRateCalc_Treatment$volume / FeedingRateCalc_Treatment$Time)
+FeedingRateCalc_Treatment$Clearance2 <- (log(FeedingRateCalc_Treatment$chlorophyll.nodaphnia.med) - log(FeedingRateCalc_Treatment$chlorophyll.med)) * (FeedingRateCalc_Treatment$volume / FeedingRateCalc_Treatment$Time) # based on the median fluorescence
 
 
-# calculate the feeding rate for relative bodysize (mL -hr -mm)
+# calculate the feeding rate for relative bodysize (mL -hr -mm^2)
 FeedingRateCalc_Treatment$Clearance_rel <- FeedingRateCalc_Treatment$Clearance / ((FeedingRateCalc_Treatment$Length/1000) ^ 2)
 FeedingRateCalc_Treatment$Clearance_rel2 <- FeedingRateCalc_Treatment$Clearance2 / ((FeedingRateCalc_Treatment$Length/1000) ^ 2)
 
@@ -677,7 +677,7 @@ write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), qu
 
 
 
-# check the metabolic rate values for the animals that died during or within 24 hours of respiration trial
+# check the metabolic rate values for the animals that died during or within 24 hours of respiration trial during parasite expsosure
 Dead_animals <- filter(RespRateCalc, Died.After.Resp == "Y")
       # 6 of the 19 animals marked in Past experiment have negative values for metabolic rate, most are low values
       # 3 of the 12 animals marked in the Metsch experiment have negative values for metabolic rate
