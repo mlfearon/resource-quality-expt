@@ -205,7 +205,7 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   facet_wrap(~Clone) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 p_prev_fig3
 ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
@@ -229,7 +229,7 @@ p_prev_feed_fig <- ggplot(past_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalen
   facet_wrap(~Clone) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=10, color="black"))
 p_prev_feed_fig
 ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate2.tiff"), plot = p_prev_feed_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
@@ -352,7 +352,7 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   facet_wrap(~Clone) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_prev_fig3
 
 ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
@@ -377,7 +377,7 @@ m_prev_feed_fig <- ggplot(metsch_prev_sum, aes(x = Mean_Clearance_rel, y= Preval
   facet_wrap(~Clone) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_prev_feed_fig
 ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate3.tiff"), plot = m_prev_feed_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
 
@@ -515,8 +515,10 @@ p_maturespore_fig2 <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spor
   #ylim(0,1000000) +
   scale_y_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
   #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
-  labs(x = "Diet", y = "Pasteuria spore yield (log scaled)") +
-  theme_classic()
+  labs(x = "Diet Treatment", y = "Pasteuria spore yield (log scaled)") +
+  theme_classic() +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
 p_maturespore_fig2
 ggsave("figures/PastMatureSpores_DietxClone2.tiff", plot = p_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
@@ -530,7 +532,7 @@ Results are similar to the total spore yield analyses. There is a sig difference
 pmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + Clone + (1|Block), family = nbinom2(), data = p_data_spores_mature)
 pmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + Clone + (1|Block), family = nbinom1(), data = p_data_spores_mature)  # lower AIC model
 summary(pmaturesporemod2)
-Anova(pmaturesporemod2)
+Anova(pmaturesporemod2)   # Table S1 in appendix
 AIC(pmaturesporemod2)
 testDispersion(pmaturesporemod2)
 testZeroInflation(pmaturesporemod2)
@@ -587,7 +589,7 @@ p_maturespore_mc_fig2 <- ggplot(p_data_spores_M_tox, aes(x = microcystin.avg+1, 
   labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "log Bacteria spore yield") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 p_maturespore_mc_fig2
 ggsave("figures/PastMatureSpore_MicrocystinxClone.tiff", plot = p_maturespore_mc_fig2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
@@ -705,10 +707,12 @@ sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fi
   geom_boxplot() +
   geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
   scale_fill_manual(values = diet_colors) +
-  labs(x = "Diet", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
+  labs(x = "Diet Treatment", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
   annotate(geom = "text", x = 3.5, y = 23, label = "p = 0.039") +
   annotate(geom = "text", x = c(1,2,3,4), y = c(24.5,21,21,21), label = c("a", "ab", "ab", "b")) +
-  theme_classic()
+  theme_classic()  +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
 sporesize_plot2
 ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot2, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
@@ -822,14 +826,14 @@ m_maturespore_fig3 <- plot(metsch_maturespores, dodge = 0.5, add.data = T, show.
   scale_y_log10(labels = scales::comma) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_maturespore_fig3
 
 ggsave("figures/MetschMatureSpores_DietxClone.tiff", plot = m_maturespore_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
-m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) +
+m_maturespore_fig2 <- ggplot(m_data_maturespores, aes(x = Diet, y = mature_spores)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
   facet_wrap(~Clone) +
@@ -839,8 +843,10 @@ m_maturespore_fig2 <- ggplot(m_data_spores, aes(x = Diet, y = mature_spores+1)) 
   ylim(0,300000) +
   scale_y_log10(labels = scales::comma) +
   #ggtitle("Mature Metsch Spore Yield by diet x host clone") +
-  labs(x = "Diet", y = "Mature Fungus Spore Yield (log+1 scaled)") +
-  theme_classic()
+  labs(x = "Diet Treatment", y = "Mature Fungus Spore Yield (log scaled)") +
+  theme_classic()  +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
 m_maturespore_fig2
 
 ggsave("figures/MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
@@ -850,34 +856,30 @@ Results are similar to the total spore yield analyses. There is not a sig differ
 
 
 ```{r, model of Mature Metsch spore yield by microcystin concentration}
-mmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + Clone + Diet + (1|Block), data = m_data_maturespores)
-mmaturesporemod2 <- lmer(log(mature_spores) ~ microcystin.avg + (1|Block), data = m_data_maturespores)
+mmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Clone + Diet + (1|Block), family = nbinom2(), data = m_data_maturespores)  # Model can't run with clone incldued, probably because there are some diets missing for Mid37
+mmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + (1|Block), family = nbinom2(), data = m_data_maturespores)
 overdisp_fun(mmaturesporemod2)
 summary(mmaturesporemod2)
-Anova(mmaturesporemod2)
+Anova(mmaturesporemod2)  # table S1 in appendix
 AIC(mmaturesporemod2)
 qqnorm(resid(mmaturesporemod2))
 qqline(resid(mmaturesporemod2))
+testDispersion(mmaturesporemod2)
+testZeroInflation(mmaturesporemod2)
+mmaturespore2_simResid <- simulateResiduals(fittedModel = mmaturesporemod2)
+plot(mmaturespore2_simResid)
 
 # try model without M+ samples (outliers b/c so much higher than all other samples, see if there is a pattern )
 m_data_spores_noM_tox <- filter(m_data_spores, Diet != "M+")
-m_data_spores_noM_tox$mature_spores_log <- log(m_data_spores_noM_tox$mature_spores+1)
-mmaturesporemod3 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores_noM_tox)
-mmaturesporemod3 <- lmer(mature_spores_log ~ microcystin.avg + Diet + (1|Block), data = m_data_spores_noM_tox)
+mmaturesporemod3 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + Clone + (1|Block), family = nbinom2(), data = m_data_spores_noM_tox)
 summary(mmaturesporemod3)
 Anova(mmaturesporemod3)
-mmaturesporemod2 <- glmer(round(mature_spores) ~ microcystin.avg + Diet + (1|Block) + (1|Unique.code), family = poisson, data = m_data_spores)
 
-# also try with M+ from extra treatment with microcystin avg added in (COMPARE ONLY M AND M+ TREATMENTS)
-mmaturesporemod2 <- lmer(log(mature_spores+1) ~ microcystin.avg + Diet + (1|Block), data = m_data_spores)
-summary(mmaturesporemod2)
-Anova(mmaturesporemod3)
-plot(mmaturesporemod2)
 
 
 # Remove other diets to only compare M and M+ diets
 m_data_spores_M_tox <- filter(m_data_maturespores, Diet == "M" | Diet == "M+")
-mmaturesporemod4 <- lm(log(mature_spores) ~ log(microcystin.avg+1), data = m_data_spores_M_tox)
+mmaturesporemod4 <- glmmTMB(mature_spores ~ microcystin.avg, family = nbinom2(), data = m_data_spores_M_tox)  
 summary(mmaturesporemod4)
 Anova(mmaturesporemod4)
 qqnorm(resid(mmaturesporemod4))
@@ -917,7 +919,7 @@ m_maturespore_mc_fig2 <- ggplot(m_data_spores_M_tox, aes(x = microcystin.avg+1, 
   labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "log Fungus spore yield") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_maturespore_mc_fig2
 ggsave("figures/MetschMatureSpore_MicrocystinxClone.tiff", plot = m_maturespore_mc_fig2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
@@ -930,10 +932,14 @@ Microcystin concentration does not have a significant impact on Metsch mature sp
 ### Comparison of Immature Metsch spore yield based on diet and host clone.
 
 ```{r, model of Immature Metsch spore yield by treatments}
-mimmaturesporemod <- lmer(log(immature_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+mimmaturesporemod <- glmmTMB(round(immature_spores) ~ Diet + Clone + (1|Block), family = nbinom1(), data = m_data_spores)
 summary(mimmaturesporemod)
 Anova(mimmaturesporemod)
 AIC(mimmaturesporemod)
+testDispersion(mimmaturesporemod)
+testZeroInflation(mimmaturesporemod)
+mimmaturespore_simResid <- simulateResiduals(fittedModel = mimmaturesporemod)
+plot(mimmaturespore_simResid)
 
 mimmaturesporemod_contrasts <- emmeans(mimmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mimmaturesporemod_contrasts
@@ -976,10 +982,16 @@ Overall there are many fewer immature spores compared to mature spores in the in
 ### Comparison of Budding Metsch spore yield based on diet and host clone.
 
 ```{r, model of Budding Metsch spore yield by treatments}
-mbudsporemod <- lmer(log(bud_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+mbudsporemod <- glmmTMB(round(bud_spores) ~ Diet + Clone + (1|Block), family = nbinom2(), data = m_data_spores)
+mbudsporemod <- glmmTMB(round(bud_spores) ~ Diet + Clone + (1|Block), family = nbinom1(), data = m_data_spores)  # better model
 summary(mbudsporemod)
 Anova(mbudsporemod)
 AIC(mbudsporemod)
+testDispersion(mbudsporemod)
+testZeroInflation(mbudsporemod)
+mbudspore_simResid <- simulateResiduals(fittedModel = mbudsporemod)
+plot(mbudspore_simResid)
+
 
 mbudsporemod_contrasts <- emmeans(mbudsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mbudsporemod_contrasts
