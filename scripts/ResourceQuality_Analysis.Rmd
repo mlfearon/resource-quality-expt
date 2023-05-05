@@ -1,7 +1,7 @@
 ---
 title: "Resource Quality Experiment Analysis"
 author: "Michelle Fearon"
-date: "2/14/2022"
+date: "5/3/2022"
 output: html_document
 ---
 
@@ -33,7 +33,7 @@ This code provides the compilation, analyses, and figures for the Resource Quali
 
 Note: The comparison between the Microcystis alone and Microcystis+Microcystin (spiked) treatments will allow for testing specifically how the toxin changes host physiology and infection.
 
-Pasteuria and Metsch (and their associated Control treatments) with both host genotypes were run separately, therefore the data will be analyzed separately based on each of the two experiments.
+Pasteuria and Metsch (and their associated Uninfected Control treatments) with both host genotypes were run separately, therefore the data will be analyzed separately based on each of the two experiments.
 
 
 ```{r, set directory and load libraries, results='hide', warning=FALSE, message=FALSE}
@@ -42,6 +42,7 @@ library(dplyr)
 library(tidyr)
 library(lme4)
 library(lmerTest)
+library(glmmTMB)
 library(emmeans)
 library(ggeffects)
 library(epiR)
@@ -52,6 +53,8 @@ library(rms)
 library(survminer)
 library(ggplot2)
 library(viridis)
+library(olsrr)
+library(DHARMa)
 library(RColorBrewer)
 ```
 
@@ -124,6 +127,10 @@ pprevmod <- glm(InfectionStatus ~ Diet * Clone, family = binomial, data = p_data
 summary(pprevmod)
 Anova(pprevmod)
 overdisp_fun(pprevmod)
+testDispersion(pprevmod)
+testZeroInflation(pprevmod)
+pprev_simResid <- simulateResiduals(fittedModel = pprevmod)
+plot(pprev_simResid)  # model looks good
 
 pprevmod_contrasts <- emmeans(pprevmod, specs = pairwise ~ Diet | Clone, type = "response")
 pprevmod_contrasts
@@ -243,12 +250,16 @@ m_data_prev <- m_data %>% filter(!is.na(InfectionStatus) & Parasites == "Metsch"
 
 m_data_prev$Block <- as.factor(m_data_prev$Block)
 
-mprevmod <- glm(InfectionStatus ~ Diet * Clone, family = binomial, data = m_data_prev)
+mprevmod <- glmer(InfectionStatus ~ Diet * Clone + (1|Block), family = binomial, data = m_data_prev)
 # Note: left off the block random effect here since it seemed to cause a problem with the model... 
 summary(mprevmod)
 Anova(mprevmod)
 overdisp_fun(mprevmod)
 AIC(mprevmod)
+testDispersion(mprevmod)
+testZeroInflation(mprevmod)
+mprev_simResid <- simulateResiduals(fittedModel = mprevmod)
+plot(mprev_simResid)  # model looks good
 
 mprevmod_contrasts <- emmeans(mprevmod, specs = pairwise ~ Diet | Clone, type = "response")
 mprevmod_contrasts
@@ -256,20 +267,32 @@ mprevmod_contrasts
 mprevmod_contrasts2 <- emmeans(mprevmod, specs = pairwise ~ Clone | Diet, type = "response")
 mprevmod_contrasts2
 
-# test a model with only S and SM diets to remove treatments with no infection (except Std M+ did have a little infection)
-m_data_prev2 <- filter(m_data_prev, Diet == "S" | Diet == "SM")
+## USE THIS MODEL
+# test a model with only S and SM diets for Mid37 to remove treatments with no infection (except Std M+ did have a little infection)
+m_data_prev_std <- filter(m_data_prev, Clone == "Standard")
+m_data_prev_midS_SM <- filter(m_data_prev, Clone == "Mid37", Diet != "M", Diet != "M+")
+m_data_prev2 <- rbind(m_data_prev_midS_SM, m_data_prev_std)
 
-mprevmod2 <- glmer(InfectionStatus ~ Diet * Clone + (1|Block), family = binomial, data = m_data_prev2)
-summary(mprevmod2)  # block random effect does work in this model
+mprevmod2 <- glmer(InfectionStatus ~ Diet + Clone + (1|Block), family = binomial, data = m_data_prev2)
+summary(mprevmod2)  # block random effect does work in this model, warnings because there are NAs for some groups when the interaction is present(the M and M+ treatments for Mid37s that I took out). Since the interaction is not sig, I removed it and this model looks much better with lower Std error values. --> USE THIS MODEL
 Anova(mprevmod2)
 overdisp_fun(mprevmod2)
 AIC(mprevmod2)
+testDispersion(mprevmod2)
+testZeroInflation(mprevmod2)
+mprev2_simResid <- simulateResiduals(fittedModel = mprevmod2)
+plot(mprev2_simResid)  # model looks good
+
+mprevmod_contrasts3 <- emmeans(mprevmod2, specs = pairwise ~ Diet | Clone, type = "response")
+mprevmod_contrasts3
+
+
 
 ```
 
 ```{r, figure of Metsch prevalence by treatment}
 # Marginal effects from best model with Abundance on the x axis
-metsch_prev <- ggpredict(mprevmod, c("Clone", "Diet"))
+metsch_prev <- ggpredict(mprevmod2, c("Clone", "Diet"))
 
 m_prev_fig <- plot(metsch_prev, dodge = 0.4) +
   scale_color_manual(values = diet_colors) +
@@ -319,7 +342,7 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Clone, y= Prevalence)) +
         axis.title.x = element_text(size=9, color="black"))
 m_prev_fig3
 
-# figures for presentation (calcuated prevalence)
+# figures for presentation (calculated prevalence)
 m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
@@ -335,6 +358,7 @@ m_prev_fig3
 ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
+### Test of whether feeding rate impacts prevalence of infection
 m_prev_feed_model <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = metsch_prev_sum)
 summary(m_prev_feed_model) 
 Anova(m_prev_feed_model)
@@ -366,7 +390,7 @@ The separation in the data (categories with all zeros or all ones) is causing pr
 In comparison to Kristel's 2019 Proc B paper, we similarly see a large decrease in infection prevalence when comparing the high quality Scenedesmus diet to the low quality Micorcystis diet. We don't see much of a change in infection prevalence between the Microcystis and the toxin spiked Microcosytis treatments in this experiment because prevalence is already so low from the microcystis diet alone.  
 
 *NEED TO COME BACK TO FIX SEPARATION IN DATA*
-I tried removing the M and M+ treatments (the treatments with data separation, no infection except for STD M+ has one infected animal). That model runs better and allows for including the block random effect. There is a sig dif in diet, but not clone or diet x clone.
+I tried removing the M and M+ treatments (the treatments with data separation). That model runs better and allows for including the block random effect. There is a sig dif in diet, but not clone or diet x clone. Still has fairly large std error, probably because of the 100% infection in Std S treatment combo. Not sure there is really much to be done about that though...
 
 
 ## Spore Yield
@@ -376,12 +400,18 @@ I tried removing the M and M+ treatments (the treatments with data separation, n
 ```{r, model of Total Pasteuria spore yield by treatments}
 # remove animals that died during exposure and remove uninfected treatments and remove animals with no spores detected
 p_data_spores <- p_data %>% filter(!is.na(InfectionStatus) & Parasites == "Pasteuria" & total_spores > 0) 
-View(p_data_spores)
+#View(p_data_spores)
 
-ptotsporemod <- lmer(log(total_spores) ~ Diet * Clone + (1|Block), data = p_data_spores)
+ptotsporemod <- glmmTMB(total_spores ~ Diet * Clone + (1|Block), family = poisson, data = p_data_spores)  # bad fit
+ptotsporemod <- glmmTMB(total_spores ~ Diet * Clone + (1|Block), family = nbinom2(), data = p_data_spores) # better fit
+ptotsporemod <- glmmTMB(total_spores ~ Diet * Clone + (1|Block), family = nbinom1(), data = p_data_spores)  # best fit
 summary(ptotsporemod)
 Anova(ptotsporemod)
 AIC(ptotsporemod)
+testDispersion(ptotsporemod)
+testZeroInflation(ptotsporemod)
+ptotspore_simResid <- simulateResiduals(fittedModel = ptotsporemod)
+plot(ptotspore_simResid)  
 
 ptotsporemod_contrasts <- emmeans(ptotsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 ptotsporemod_contrasts
@@ -431,10 +461,16 @@ Note that there is one standard animal that had zero mature spores but did have 
 ```{r, model of Mature Pasteuria spore yield by treatments}
 p_data_spores$mature_spores_log <- log(p_data_spores$mature_spores+1)
 p_data_spores_mature <- filter(p_data_spores, mature_spores > 0) # remove the one sample without mature spores
-pmaturesporemod <- lmer(log(mature_spores) ~ Diet * Clone + (1|Block), data = p_data_spores_mature)
+
+pmaturesporemod <- glmmTMB(mature_spores ~ Diet * Clone + (1|Block), family = nbinom2(), data = p_data_spores_mature) # better fit
+pmaturesporemod <- glmmTMB(mature_spores ~ Diet * Clone + (1|Block), family = nbinom1(), data = p_data_spores_mature)  # best fit of the residuals
 summary(pmaturesporemod)
 Anova(pmaturesporemod)
 AIC(pmaturesporemod)
+testDispersion(pmaturesporemod)
+testZeroInflation(pmaturesporemod)
+pmaturespore_simResid <- simulateResiduals(fittedModel = pmaturesporemod)
+plot(pmaturespore_simResid)  
 
 pmaturesporemod_contrasts <- emmeans(pmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 pmaturesporemod_contrasts
@@ -491,31 +527,37 @@ Results are similar to the total spore yield analyses. There is a sig difference
 
 
 ```{r, model of Mature Past spore yield by microcystin concentration}
-pmaturesporemod2 <- lmer(log(mature_spores) ~ log(microcystin.avg+1) + Diet + Clone + (1|Block), data = p_data_spores_mature)
-pmaturesporemod2 <- lmer(mature_spores_log ~ microcystin.avg * Diet + (1|Block), data = p_data_spores)
-#overdisp_fun(pmaturesporemod2)
+pmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + Clone + (1|Block), family = nbinom2(), data = p_data_spores_mature)
+pmaturesporemod2 <- glmmTMB(mature_spores ~ microcystin.avg + Diet + Clone + (1|Block), family = nbinom1(), data = p_data_spores_mature)  # lower AIC model
 summary(pmaturesporemod2)
 Anova(pmaturesporemod2)
 AIC(pmaturesporemod2)
-plot(pmaturesporemod2)
-qqnorm(resid(pmaturesporemod2))
-qqline(resid(pmaturesporemod2))
+testDispersion(pmaturesporemod2)
+testZeroInflation(pmaturesporemod2)
+pmaturespore2_simResid <- simulateResiduals(fittedModel = pmaturesporemod2)
+plot(pmaturespore2_simResid)  
 
 # try model without M+ samples (outliers b/c so much higher than all other samples, see if there is a pattern )
 p_data_spores_noM_tox <- filter(p_data_spores_mature, Diet != "M+")
-p_data_spores_noM_tox$mature_spores_log <- log(p_data_spores_noM_tox$mature_spores+1)
-pmaturesporemod3 <- lmer(log(mature_spores+1) ~ microcystin.avg * Diet + (1|Block), data = p_data_spores_noM_tox)
-pmaturesporemod3 <- lmer(mature_spores_log ~ microcystin.avg * Diet * Clone + (1|Block), data = p_data_spores_noM_tox)
+pmaturesporemod3 <- glmmTMB(mature_spores ~ microcystin.avg * Diet + (1|Block), family = nbinom1(), data = p_data_spores_noM_tox)
 summary(pmaturesporemod3)
 Anova(pmaturesporemod3)
+testDispersion(pmaturesporemod3)
+testZeroInflation(pmaturesporemod3)
+pmaturespore3_simResid <- simulateResiduals(fittedModel = pmaturesporemod3)
+plot(pmaturespore3_simResid)  
 
-# Remove other diets to only compare M and M+ diets
+# Remove other diets to only compare M and M+ diets  (only 8 data points...)
 p_data_spores_M_tox <- filter(p_data_spores_mature, Diet == "M" | Diet == "M+")
-pmaturesporemod4 <- lmer(log(mature_spores) ~ log(microcystin.avg+1) * Clone + (1|Block), data = p_data_spores_M_tox)
+pmaturesporemod4 <- glmmTMB(mature_spores ~ log(microcystin.avg+0.01) * Diet + (1|Block), family = nbinom1(), data = p_data_spores_M_tox)
+
 summary(pmaturesporemod4)
 Anova(pmaturesporemod4)
-qqnorm(resid(pmaturesporemod4))
-qqline(resid(pmaturesporemod4))
+testDispersion(pmaturesporemod4)
+testZeroInflation(pmaturesporemod4)
+pmaturespore4_simResid <- simulateResiduals(fittedModel = pmaturesporemod4)
+plot(pmaturespore4_simResid)  
+
 ```
 
 ```{r, figure of Mature Past spore yield by microcystin concentration}
@@ -558,12 +600,18 @@ ggsave("figures/PastMatureSpore_MicrocystinxClone.tiff", plot = p_maturespore_mc
 Most animals did not have any immature spores detected, so there will be a lot of zeros in this data set. I did not detect any cauliflower stage Pasteuria, so I did not run any models/figures for that parasite developmental stage.
 
 ```{r, model of Immature Pasteuria spore yield by treatments}
-p_data_spores$immature_spores_log <- log(p_data_spores$immature_spores+1)
 p_data_spores_immature <- filter(p_data_spores, immature_spores > 0) # remove the one sample without mature spores
-pimmaturesporemod <- lmer(immature_spores_log ~ Diet * Clone + (1|Block), data = p_data_spores)
+
+pimmaturesporemod <- glmmTMB(immature_spores ~ Diet * Clone + (1|Block) + (1|Unique.code), family = poisson(), data = p_data_spores)  # overdispersed unless the unique code is added
+pimmaturesporemod <- glmmTMB(immature_spores ~ Diet * Clone + (1|Block), family = nbinom2(), data = p_data_spores)  # better model to use! Lower AIC than poisson
+#pimmaturesporemod <- glmmTMB(immature_spores ~ Diet * Clone + (1|Block), family = nbinom1(), data = p_data_spores)  # produces small eigenvalues and NAs in model output
 summary(pimmaturesporemod)
 Anova(pimmaturesporemod)
 AIC(pimmaturesporemod)
+testDispersion(pimmaturesporemod)
+testZeroInflation(pimmaturesporemod)
+pimmaturespore_simResid <- simulateResiduals(fittedModel = pimmaturesporemod)
+plot(pimmaturespore_simResid)  
 
 pimmaturesporemod_contrasts <- emmeans(pimmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 pimmaturesporemod_contrasts
@@ -605,6 +653,70 @@ Overall there are many fewer immature spores compared to mature spores in the in
 I did not find any spores at the cauliflower stage so that model was not run.
 
 
+```{r, model and figure of pasteuria spore size}
+p_data_spores_size <- filter(p_data_spores, !is.na(AvgSporeSize)) # remove animals where we did not measure spore size
+
+# model of spore size based on diet x clone
+sporesize_mod <- lm(AvgSporeSize ~ Diet * Clone, data = p_data_spores_size)
+summary(sporesize_mod)
+Anova(sporesize_mod)
+AIC(sporesize_mod)
+#plot(sporesize_mod)
+qqnorm(resid(sporesize_mod))
+qqline(resid(sporesize_mod)) # looks ok, not the best
+ols_test_normality(sporesize_mod)  # shapiro-wilk is not significant, normal distribution should be fine
+ols_test_breusch_pagan(sporesize_mod)
+ols_plot_resid_fit(sporesize_mod)
+
+# figure of spores size vs diet x clone
+sporesize_plot <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
+  geom_boxplot() +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  facet_wrap(~Clone) +
+  scale_fill_manual(values = diet_colors) +
+  #ggtitle("Pasteuria spore size based on diet") +
+  labs(x = "Diet", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
+  theme_classic()
+sporesize_plot
+ggsave(here("figures/Pasteuria_sporesize_dietxclone.tiff"), plot = sporesize_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+
+  # very few replicates among the standard diet treatments, not a robust test including host clone
+
+
+#  Spore size model with just diet
+sporesize_mod2 <- lm(AvgSporeSize ~ Diet, data = p_data_spores_size)
+summary(sporesize_mod2)
+Anova(sporesize_mod2)
+AIC(sporesize_mod2)
+#plot(sporesize_mod)
+qqnorm(resid(sporesize_mod2))
+qqline(resid(sporesize_mod2)) # looks ok, not the best
+ols_test_normality(sporesize_mod2)  # shapiro-wilk is not significant, normal distribution should be fine
+ols_test_breusch_pagan(sporesize_mod2)
+ols_plot_resid_fit(sporesize_mod2)
+
+psporesize_contrasts <- emmeans(sporesize_mod2, specs = pairwise ~ Diet, type = "response")
+psporesize_contrasts
+
+
+
+# figure of spores size vs diet
+sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
+  geom_boxplot() +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  scale_fill_manual(values = diet_colors) +
+  labs(x = "Diet", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
+  annotate(geom = "text", x = 3.5, y = 23, label = "p = 0.039") +
+  annotate(geom = "text", x = c(1,2,3,4), y = c(24.5,21,21,21), label = c("a", "ab", "ab", "b")) +
+  theme_classic()
+sporesize_plot2
+ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot2, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+
+```
+
+
+
+
 
 ### Comparison of Total Metsch spore yield based on diet and host clone.
 
@@ -615,10 +727,16 @@ Most of the infected animals are in the S treatment, with only 3 in SM, and 1 in
 m_data_spores <- m_data %>% filter(!is.na(InfectionStatus) & Parasites == "Metsch" & total_spores > 0) 
 #hist(m_data_spores$total_spores)
 
-mtotsporemod <- lmer(log(total_spores) ~ Diet + Clone + (1|Block), data = m_data_spores)
+mtotsporemod <- glmmTMB(total_spores ~ Diet + Clone + (1|Block)  + (1|Unique.code), family = poisson, data = m_data_spores)  # overdispersed unless unique code is added, and even then still kind of overdispersed
+mtotsporemod <- glmmTMB(total_spores ~ Diet + Clone + (1|Block), family = nbinom2(), data = m_data_spores)  # better than poisson
+mtotsporemod <- glmmTMB(total_spores ~ Diet + Clone + (1|Block), family = nbinom1(), data = m_data_spores)  # lowest AIC and best fit with diagnostics
 summary(mtotsporemod)
 Anova(mtotsporemod)
 AIC(mtotsporemod)
+testDispersion(mtotsporemod)
+testZeroInflation(mtotsporemod)
+mtotspore_simResid <- simulateResiduals(fittedModel = mtotsporemod)
+plot(mtotspore_simResid)
 
 mtotsporemod_contrasts <- emmeans(mtotsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mtotsporemod_contrasts
@@ -665,10 +783,16 @@ There is not a significant difference in spore yield based on clone, but diet do
 
 ```{r, model of Mature Metsch spore yield by treatments}
 m_data_maturespores <- m_data_spores %>% filter(mature_spores > 0) 
-mmaturesporemod <- lmer(log(mature_spores+1) ~ Diet + Clone + (1|Block), data = m_data_spores)
+mmaturesporemod <- glmmTMB(mature_spores ~ Diet + Clone + (1|Block) + (1|Unique.code), family = poisson, data = m_data_maturespores)  # model is overdispersed unless unique.code random effect is included
+mmaturesporemod <- glmmTMB(mature_spores ~ Diet + Clone + (1|Block), family = nbinom1(), data = m_data_maturespores)  # slightly higher AIC than nbinom2
+mmaturesporemod <- glmmTMB(mature_spores ~ Diet + Clone + (1|Block), family = nbinom2(), data = m_data_maturespores)  # lower AIC than nbinom1, otherwise fit is similar
 summary(mmaturesporemod) # not enough data to run the Diet x Clone interaction
 Anova(mmaturesporemod)
 AIC(mmaturesporemod)
+testDispersion(mmaturesporemod)
+testZeroInflation(mmaturesporemod)
+mmaturespore_simResid <- simulateResiduals(fittedModel = mmaturesporemod)
+plot(mmaturespore_simResid)
 
 mmaturesporemod_contrasts <- emmeans(mmaturesporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mmaturesporemod_contrasts
