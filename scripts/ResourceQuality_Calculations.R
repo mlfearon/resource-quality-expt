@@ -17,7 +17,6 @@ library(emmeans)
 library(ggplot2)
 library(car)
 library(olsrr)
-library(fitdistrplus)
 library(DHARMa)
 library(glmmTMB)
 library(here)
@@ -213,28 +212,6 @@ sporesize_past_sum <- sporesize_past %>%
 sporesize_past_sum$Diet <- factor(sporesize_past_sum$Diet, levels = c("S", "SM", "M", "M+"))
 hist(sporesize_past_sum$AvgSporeSize)
 
-# quick model of spores size
-sporesize_mod <- lm(AvgSporeSize ~ Diet, data = sporesize_past_sum)
-summary(sporesize_mod)
-Anova(sporesize_mod)
-AIC(sporesize_mod)
-#plot(sporesize_mod)
-qqnorm(resid(sporesize_mod))
-qqline(resid(sporesize_mod)) # looks ok, not the best
-ols_test_normality(sporesize_mod)  # shapiro-wilk is not significant, normal distribution should be fine
-ols_plot_resid_fit(sporesize_mod)
-
-# quick figure of spores size
-diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
-sporesize_plot <- ggplot(sporesize_past_sum, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
-  geom_boxplot() +
-  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
-  #facet_wrap(~Clone) +
-  scale_fill_manual(values = diet_colors) +
-  #ggtitle("Pasteuria spore size based on diet") +
-  labs(x = "Diet", y = bquote("Mean Bacteria Spore Area " ~ (m^2)))
-sporesize_plot
-ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 
 
