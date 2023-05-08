@@ -197,8 +197,8 @@ p_prev_fig3
 
 # figures for presentation (calcuated prevalence)
 p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
-  geom_point(aes(color = Diet), size = 2) +
-  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
+  geom_point(aes(color = Diet), size = 2, show.legend = F) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
   labs(x = "Diet Treatment", y = "Bacteria Prevalence (%)") +
   ylim(0, 100) +
@@ -344,8 +344,8 @@ m_prev_fig3
 
 # figures for presentation (calculated prevalence)
 m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
-  geom_point(aes(color = Diet), size = 2) +
-  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2) + 
+  geom_point(aes(color = Diet), size = 2, show.legend = F) +
+  geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
   labs(x = "Diet Treatment", y = "Fungus Prevalence (%)") +
   ylim(0, 100) +
@@ -506,14 +506,15 @@ ggsave("figures/PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dp
 
 
 p_maturespore_fig2 <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spores)) +
-  geom_boxplot(aes(fill=Diet),position=position_dodge()) +
-  geom_point(aes(shape=Diet), size=2, position=position_jitterdodge()) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7), show.legend = F) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
-  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
-  #ylim(0,1000000) +
-  scale_y_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ylim(0,300000) +
+  scale_y_log10(labels = scales::comma) +
+  #scale_y_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
   #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
   labs(x = "Diet Treatment", y = "Pasteuria spore yield (log scaled)") +
   theme_classic() +
@@ -704,8 +705,8 @@ psporesize_contrasts
 
 # figure of spores size vs diet
 sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
-  geom_boxplot() +
-  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  geom_boxplot(show.legend = F) +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2, show.legend = F) +
   scale_fill_manual(values = diet_colors) +
   labs(x = "Diet Treatment", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
   annotate(geom = "text", x = 3.5, y = 23, label = "p = 0.039") +
@@ -1040,25 +1041,40 @@ m_data_gutspore <- m_data %>% filter(Block == 5 & Infection != "Uninfected")
 # only include animals in block 5 that were checked for gut spores and remove 3 animals that did not get exposed to parasites (STD SM, M, and M+ rep 20 for all, b/c ran out of spores for exposure)
 hist(m_data_gutspore$TotalGutSpores)
 
-mgutsporemod <- glm(TotalGutSpores ~ Diet * Clone, family = poisson, data = m_data_gutspore)
+mgutsporemod <- glmmTMB(TotalGutSpores ~ Diet * Clone, family = poisson, data = m_data_gutspore)  # lowest AIC, best model use this one
+#mgutsporemod <- glmmTMB(TotalGutSpores ~ Diet * Clone, family = nbinom2(), data = m_data_gutspore)   # higher AIC
+#mgutsporemod <- glmmTMB(TotalGutSpores ~ Diet * Clone, family = nbinom1(), data = m_data_gutspore)  # higher AIC
 # Note: left off the block random effect because all these animals were in the same block 
 summary(mgutsporemod)
-Anova(mgutsporemod)
+Anova(mgutsporemod)      ## Use this model for results in the mansuscript
 overdisp_fun(mgutsporemod)
 AIC(mgutsporemod)
-
-mgutsporemod2 <- glm(TotalGutSpores ~ Diet * Clone * length.um, family = poisson, data = m_data_gutspore)
-# Note: left off the block random effect because all these animals were in the same block 
-summary(mgutsporemod2)
-Anova(mgutsporemod2)
-overdisp_fun(mgutsporemod2)
-AIC(mgutsporemod2)
+testDispersion(mgutsporemod)
+testZeroInflation(mgutsporemod)
+mgutspore_simResid <- simulateResiduals(fittedModel = mgutsporemod)
+plot(mgutspore_simResid)
 
 mgutsporemod_contrasts <- emmeans(mgutsporemod, specs = pairwise ~ Diet | Clone, type = "response")
 mgutsporemod_contrasts
 
 
-mgutsporemod3 <- glm(TotalGutSpores ~ Clone * length.um, family = poisson, data = m_data_gutspore)
+
+## Check if body size impacts the likelihood of spores attacking the gut
+mgutsporemod2 <- glm(TotalGutSpores ~ Diet * Clone * length.um, family = poisson, data = m_data_gutspore)
+# Note: left off the block random effect because all these animals were in the same block 
+# glmmTMB model didn't run but the lme4 glm did
+summary(mgutsporemod2)
+Anova(mgutsporemod2)   # host body size does not impact likelihood that spores attack gut, while accounting for diet and clone
+overdisp_fun(mgutsporemod2)
+AIC(mgutsporemod2)
+testDispersion(mgutsporemod2)
+testZeroInflation(mgutsporemod2)
+mgutspore2_simResid <- simulateResiduals(fittedModel = mgutsporemod)
+plot(mgutspore2_simResid)
+
+
+
+mgutsporemod3 <- glmmTMB(TotalGutSpores ~ Clone * length.um, family = poisson, data = m_data_gutspore)  # much higher AIC than the initial model
 summary(mgutsporemod3)
 Anova(mgutsporemod3)
 ```
@@ -1107,10 +1123,10 @@ m_totgutspores_fig3 <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  labs(x = "Diet", y = "Number of Fungus Spores Attacking Gut") +
+  labs(x = "Diet Treatment", y = "Number of Fungus Spores Attacking Gut") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_totgutspores_fig3
 
 ggsave("figures/MetschGutSpores_DietxClone.tiff", plot = m_totgutspores_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
@@ -1132,41 +1148,79 @@ We counted the number of hemocytes that were attached to metsch spores that had 
 **Needed to filter data to remove animals where there were no punctured spores because then there would also not be any hemocytes counted, so there would be separation in the data.**
 
 ```{r, model of hemocytes per Metsch attacking gut spores by treatment}
-m_data_hemocytes <- m_data_gutspore %>% filter(TotalGutSpores > 0) 
+m_data_hemocytes <- m_data_gutspore %>% filter(TotalPunctSpores > 0)  # we only counted hemocytes where there were penetrated spores
 dim(m_data_hemocytes)
 m_data_hemocytes$Unique.code <- as.factor(m_data_hemocytes$Unique.code)
 
 hist(m_data_hemocytes$Hemocytes)
 hist(m_data_hemocytes$HemocytesPerSpore)
-# I'm not sure what is the best distribution to use for this data since it doesn't look normal but a poisson won't fit because the data are not integers...
 
-# Number of hemocytes
-mhemocytemod <- glmer(Hemocytes ~ Diet * Clone + TotalPunctSpores + (1|Unique.code), family = "poisson", data = m_data_hemocytes, control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
-mhemocytemod <- glmer(Hemocytes ~ Diet * Clone + (1|Unique.code), family = "poisson", data = m_data_hemocytes, control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e5)))
+
+# Number of hemocytes (raw counts of hemocytes)
+mhemocytemod <- glmmTMB(Hemocytes ~ Diet + Clone + (1|Unique.code), family = poisson(), data = m_data_hemocytes)  # lowest AIC model
+#mhemocytemod <- glmmTMB(Hemocytes ~ Diet + Clone, family = nbinom2(), data = m_data_hemocytes)                    # very similar AIC
+#mhemocytemod <- glmmTMB(Hemocytes ~ Diet + Clone, family = nbinom1(), data = m_data_hemocytes)                    # not as good AIC as above
 summary(mhemocytemod)
 Anova(mhemocytemod)
 overdisp_fun(mhemocytemod) 
 AIC(mhemocytemod)
-# model is very overdispersed so I included a unique ID random effect to correct for that. The length term did not work well when included in the model, and the results for it were very messy, so I removed it to improve the model.
+testDispersion(mhemocytemod)
+testZeroInflation(mhemocytemod)
+mhemocyte_simResid <- simulateResiduals(fittedModel = mhemocytemod)
+plot(mhemocyte_simResid)
+# model is initially overdispersed, so I included a unique ID random effect to correct for that. The model did not have enough replicates 
+# in each diet x clone treatment to be able to run the interaction.
 
-# Hemocytes per spore and including body size as a predictor
-mhemocytemod2 <- lm(HemocytesPerSpore ~ Diet * Clone * length.um, data = m_data_hemocytes)
+# Hemocytes and including body size as a predictor
+mhemocytemod2 <- glmmTMB(Hemocytes ~ Diet + Clone * length.um + Diet:length.um + (1|Unique.code), family = poisson(), data = m_data_hemocytes) 
 # Note: left off the block random effect because all these animals were in the same block 
 summary(mhemocytemod2)
 Anova(mhemocytemod2)
-AIC(mhemocytemod2)
+AIC(mhemocytemod2)   # model AIC is better when length is included, but it is not significant
+testDispersion(mhemocytemod2)
+testZeroInflation(mhemocytemod2)
+mhemocyte2_simResid <- simulateResiduals(fittedModel = mhemocytemod2)
+plot(mhemocyte2_simResid)
 
-# Hemocytes per spore and NOT including body size as a predictor
-mhemocytemod3 <- lm(HemocytesPerSpore ~ Diet * Clone, data = m_data_hemocytes)
-# Note: left off the block random effect because all these animals were in the same block 
+
+## Since we know from above that the number of attacking spores per host also differ significantly, we modeled 
+## The number of hemocytes per attacking spore
+
+
+# Hemocytes per spore and NOT including body size as a predictor [USE THIS ONE IN THE MANUSCRIPT]
+mhemocytemod3 <- glmmTMB(Hemocytes ~ Diet + Clone + (1|Unique.code), offset = log(TotalPunctSpores), family = poisson(), data = m_data_hemocytes) 
+mhemocytemod3 <- glmmTMB(Hemocytes ~ Diet + Clone + length.um + Diet:length.um + (1|Unique.code), offset = log(TotalPunctSpores), family = poisson(), data = m_data_hemocytes)
+# Note: left off the block random effect because all these animals were in the same block
+# Not enough diet x clone replicates to include the interaction
+# Adding body size made the predicted effects come out very strange, and I did not trust that model. Model is robust without body size
 summary(mhemocytemod3)
 Anova(mhemocytemod3)
-AIC(mhemocytemod3) # AIC is lower without bodyzie
+AIC(mhemocytemod3) # model AIC is better 
+testDispersion(mhemocytemod3)
+testZeroInflation(mhemocytemod3)
+mhemocyte3_simResid <- simulateResiduals(fittedModel = mhemocytemod3)
+plot(mhemocyte3_simResid)
 
-mhemocytemod_contrasts <- emmeans(mhemocytemod3, specs = pairwise ~ Diet | Clone, type = "response")
+mhemocytemod_contrasts <- emmeans(mhemocytemod3, specs = pairwise ~ Diet | Clone, type = "response", offset = T)
 mhemocytemod_contrasts
 
+mhemocytemod_contrasts2 <- emmeans(mhemocytemod3, specs = pairwise ~ Clone, type = "response", offset = T)
+mhemocytemod_contrasts2
+
+
+## Test to show that hemoctyes are responding to the intensity of exposure to attacking spores
+mhemocytemod4 <- glmmTMB(Hemocytes ~ TotalPunctSpores + (1|Unique.code), family = poisson(), data = m_data_hemocytes) # This model has severe quantile deviations...needs diet and clone in the model to fix, but then total spores is not sig. 
+mhemocytemod4 <- glmmTMB(Hemocytes ~ TotalPunctSpores + Diet + Clone + (1|Unique.code), family = poisson(), data = m_data_hemocytes) 
+summary(mhemocytemod4)
+Anova(mhemocytemod4)
+testDispersion(mhemocytemod4)
+testZeroInflation(mhemocytemod4)
+mhemocyte4_simResid <- simulateResiduals(fittedModel = mhemocytemod4)
+plot(mhemocyte4_simResid)
+
 ```
+
+
 ```{r, figures of Metsch hemocytes per spore by treatment}
 # Marginal effects 
 metsch_hemocytes <- ggpredict(mhemocytemod, c("TotalPunctSpores", "Diet", "Clone"))
@@ -1219,6 +1273,7 @@ ggsave("figures/Hemocytes_DietxClone.tiff", plot = m_hemocytes_fig2, dpi = 600, 
 
 # Marginal effects
 metsch_hemocytesperspore <- ggpredict(mhemocytemod3, c("Clone", "Diet"))
+plot(metsch_hemocytesperspore) + ylim(0,15)
 
 # figure with bodysize
 m_hemocytesperspore_fig <- plot(metsch_hemocytesperspore, dodge = 0.4, add.data = T) +
@@ -1251,10 +1306,10 @@ m_hemocytesperspore_fig3 <- ggplot(m_data_hemocytes, aes(x = Diet, y = Hemocytes
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #ggtitle("Hemocytes per attacking Metsch spore in the gut by diet x host clone") +
-  labs(x = "Diet", y = "Recruited Hemocytes per Attacking Fungus Spore") +
+  labs(x = "Diet Treatment", y = "Hemocytes per Attacking Fungus Spore") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_hemocytesperspore_fig3
 
 ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
@@ -1283,7 +1338,7 @@ m_data_inf <- m_data_gutspore %>% filter(!is.na(InfectionStatus))
 dim(m_data_gutspore)
 dim(m_data_inf)
 
-mprevmod2 <- glm(InfectionStatus ~ Diet + Clone + TotalPunctSpores + Hemocytes, family = "binomial", data = m_data_inf)
+mprevmod2 <- glm(InfectionStatus ~ TotalPunctSpores + HemocytesPerSpore, family = "binomial", data = m_data_inf)
 summary(mprevmod2)  # try putting diet and/or clone as a random effect?
 Anova(mprevmod2)
 overdisp_fun(mprevmod2)
@@ -1323,6 +1378,27 @@ m_inf_fig2
 ```
 
 I think the data here may be too sparse to be used well. Unfortunately many of the animals that I checked for spores in the guts died the day after I looked at them under the scope, so I was not able to assess terminal infection status for those animals. And there was an unfortunate trend that the more of the animals that had spores in their guts tended to die more either because I took longer to count them on the scope, and/or they were more sensitive since they were experiencing an infection. 
+
+
+```{r, Figure 1 and 2 of Metsh and Past infection prevalence, spore yield, spore size and spores}
+
+Figure1 <- ggarrange(m_prev_fig3, m_maturespore_fig2, m_totgutspores_fig3, m_hemocytesperspore_fig3, labels = "auto",
+                      ncol = 2, nrow = 2, legend = "bottom", common.legend = T)
+Figure1
+ggsave("figures/Fig1_FungusInfection.tiff", plot = Figure1, dpi = 600, width = 6.5, height = 7, units = "in", compression="lzw")
+
+
+
+Figure2 <- ggarrange(p_prev_fig3, p_maturespore_fig2, sporesize_plot2, labels = "auto",
+                      ncol = 2, nrow = 2, widths = c(3,3,4,2))
+Figure2
+ggsave("figures/Fig2_BacteriaInfection.tiff", plot = Figure2, dpi = 600, width = 6.5, height = 7, units = "in", compression="lzw")
+
+
+
+```
+
+
 
 
 ## Fecundity 
@@ -1756,6 +1832,7 @@ Need to do this still...
 p_data_feeding <- p_data %>% filter(!is.na(Clearance.Week1))
 hist(p_data_feeding$Clearance.Week1) # wow normal data!!
 hist(p_data_feeding$Clearance_rel.Week1) # wow normal data!! 
+class(p_data_feeding$Cl)
 
 # Feeding rate (not bodysize controlled)
 pfeedmod <- lmer(Clearance.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
@@ -1765,6 +1842,8 @@ AIC(pfeedmod)
 plot(pfeedmod)
 qqnorm(resid(pfeedmod))
 qqline(resid(pfeedmod))
+shapiro.test(resid(pfeedmod))   # significant! 
+
 
 # Relative Feeding rate (bodysize controlled)
 pfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
@@ -1772,48 +1851,56 @@ summary(pfeedmod2)
 Anova(pfeedmod2)
 AIC(pfeedmod2)
 plot(pfeedmod2)
-qqnorm(resid(pfeedmod2))
+qqnorm(resid(pfeedmod2))       # looks good
 qqline(resid(pfeedmod2))
+shapiro.test(resid(pfeedmod2)) # significant! But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
 
-pfeedmod_contrasts <- emmeans(pfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
+pfeedmod3 <- lmer(Clearance_rel.Week1 ~ Diet + Infection + Clone + Diet:Clone +(1|Block), data = p_data_feeding)
+summary(pfeedmod3)
+Anova(pfeedmod3)
+AIC(pfeedmod3)
+plot(pfeedmod3)
+qqnorm(resid(pfeedmod3))     # looks good
+qqline(resid(pfeedmod3))
+shapiro.test(resid(pfeedmod3))  # not significant
+# though this simplifies the model, it makes predicted effects across clone x infection and diet x infection the same
+
+
+# tests contrasts for each factor holding the other two constant in separate tests. 
+pfeedmod_emm <- emmeans(pfeedmod2, ~ Diet * Infection * Clone)
+pfeedmod_contrasts <- pairs(pfeedmod_emm, simple = "each")
 pfeedmod_contrasts
 
-pfeedmod_contrasts2 <- emmeans(pfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
-pfeedmod_contrasts2
+# contrasts of diet effects by each clone (averaged over all infection statuses)
+pfeedmod_contrasts2 <- emmeans(pfeedmod2, specs = pairwise ~ Diet | Clone, type = "response")
+pfeedmod_contrasts2   # Mid37: S > M; SM > M and M+; Std: S > M and M+, SM > M
+
+# contrasts of infection status effects by each clone (averaged over all diets)
+pfeedmod_contrasts3 <- emmeans(pfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+pfeedmod_contrasts3 <- emmeans(pfeedmod2, specs = pairwise ~ Infection, type = "response")
+pfeedmod_contrasts3   # This result tells us that there is a sig difference between uninfected and exposed for Standard but NOT for Mid37 (same for both feedingand relative feeding)
+
+# contrasts of diet effects by each infection status (averaged over both clones)
+pfeedmod_contrasts4 <- emmeans(pfeedmod2, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+pfeedmod_contrasts4 <- emmeans(pfeedmod2, specs = pairwise ~ Diet | Infection, type = "response")
+pfeedmod_contrasts4   # Mid37 there is a dif between S - M for uninfected and SM - M+ for exposed, and no differences for infected; and for Std uninfected there are dif between S - M, S - M+, and SM - M, for exposed and infected dif between S - M for both
 
 ```
 ```{r, figure of past feeding rate week 1}
-# Marginal effects
-past_feed <- ggpredict(pfeedmod2, c("Infection", "Diet", "Clone"))
+##### # figure with feeding rate (NOT body size corrected)
+past_feed <- ggpredict(pfeedmod, c("Infection", "Diet", "Clone"))
 plot(past_feed)
 
-# figure with bodysize
+# figure with feeding rate (not body size corrected)
 p_feeding_fig <- plot(past_feed, dodge = 0.6, add.data = T, show.title = F) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
-  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
-  theme_classic()
-p_feeding_fig
-ggsave("figures/PastFeedingRate_DietxClonexInfection2.tiff", plot = p_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
-
-
-# figure for presentation
-p_feeding2 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
-  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
-  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
-  facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
-  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
-  scale_fill_manual(values = diet_colors) +
-  scale_color_manual(values = c(rep("black", 4))) +
-  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
-  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  labs(x = "Parasite Exposure", y = "Feeding Rate (mL per hr)") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
-p_feeding2
-
-ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding_fig
+ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
 # figure for Meg (week 1 feeding rate - NOT body size corrected)
 p_feeding3 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
@@ -1832,9 +1919,48 @@ p_feeding3
 
 ggsave("figures/PastFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = p_feeding3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
+
+
+
+##### # figure with feeding rate (body size corrected)
+past_feed2 <- ggpredict(pfeedmod3, c("Infection", "Diet", "Clone"))
+plot(past_feed)
+
+# figure with bodysize corrected feeding rate
+p_feeding_fig2 <- plot(past_feed2, dodge = 0.6, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding_fig2
+ggsave("figures/PastRelFeedingRate_DietxClonexInfection.tiff", plot = p_feeding_fig2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# figure for presentation
+p_feeding2 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding2
+
+ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
 ```
  
- The relative body size feeding rate seems like the better model because ti controls for differences between clones that are likely just due to body size differences, while diet effects are sig in both models indicating that it high quality diet fed animals are eating more relative to their bodysize.
+ The relative body size feeding rate seems like the better model because it controls for differences between clones that are likely just due to body size differences, while diet effects are sig in both models indicating that it high quality diet fed animals are eating more relative to their bodysize.
 
 
 
@@ -1845,27 +1971,55 @@ m_data_feeding <- m_data %>% filter(!is.na(Clearance.Week1))
 hist(m_data_feeding$Clearance.Week1) # wow normal data!! 
 hist(m_data_feeding$Clearance_rel.Week1) # wow normal data!! 
 
+mfeedmod <- lmer(Clearance.Week1 ~ Diet * Infection * Clone +(1|Block), data = m_data_feeding)
 mfeedmod <- lmer(Clearance.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
-# removed the three-way interaction
+# removed the three-way interaction, not enough data for the model to run the 3-way interaction
 summary(mfeedmod)
 Anova(mfeedmod)
 AIC(mfeedmod)
-
+plot(mfeedmod)
+qqnorm(resid(mfeedmod))
+qqline(resid(mfeedmod))
+shapiro.test(resid(mfeedmod))
 
 # Relative Feeding rate (bodysize controlled)
 mfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
+# removed the three-way interaction, not enough data for the model to run the 3-way interaction
 summary(mfeedmod2)
 Anova(mfeedmod2) 
 AIC(mfeedmod2)   # AIC is negative???
 plot(mfeedmod2)
 qqnorm(resid(mfeedmod2))
 qqline(resid(mfeedmod2))
+shapiro.test(resid(mfeedmod2))
 
+mfeedmod_contrasts <- emmeans(mfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 mfeedmod_contrasts <- emmeans(mfeedmod2, specs = pairwise ~ Diet + Infection | Clone, type = "response")
 mfeedmod_contrasts
 
 mfeedmod_contrasts2 <- emmeans(mfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
 mfeedmod_contrasts2
+
+
+# tests contrasts for each factor holding the other two constant in separate tests. 
+mfeedmod_emm <- emmeans(mfeedmod2, ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone)
+mfeedmod_contrasts <- pairs(mfeedmod_emm, simple = "each")
+mfeedmod_contrasts
+
+# contrasts of diet effects by each clone (averaged over all infection statuses)
+mfeedmod_contrasts2 <- emmeans(mfeedmod2, specs = pairwise ~ Diet | Clone, type = "response")
+mfeedmod_contrasts2   # Mid37: S > M; SM > M and M+; Std: S > M and M+, SM > M
+
+# contrasts of infection status effects by each clone (averaged over all diets)
+mfeedmod_contrasts3 <- emmeans(mfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+mfeedmod_contrasts3 <- emmeans(mfeedmod2, specs = pairwise ~ Clone | Infection, type = "response")
+mfeedmod_contrasts3 <- emmeans(mfeedmod2, specs = pairwise ~ Infection, type = "response")
+mfeedmod_contrasts3   # This result tells us that there is a sig difference between uninfected and exposed for Standard but NOT for Mid37 (same for both feedingand relative feeding)
+
+# contrasts of diet effects by each infection status (averaged over both clones)
+mfeedmod_contrasts4 <- emmeans(mfeedmod2, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mfeedmod_contrasts4 <- emmeans(mfeedmod2, specs = pairwise ~ Diet | Infection, type = "response")
+mfeedmod_contrasts4   # Mid37 there is a dif between S - M for uninfected and SM - M+ for exposed, and no differences for infected; and for Std uninfected there are dif between S - M, S - M+, and SM - M, for exposed and infected dif between S - M for both
 
 ```
 
@@ -1898,7 +2052,7 @@ m_feeding2 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)
   labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_feeding2
 
 ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
@@ -1916,7 +2070,7 @@ m_feeding3 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
   labs(x = "Parasite Exposure", y = bquote("Feeding Rate (mL per hr)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_feeding3
 
 ggsave("figures/MetschFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = m_feeding3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
