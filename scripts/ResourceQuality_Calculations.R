@@ -164,8 +164,9 @@ bodysize_past_longWeek$Week <- as.factor(bodysize_past_longWeek$Week)
 # create short version of the data set with one row per replicate
         # calculate growth rate between the first and second week of experiment ( 7 to 14 and 8 to 15, respectively)
 bodysize_past_short <- bodysize_past %>%
-  mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1)) %>%
-  dplyr::select(Unique.code:Block, GrowthRate)
+  mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1),
+         Length_Week1 = if_else(is.na(length_7), length_8, length_7)) %>%
+  dplyr::select(Unique.code:Block, Length_Week1, GrowthRate)
 
 
 
@@ -591,8 +592,9 @@ bodysize_metsch_longWeek$Week <- as.factor(bodysize_metsch_longWeek$Week)
 # create short version of the data set with one row per replicate
 # calculate growth rate between the first and second week of experiment (7 to 14 and 8 to 15, respectively)
 bodysize_metsch_short <- bodysize_metsch %>%
-  mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1)) %>%
-  dplyr::select(Unique.code:Block, GrowthRate)
+  mutate(GrowthRate1 = (length_14 - length_7)/7,  GrowthRate2 = (length_15 - length_8)/7, GrowthRate = if_else(is.na(GrowthRate1), GrowthRate2, GrowthRate1),
+         Length_Week1 = if_else(is.na(length_7), length_8, length_7)) %>%
+  dplyr::select(Unique.code:Block, Length_Week1, GrowthRate)
 
 
 
