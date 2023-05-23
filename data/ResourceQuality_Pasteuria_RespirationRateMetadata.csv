@@ -56,7 +56,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 2,7,3,1,11/15/2021,14:02,16:24,M,Pasteuria,MID,10,B1,B,1,MPasteuriaMID,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Blank,Blank,3,B2,B,2,MBlankBlank,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Pasteuria,STD,6,B3,B,3,MPasteuriaSTD,Past,N,Set up 20 min earlier than start time at 13:40
-2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,MID,7,B4,B,4,MUninfMID,Past,N,Set up 20 min earlier than start time at 13:40
+2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,MID,7,B4,B,4,MUninfMID,Past,Y,"Set up 20 min earlier than start time at 13:40, B4 or D6 is mislabeled as the same ID and can't distriguish which is correct and which should be STD. Remove from analysis"
 2,7,3,1,11/15/2021,14:02,16:24,M,Pasteuria,STD,9,B5,B,5,MPasteuriaSTD,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,STD,10,B6,B,6,MUninfSTD,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,STD,9,C1,C,1,MUninfSTD,Past,N,Set up 20 min earlier than start time at 13:40
@@ -70,7 +70,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 2,7,3,1,11/15/2021,14:02,16:24,M,Pasteuria,MID,9,D3,D,3,MPasteuriaMID,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,MID,10,D4,D,4,MUninfMID,Past,N,Set up 20 min earlier than start time at 13:40
 2,7,3,1,11/15/2021,14:02,16:24,M,Blank,Blank,4,D5,D,5,MBlankBlank,Past,N,Set up 20 min earlier than start time at 13:40
-2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,MID,7,D6,D,6,MUninfMID,Past,N,Set up 20 min earlier than start time at 13:40
+2,7,3,1,11/15/2021,14:02,16:24,M,Uninf,MID,7,D6,D,6,MUninfMID,Past,Y,"Set up 20 min earlier than start time at 13:40, B4 or D6 is mislabeled as the same ID and can't distriguish which is correct and which should be STD. Remove from analysis"
 2,7,4,1,11/15/2021,16:28,19:07,M+,Uninf,STD,8,A1,A,1,M+UninfSTD,Past,N,
 2,7,4,1,11/15/2021,16:28,19:07,M+,Uninf,MID,8,A2,A,2,M+UninfMID,Past,N,
 2,7,4,1,11/15/2021,16:28,19:07,M+,Pasteuria,STD,6,A3,A,3,M+PasteuriaSTD,Past,N,
@@ -507,7 +507,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 1,22,2,3,11/30/2021,9:50,12:17,SM,NA,NA,NA,A2,A,2,SMNANA,Past,N,
 1,22,2,3,11/30/2021,9:50,12:17,SM,Uninf,MID,5,A3,A,3,SMUninfMID,Past,N,
 1,22,2,3,11/30/2021,9:50,12:17,SM,Uninf,STD,4,A4,A,4,SMUninfSTD,Past,N,
-1,22,2,3,11/30/2021,9:50,12:17,SM,Blank,Blank,1,A5,A,5,SMBlankBlank,Past,N,
+1,22,2,3,11/30/2021,9:50,12:17,SM,Blank,Blank,4,A5,A,5,SMBlankBlank,Past,N,
 1,22,2,3,11/30/2021,9:50,12:17,SM,Uninf,STD,5,A6,A,6,SMUninfSTD,Past,N,
 1,22,2,3,11/30/2021,9:50,12:17,SM,Pasteuria,STD,5,B1,B,1,SMPasteuriaSTD,Past,N,
 1,22,2,3,11/30/2021,9:50,12:17,SM,Pasteuria,MID,3,B2,B,2,SMPasteuriaMID,Past,N,
@@ -871,7 +871,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 1,36,2,5,12/14/2021,9:26,11:48,S,Uninf,MID,1,A6,A,6,SUninfMID,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
 1,36,2,5,12/14/2021,9:26,11:48,S,NA,NA,NA,B1,B,1,SNANA,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
 1,36,2,5,12/14/2021,9:26,11:48,S,NA,NA,NA,B2,B,2,SNANA,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
-1,36,2,5,12/14/2021,9:26,11:48,S,Pasteuria,STD,5,B3,B,3,SPasteuriaSTD,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
+1,36,2,5,12/14/2021,9:26,11:48,S,Pasteuria,STD,3,B3,B,3,SPasteuriaSTD,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
 1,36,2,5,12/14/2021,9:26,11:48,S,NA,NA,NA,B4,B,4,SNANA,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
 1,36,2,5,12/14/2021,9:26,11:48,S,Blank,Blank,1,B5,B,5,SBlankBlank,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"
 1,36,2,5,12/14/2021,9:26,11:48,S,NA,NA,NA,B6,B,6,SNANA,Past,N,"Plate 1 and 2 were switched, correct records now (2/20/23 MF)"

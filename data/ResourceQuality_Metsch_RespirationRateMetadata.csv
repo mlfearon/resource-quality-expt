@@ -127,7 +127,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,1,A6,A,6,SMBlankBlank,Metsch,N,
 3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,5,B1,B,1,SMMetschSTD,Metsch,N,
 3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,3,B2,B,2,SMMetschSTD,Metsch,N,
-3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B3,B,3,SMMetschMID,Metsch,N,
+3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,1,B3,B,3,SMMetschMID,Metsch,N,
 3,8,2,1,1/11/2022,10:30,12:54,SM,Blank,Blank,3,B4,B,4,SMBlankBlank,Metsch,N,
 3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,STD,4,B5,B,5,SMMetschSTD,Metsch,N,
 3,8,2,1,1/11/2022,10:30,12:54,SM,Metsch,MID,2,B6,B,6,SMMetschMID,Metsch,N,
@@ -168,7 +168,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,4,D5,D,5,MUninfSTD,Metsch,N,
 3,8,3,1,1/11/2021,14:20,17:31,M,Uninf,STD,1,D6,D,6,MUninfSTD,Metsch,N,
 3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,1,A1,A,1,M+UninfMID,Metsch,N,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,A2,A,2,M+MetschMID,Metsch,N,"Dropped before respiration, set up at 14:00"
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,STD,1,A2,A,2,M+MetschSTD,Metsch,N,set up at 14:00
 3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,2,A3,A,3,M+UninfMID,Metsch,N,set up at 14:00
 3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,5,A4,A,4,M+MetschMID,Metsch,N,set up at 14:00
 3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,4,A5,A,5,M+MetschMID,Metsch,N,set up at 14:00
@@ -190,7 +190,7 @@ Block,Day,Plate,Week,Date,StartTime,EndTime,Diet,Parasites,Clone,Rep,Well,Row,Co
 3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,STD,2,D3,D,3,M+UninfSTD,Metsch,N,set up at 14:00
 3,8,4,1,1/11/2021,14:20,17:31,M+,Uninf,MID,3,D4,D,4,M+UninfMID,Metsch,N,set up at 14:00
 3,8,4,1,1/11/2021,14:20,17:31,M+,Blank,Blank,2,D5,D,5,M+BlankBlank,Metsch,N,set up at 14:00
-3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,D6,D,6,M+MetschMID,Metsch,N,set up at 14:00
+3,8,4,1,1/11/2021,14:20,17:31,M+,Metsch,MID,2,D6,D,6,M+MetschMID,Metsch,N,"Dropped before respiration, set up at 14:00"
 4,14,1,2,1/17/2022,9:43,12:09,S,Blank,Blank,1,A1,A,1,SBlankBlank,Metsch,N,
 4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,MID,7,A2,A,2,SMetschMID,Metsch,N,
 4,14,1,2,1/17/2022,9:43,12:09,S,Metsch,STD,6,A3,A,3,SMetschSTD,Metsch,N,
