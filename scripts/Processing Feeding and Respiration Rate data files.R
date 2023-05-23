@@ -692,7 +692,7 @@ write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), qu
 
 
 
-# check the metabolic rate values for the animals that died during or within 24 hours of respiration trial during parasite expsosure
+# check the metabolic rate values for the animals that died during or within 24 hours of respiration trial during parasite exposure, or the samples that needed to be removed from the analysis
 Dead_animals <- filter(RespRateCalc, Died.After.Resp == "Y")
       # 6 of the 19 animals marked in Past experiment have negative values for metabolic rate, most are low values
       # 3 of the 12 animals marked in the Metsch experiment have negative values for metabolic rate
