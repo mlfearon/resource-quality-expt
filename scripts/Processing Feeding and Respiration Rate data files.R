@@ -1,8 +1,9 @@
 # Processing Feeding rate and Respiration Rate data files
 
-#Michelle's working directory
+# Code written by: Michelle Fearon
+# Last updated: May 23, 2023
 
-
+# load libraries
 library(ggplot2)
 library(gridExtra)
 library(grid)
@@ -583,6 +584,7 @@ RespRate[ RespRate$Block == 4 & RespRate$Day == 14 & RespRate$Plate == 4, "B6"] 
 RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 3, "C5"] <- NA
 
 
+
 # loop through respiration calculation for each block, day, plate, and well
     # compile into new data frame where each row represents a single block, day, plate, and well combination with the respiration rate calculated
     # join with the metadata to compare patterns across different treatments
@@ -598,6 +600,19 @@ RespRateCalc$mean.control.O2.sat <- NA
 RespRateCalc$sd.control.O2.sat <- NA
 RespRateCalc$VO2 <- NA
 RespRateCalc$metabolic.rate <- NA
+
+
+# check for duplicates in recorded samples within a plate
+RespRateCalc %>%
+  select(Block:Rep) %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup() %>%
+  filter(!is.na(Parasites))
+        # the two sets of duplicates will be removed below
+        # M Uninf MID 7 from 11/15/2021 are two samples that are mislabeled, where one should be STD but I can't distinguish between which is which
+        # S Uninf MID 9 from 11/22/2021 is a single sample that was moved in the middle of the trial run because there was an error in it's reading, but had a bad respiration reading and will be removed 
+
 
 
 ### Loop takes a VERY long time to run ###
