@@ -2,7 +2,7 @@
 # Both short and long (by experimental day) versions of the data are created for use in different analyses.
 
 # Code written by: Michelle Fearon
-# Last updated: May 3, 2023
+# Last updated: May 23, 2023
 
 # load libraries
 library(tidyr)
@@ -249,7 +249,7 @@ resp_data$Rep <- as.factor(resp_data$Rep)
 resp_data$Block <- as.factor(resp_data$Block)
 resp_data$Week <- as.factor(resp_data$Week)
 
-# filter by experiment, and remove dead animals and blanks, generate short and long versions of data
+# filter by experiment, and remove dead animals, mislabeled samples, and 1 bad read, and remove blanks, generate short and long versions of data
 resp_past_data_long <- resp_data %>% 
   filter(Experiment == "Past", Died.After.Resp == "N", Clone != "Blank") %>%
   dplyr::select(Diet, Parasites, Clone, Rep, Block, Week, metabolic.rate)
@@ -295,12 +295,19 @@ spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Die
   labs(x = "Diet", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
 spike_plot
-ggsave(here("figures/Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+#ggsave(here("figures/Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
-m_conc_mod <- lm(log(Microcystin.conc) ~ Day*Diet, data = super_spike)
+# remove outliers for analysis of differences during toxin spike (improve normality of residuals)
+super_spike2 <- filter(super_spike, Microcystin.conc < 290)
+super_spike2 <- filter(super_spike2, Microcystin.conc < 3 | Microcystin.conc > 5 )
+
+m_conc_mod <- lm(log(Microcystin.conc) ~ Day*Diet, data = super_spike2)
 summary(m_conc_mod)
 Anova(m_conc_mod)
-#plot(m_conc_mod)
+plot(m_conc_mod)
+qqnorm(resid(m_conc_mod))   # falls off the bottom a bit
+qqline(resid(m_conc_mod))
+shapiro.test(resid(m_conc_mod))  # not significant
 treatment_difs <- emmeans(m_conc_mod, pairwise ~ Diet * Day, type = "response")
 treatment_difs  
         # no sig diff between M treatments on days 5 and 8.
@@ -328,7 +335,7 @@ microcystin_plot <- ggplot(microcystin_exposure, aes(x = Parasite, y = Microcyst
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 microcystin_plot
-ggsave(here("figures/Microcystin_exposure_at_Day8.tiff"), plot = microcystin_plot, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
+#ggsave(here("figures/Microcystin_exposure_at_Day8.tiff"), plot = microcystin_plot, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
 
 
 # calculate average microcystin concentration per diet,clone, parasite treatment in each experiment
@@ -361,21 +368,30 @@ microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Exposure, y = micr
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 microcystin_plot2
-ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
+#ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
 
 
 hist(microcystin_exposure$Microcystin.conc)
 # adjust zero values to be very low but non-zero to be able to run the gamma distribution
 microcystin_exposure$Microcystin.conc[ microcystin_exposure$Microcystin.conc == 0] <- 0.01
 
-m_conc_mod2 <- glmmTMB(Microcystin.conc ~ Experiment * Diet, ziformula = ~1, family = ziGamma(), data = microcystin_exposure)
+m_conc_mod2 <- lm(log(Microcystin.conc+1) ~ Experiment * Diet,data = microcystin_exposure)  # use this model
 summary(m_conc_mod2)
 Anova(m_conc_mod2)
+plot(m_conc_mod2)
+qqnorm(resid(m_conc_mod2))   # falls off the bottom a bit
+qqline(resid(m_conc_mod2))
+shapiro.test(resid(m_conc_mod2))
+library(performance)
+check_model(m_conc_mod2)  # normality of residuals could be better...but otherwise not too bad
 
+# don't use this model
+#m_conc_mod2 <- glmmTMB(Microcystin.conc ~ Experiment * Diet, family = Gamma(), data = microcystin_exposure) # this also has problems
 testDispersion(m_conc_mod2)
 testZeroInflation(m_conc_mod2)
 micro_simResid <- simulateResiduals(fittedModel = m_conc_mod2)
 plot(micro_simResid)  # not a perfect fit, but better than the linear model...
+
 
 treatment_difs2 <- emmeans(m_conc_mod2, pairwise ~ Diet | Experiment, type = "response")
 treatment_difs2  
@@ -396,7 +412,7 @@ microcystin_exposure.sum2 <- microcystin_exposure %>%
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
                    microcystin.se   = microcystin.sd / sqrt(N))
 View(microcystin_exposure.sum2)
-
+write.csv(microcystin_exposure.sum2, "tables/AverageMicrocystinConc_AllDietsVsToxinDiet" , quote = F, row.names=FALSE)
 
 # calculate average microcystin concentration per diet, clone, parasite infection status treatment to join with larger data set
 microcystin_exposure.sum3 <- microcystin_exposure %>%
@@ -425,6 +441,7 @@ past_data_short <- full_join(past_data_short, feed_past_data_short)
 past_data_short <- full_join(past_data_short, resp_past_data_short)
 past_data_short <- full_join(past_data_short, past_microcystin)
 View(past_data_short)
+dim(past_data_short)  # should have 160 rows, 1 for each animal in the study
 write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F, row.names=FALSE)
 
 
@@ -694,6 +711,7 @@ metsch_data_short <- full_join(metsch_data_short, feed_metsch_data_short)
 metsch_data_short <- full_join(metsch_data_short, resp_metsch_data_short)
 metsch_data_short <- left_join(metsch_data_short, metsch_microcystin, by = c(c("Diet", "Clone", "Infection")))
 unique(metsch_data_short$Clone)
+dim(metsch_data_short)   # should be 240 rows, one for each animal in the experiment
 write.csv(metsch_data_short, "data/ResourceQuality_Metsch_Full.csv", quote = F, row.names=FALSE)
 
 View(metsch_data_short)
