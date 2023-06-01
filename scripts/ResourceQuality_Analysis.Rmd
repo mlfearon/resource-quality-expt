@@ -205,6 +205,7 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
   labs(x = "Diet Treatment", y = "Bacteria Prevalence (%)") +
+  ggtitle("Bacteria Experiment") +
   ylim(0, 100) +
   facet_wrap(~Clone) +
   theme_classic() +
@@ -214,7 +215,7 @@ p_prev_fig3
 ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
-# Test is feeding rate predicts infection prevalence
+# Test if feeding rate predicts infection prevalence
 p_prev_feed_model <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = past_prev_sum)
 p_prev_feed_model <- glmer(InfectionStatus ~ Clearance_rel.Week1 * Clone + (1|Diet) + (1|Block), family = "binomial", data = p_data_prev)
 summary(p_prev_feed_model)
@@ -375,6 +376,7 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
   labs(x = "Diet Treatment", y = "Fungus Prevalence (%)") +
+  ggtitle("Fungus Experiment") +
   ylim(0, 100) +
   facet_wrap(~Clone) +
   theme_classic() +
@@ -765,6 +767,7 @@ sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fi
   labs(x = "Diet Treatment", y = bquote("Mean Bacteria Spore Area " ~ (mu *m^2))) +
   #annotate(geom = "text", x = 3.5, y = 23, label = "p = 0.039") +
   #annotate(geom = "text", x = c(1,2,3,4), y = c(24.5,21,21,21), label = c("a", "ab", "ab", "b")) +
+  ggtitle("Bacteria Experiment") +
   theme_classic()  +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -898,7 +901,7 @@ m_maturespore_fig2 <- ggplot(m_data_maturespores, aes(x = Diet, y = mature_spore
   ylim(0,300000) +
   scale_y_log10(labels = scales::comma) +
   #ggtitle("Mature Metsch Spore Yield by diet x host clone") +
-  labs(x = "Diet Treatment", y = "Mature Fungus Spore Yield (log scaled)") +
+  labs(x = "Diet Treatment", y = "Fungus Spore Yield (log scaled)") +
   theme_classic()  +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1120,7 +1123,7 @@ mgutsporemod2 <- glm(TotalGutSpores ~ Diet * Clone * length.um, family = poisson
 summary(mgutsporemod2)
 Anova(mgutsporemod2)   # host body size does not impact likelihood that spores attack gut, while accounting for diet and clone
 overdisp_fun(mgutsporemod2)
-AIC(mgutsporemod2)
+AIC(mgutsporemod2)     # AIC is much higher with body size is included in the model compared to the initial model above
 testDispersion(mgutsporemod2)
 testZeroInflation(mgutsporemod2)
 mgutspore2_simResid <- simulateResiduals(fittedModel = mgutsporemod)
@@ -1178,6 +1181,7 @@ m_totgutspores_fig3 <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   labs(x = "Diet Treatment", y = "Number of Fungus Spores Attacking Gut") +
+  ggtitle("Fungus Experiment") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1437,26 +1441,6 @@ m_inf_fig2
 I think the data here may be too sparse to be used well. Unfortunately many of the animals that I checked for spores in the guts died the day after I looked at them under the scope, so I was not able to assess terminal infection status for those animals. And there was an unfortunate trend that the more of the animals that had spores in their guts tended to die more either because I took longer to count them on the scope, and/or they were more sensitive since they were experiencing an infection. 
 
 
-```{r, Figure 1 and 2 of Metsh and Past infection prevalence, spore yield, spore size and spores}
-
-Figure1 <- ggarrange(m_prev_fig3, m_maturespore_fig2, m_totgutspores_fig3, m_hemocytesperspore_fig3, labels = "auto",
-                      ncol = 2, nrow = 2, legend = "bottom", common.legend = T)
-Figure1
-ggsave("figures/Fig1_FungusInfection.tiff", plot = Figure1, dpi = 600, width = 6.5, height = 7, units = "in", compression="lzw")
-
-
-
-Figure2 <- ggarrange(p_prev_fig3, p_maturespore_fig2, sporesize_plot2, labels = "auto",
-                      ncol = 2, nrow = 2)
-Figure2
-ggsave("figures/Fig2_BacteriaInfection.tiff", plot = Figure2, dpi = 600, width = 6.5, height = 7, units = "in", compression="lzw")
-
-
-
-```
-
-
-
 
 ## Fecundity 
 
@@ -1484,7 +1468,7 @@ plot(pfecund_simResid)
 
 # contrasts among diets conditional on infection status and clone
 pfecundmod_contrasts <- emmeans(pfecundmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
-as.data.frame(pfecundmod_contrasts)
+pfecundmod_contrasts
 
 # contrasts among infection statuses conditional on clone and averaged across all diets
 pfecundmod_contrasts2 <- emmeans(pfecundmod, specs = pairwise ~ Infection | Clone, type = "response")
@@ -1528,16 +1512,16 @@ p_fecund_tot2 <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge2(width=0.8)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #scale_y_log10(labels = scales::comma, breaks = c(1,3,10,30)) +
   #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
-  labs(x = "Parasite Exposure", y = "Total Fecundity") +
+  labs(x = "Infection Status", y = "Total Fecundity") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 p_fecund_tot2
 
 ggsave("figures/PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
@@ -1619,13 +1603,13 @@ m_fecund_tot2 <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge2(width =0.8), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #scale_y_log10(labels = scales::comma) +
   #ggtitle("Total Fecundity by infection status x diet x host clone for Metsch Expt") +
-  labs(x = "Parasite Exposure", y = "Total Fecundity") +
+  labs(x = "Infection Status", y = "Total Fecundity") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
@@ -1703,14 +1687,14 @@ p_little_r2 <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
   geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Little r by infection status x diet x host clone for Past Expt") +
-  labs(x = "Parasite Exposure", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 p_little_r2
 
 ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
@@ -1742,14 +1726,14 @@ m_little_r2 <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
   geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5), show.legend = F) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Little r by infection status x diet x host clone for Metsch Expt") +
-  labs(x = "Parasite Exposure", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+        axis.title.x = element_text(size=11, color="black"))
 m_little_r2
 
 ggsave("figures/MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
@@ -1790,6 +1774,10 @@ pgrowthmod_contrasts
 pgrowthmod_contrasts2 <- emmeans(pgrowthmod, specs = pairwise ~ Infection | Clone, type = "response")
 pgrowthmod_contrasts2
 
+pgrowthmod_contrasts3 <- emmeans(pgrowthmod, specs = pairwise ~ Clone, type = "response")
+pgrowthmod_contrasts3
+
+
 ```
 ```{r, growth rate by treatment for past}
 p_growth <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
@@ -1810,12 +1798,12 @@ p_growth2 <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #ggtitle("Bacteria Experiment") +
-  labs(x = "Parasite Exposure", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1~")")) +
+  labs(x = "Infection Status", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1844,7 +1832,7 @@ AIC(mgrowthmod)
 plot(mgrowthmod)
 qqnorm(resid(mgrowthmod))
 qqline(resid(mgrowthmod))
-shapiro.test(resid(mgrowthmod)) # not sig, but 0.08
+shapiro.test(resid(mgrowthmod)) # not sig, but 0.074
 
 mgrowthmod_contrasts <- emmeans(mgrowthmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 mgrowthmod_contrasts
@@ -1889,12 +1877,12 @@ m_growth2 <- ggplot(m_data_growth, aes(x = Infection, y = GrowthRate)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #ggtitle("Fungus Experiment") +
-  labs(x = "Parasite Exposure", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1~")")) +
+  labs(x = "Infection Status", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1925,7 +1913,7 @@ AIC(psizemod)
 plot(psizemod)
 qqnorm(resid(psizemod))   # looks ok
 qqline(resid(psizemod))
-shapiro.test(resid(psizemod)) # not sig, but 0.055
+shapiro.test(resid(psizemod)) # not sig, but 0.079
 
 
 psizemod_contrasts <- emmeans(psizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
@@ -1947,12 +1935,12 @@ p_size <- ggplot(p_data_size, aes(x = Infection, y = Length_Week1)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   ggtitle("Bacteria Experiment") +
-  labs(x = "Parasite Exposure", y = bquote("Body Size During Parasite Exposure ("* mu* "m)")) +
+  labs(x = "Infection Status", y = bquote("Body Size During Parasite Exposure ("* mu* "m)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -2012,7 +2000,7 @@ AIC(msizemod)
 plot(msizemod)
 qqnorm(resid(msizemod))        # looks great
 qqline(resid(msizemod))
-shapiro.test(resid(msizemod)) # not sig, but 0.08
+shapiro.test(resid(msizemod)) 
 
 msizemod_contrasts <- emmeans(msizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 msizemod_contrasts
@@ -2030,12 +2018,12 @@ m_size <- ggplot(m_data_size, aes(x = Infection, y = Length_Week1)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   ggtitle("Fungus Experiment") +
-  labs(x = "Parasite Exposure", y = bquote("Body Size During Parasite Exposure ("* mu* "m)")) +
+  labs(x = "Infection Status", y = bquote("Body Size During Parasite Exposure ("* mu* "m)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -2098,12 +2086,12 @@ ggsave("figures/FigS4_GrowthRate_BodySize.tiff", plot = FigureS4, dpi = 600, wid
 p_data_feeding <- p_data %>% filter(!is.na(Clearance.Week1))
 hist(p_data_feeding$Clearance.Week1) # wow normal data!!
 hist(p_data_feeding$Clearance_rel.Week1) # wow normal data!! 
-class(p_data_feeding$Cl)
+
 
 # Feeding rate (not bodysize controlled)
 pfeedmod <- lmer(Clearance.Week1 ~ Diet * Infection * Clone + (1|Block), data = p_data_feeding)
 summary(pfeedmod)
-Anova(pfeedmod)
+Anova(pfeedmod)  # Appendix Table S2
 AIC(pfeedmod)
 plot(pfeedmod)
 qqnorm(resid(pfeedmod))
@@ -2122,10 +2110,12 @@ pfeedmod_infstatus_est <- as.data.frame(pfeedmod_contrasts2)
 pfeedmod_infstatus_est <- filter(pfeedmod_infstatus_est, contrast == ".")
 pfeedmod_infstatus_est$Infection <- factor(pfeedmod_infstatus_est$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
+
+
 # Relative Feeding rate (bodysize controlled)
 pfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
 summary(pfeedmod2)
-Anova(pfeedmod2)
+Anova(pfeedmod2)   # Appendix Table S2
 AIC(pfeedmod2)
 plot(pfeedmod2)
 qqnorm(resid(pfeedmod2))       # looks good
@@ -2195,15 +2185,15 @@ p_feeding3 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  labs(x = "Parasite Exposure", y = bquote("Feeding Rate (mL per hr)")) +
-  ggtitle("Bacteria Experiment") +
+  labs(x = "Infection Status", y = bquote("Feeding Rate (mL per hr)")) +
+  #ggtitle("Bacteria Experiment") +
   theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=9, color="black"))
+  theme(axis.text.x = element_text(size=9, color = "black"), axis.text.y = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
 p_feeding3
 
 ggsave("figures/PastFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = p_feeding3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
@@ -2237,7 +2227,7 @@ p_feeding2 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
-  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  labs(x = "Infection Status", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -2325,14 +2315,14 @@ m_feeding3 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  labs(x = "Parasite Exposure", y = bquote("Feeding Rate (mL per hr)")) +
-  ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Feeding Rate (mL per hr)")) +
+  #ggtitle("Fungus Experiment") +
   theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+  theme(axis.text.x = element_text(size=9, color = "black"), axis.text.y = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 m_feeding3
 
@@ -2361,7 +2351,7 @@ m_feeding2 <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
@@ -2377,6 +2367,23 @@ ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_feeding2,
 ```
 
 
+```{r, Figure 1 and 2 of Metsh and Past infection prevalence, feeding and exposure rate, spore yield, spore size an gut spores}
+
+Figure1 <- ggarrange(m_prev_fig3,p_prev_fig3, m_feeding3, p_feeding3, m_maturespore_fig2, p_maturespore_fig2, labels = "auto",
+                      ncol = 2, nrow = 3, legend = "right", common.legend = T)
+Figure1
+ggsave("figures/Fig1_Prev_Exposure_Yield.tiff", plot = Figure1, dpi = 600, width = 7.5, height = 9, units = "in", compression="lzw")
+
+
+
+Figure2 <- ggarrange(m_totgutspores_fig3, sporesize_plot2, m_hemocytesperspore_fig3, labels = "auto",
+                      ncol = 2, nrow = 2, legend = "right", common.legend = T)
+Figure2
+ggsave("figures/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure2, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
+
+
+
+```
 
 
 ```{r, Figure 3 of feeding rate and fecundity for fungus and bacteria experiments}
@@ -2435,8 +2442,8 @@ p_longdata_resp <- p_longdata %>% dplyr::filter(!is.na(metabolic.rate))
 hist(as.numeric(p_longdata_resp$metabolic.rate)) # a bit right skewed
 range(p_longdata_resp$metabolic.rate)
 
-# Respiration rate over whole experiment
-prespmod2 <- lmer(log(metabolic.rate+1) ~ Diet * Infection + Clone + (1|Week) + (1|Block), data = p_longdata_resp)
+# Respiration rate over whole experiment (DON"T USE THIS MDOEL, doesn't work)
+#prespmod2 <- lmer(log(metabolic.rate+1) ~ Diet * Infection + Clone + (1|Week) + (1|Block), data = p_longdata_resp)
 summary(prespmod2)
 Anova(prespmod2)
 AIC(prespmod2)
@@ -2474,12 +2481,12 @@ p_resp_fig2 <- ggplot(p_data_resp, aes(x = Infection, y = metabolic.rate.Week1))
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
   ggtitle("Bacteria Experiment") +
-  labs(x = "Parasite Exposure", y = bquote("Metabolic Rate (J/hr)")) +
+  labs(x = "Infection Status", y = bquote("Metabolic Rate (J/hr)")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -2548,7 +2555,7 @@ AIC(mrespmod)
 plot(mrespmod)
 qqnorm(resid(mrespmod)) # looks pretty good
 qqline(resid(mrespmod))
-shapiro.test(resid(mrespmod))   # significant, p = 0.039, But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
+shapiro.test(resid(mrespmod))   # significant, p = 0.043, But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
 
 mrespmod_contrasts <- emmeans(mrespmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 mrespmod_contrasts
@@ -2567,8 +2574,8 @@ m_longdata_resp <- m_longdata %>% dplyr::filter(!is.na(metabolic.rate))
 hist(as.numeric(m_longdata_resp$metabolic.rate)) # more normal than above, though a bit right skewed
 range(m_longdata_resp$metabolic.rate)
 
-# Respiration rate over whole experiment
-mrespmod2 <- lmer(metabolic.rate ~ Diet + Infection + Clone + Week + Diet:Infection + Infection:Clone + (1|Block), data = m_longdata_resp)
+# Respiration rate over whole experiment (DON'T USE THIS MODEL, DOESN'T WORK)
+#mrespmod2 <- lmer(metabolic.rate ~ Diet + Infection + Clone + Week + Diet:Infection + Infection:Clone + (1|Block), data = m_longdata_resp)
 summary(mrespmod2)
 Anova(mrespmod2)
 AIC(mrespmod2)
@@ -2604,11 +2611,11 @@ m_resp_fig2 <- ggplot(m_data_resp, aes(x = Infection, y = metabolic.rate.Week1))
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  labs(x = "Parasite Exposure", y = bquote("Metabolic Rate (J/hr)")) +
+  labs(x = "Infection Status", y = bquote("Metabolic Rate (J/hr)")) +
   ggtitle("Fungus Experiment") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -2812,7 +2819,7 @@ cox.diet_parasite_mid
 cox.diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = p_data_mid)
 cox.diet_infstatus_mid
 cox.diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_mid)  # Use this one for the Mid37 specific results
-cox.diet_infstatus_mid2
+summary(cox.diet_infstatus_mid2)
 
 # forest plot
 ggforest(cox.diet_parasite_mid, data = p_data_mid)
@@ -3302,7 +3309,7 @@ percentdif_fig <- ggplot(dif_data, aes(x = Metric, y = Percent_change, color = E
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
   geom_point(position = position_dodge(width = 0.5), size = 2.5) +
   labs(x = "Host Metric", y = "Percent change between Uninfected and Exposed") +
-  scale_y_continuous(breaks = c(-1,-0.5,0,0.5,1,1.5,2,2.5,3), labels = c("-100%","","0%", "","100%","","200%","","300%")) +
+  scale_y_continuous(breaks = c(-1,-0.5,0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7), labels = c("-100%","","0%", "","100%","","200%","","300%", "","400%", "","500%","","600%","","700%")) +
   scale_shape_manual(values = c(21,22)) +
   scale_color_manual(values = c("#D16103", "#4E84C4")) +
   scale_fill_manual(values = c("white", "#D16103", "white", "#4E84C4")) +
