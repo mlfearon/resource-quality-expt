@@ -70,11 +70,13 @@ setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Q
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
 p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
 p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
+p_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 # Metsch data
 m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
 m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptWeek.csv"), stringsAsFactors = F)
 m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
+m_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Metsch_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 ```
 
@@ -87,7 +89,7 @@ p_longdata$Diet <- factor(p_longdata$Diet, levels = c("S", "SM", "M", "M+"))
 p_longdata$Infection <- factor(p_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 p_lifetable$Diet <- factor(p_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
 p_lifetable$Infection <- factor(p_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
-
+p_lifetable_clone_inf$Infection <- factor(p_lifetable_clone_inf$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
 m_data$Diet <- factor(m_data$Diet, levels = c("S", "SM", "M", "M+"))
 m_data$Infection <- factor(m_data$Infection, levels = c("Uninfected", "Exposed", "Infected"))
@@ -96,6 +98,7 @@ m_longdata$Diet <- factor(m_longdata$Diet, levels = c("S", "SM", "M", "M+"))
 m_longdata$Infection <- factor(m_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 m_lifetable$Diet <- factor(m_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
 m_lifetable$Infection <- factor(m_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+m_lifetable_clone_inf$Infection <- factor(m_lifetable_clone_inf$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
 ```
 
@@ -1690,14 +1693,31 @@ p_little_r2 <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
   scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
-  #ggtitle("Little r by infection status x diet x host clone for Past Expt") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  ggtitle("Bacteria Experiment") +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 p_little_r2
 
 ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+# Little r for infection status x clone
+p_little_r3 <- ggplot(p_lifetable_clone_inf, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  ggtitle("Bacteria Experiment") +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_little_r3
+
+ggsave("figures/PastLittleR_ClonexInfection.tiff", plot = p_little_r3, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -1729,14 +1749,30 @@ m_little_r2 <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
   scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
-  #ggtitle("Little r by infection status x diet x host clone for Metsch Expt") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1~")")) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 m_little_r2
 
 ggsave("figures/MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+# Little r for infection status x clone
+m_little_r3 <- ggplot(m_lifetable_clone_inf, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_little_r3
+
+ggsave("figures/MetschLittleR_ClonexInfection.tiff", plot = m_little_r3, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
 
 ```
 
@@ -2389,17 +2425,23 @@ ggsave("figures/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure2, dpi = 600, 
 ```{r, Figure 3 of feeding rate and fecundity for fungus and bacteria experiments}
 
 
-Figure3 <- ggarrange(m_feeding3, p_feeding3, m_little_r2, p_little_r2, m_survival_fig, p_survival_fig, labels = "auto",
-                      ncol = 2, nrow = 3, widths = c(3.3,4))
+Figure3 <- ggarrange(m_little_r2, p_little_r2, m_survival_fig, p_survival_fig, labels = "auto",
+                      ncol = 2, nrow = 2, widths = c(3.3,4))
 Figure3
-ggsave("figures/Fig3_Feeding_LittleR_Survival.tiff", plot = Figure3, dpi = 600, width = 8.5, height = 10, units = "in", compression="lzw")
+ggsave("figures/Fig3_LittleR_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 8, units = "in", compression="lzw")
 
 
 FigureS6 <- ggarrange(m_fecund_tot2, p_fecund_tot2, labels = "auto",
                       ncol = 2, nrow = 1, legend = "right", common.legend = T)
 ggsave("figures/FigS6_Fecundity.tiff", plot = FigureS6, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
 
+
+FigureS4_2 <- ggarrange(m_little_r3, p_little_r3, labels = "auto",
+                      ncol = 2, nrow = 1)
+ggsave("figures/FigS4_LitteR_ClonexInfectionStatus.tiff", plot = FigureS4_2, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
+
 ```
+
 
 
 
@@ -3248,18 +3290,34 @@ df_mresp <- data.frame(
 
 
 ## little r calculation
-p_littleR <- p_lifetable %>%
-  dplyr::group_by(Clone, Infection)  %>%
-  dplyr::summarize(r_mx = mean(r_mx)) %>%
+# p_littleR <- p_lifetable %>%
+#   dplyr::group_by(Clone, Infection)  %>%
+#   dplyr::summarize(r_mx = mean(r_mx)) %>%
+#   pivot_wider(names_from = Infection, values_from = r_mx) %>%
+#   mutate(Metric = "Pop Growth", Experiment = "Bacteria", U_E_pvalue = NA) %>%
+#   dplyr::select(Metric, Experiment, Clone, Uninfected, Exposed, Infected, U_E_pvalue)
+
+
+p_littleR <- p_lifetable_clone_inf %>%
+  dplyr::select(Clone, Infection, r_mx) %>%
+  dplyr::group_by(Clone, Infection) %>%
   pivot_wider(names_from = Infection, values_from = r_mx) %>%
-  mutate(Metric = "Pop Growth", Experiment = "Bacteria", U_E_pvalue = NA) %>%
-  dplyr::select(Metric, Experiment, Clone, Uninfected, Exposed, Infected, U_E_pvalue)
+  mutate(Metric = "Pop Growth", Experiment = "Bacteria") %>%  # note this not the p-value but just a place holder to indicate that the standard errors do not overlap between uninfected and exposed groups in mid37s, but do overlap for standards
+  dplyr::select(Metric, Experiment, Clone, Uninfected, Exposed, Infected)
+p_littleR$U_E_pvalue <- c(0.01, 0.2)
   
-m_littleR <- m_lifetable %>%
-  dplyr::group_by(Clone, Infection)  %>%
-  dplyr::summarize(r_mx = mean(r_mx)) %>%
+# m_littleR <- m_lifetable %>%
+#   dplyr::group_by(Clone, Infection)  %>%
+#   dplyr::summarize(r_mx = mean(r_mx)) %>%
+#   pivot_wider(names_from = Infection, values_from = r_mx) %>%
+#   mutate(Metric = "Pop Growth", Experiment = "Fungus", U_E_pvalue = NA) %>%
+#   dplyr::select(Metric, Experiment, Clone, Uninfected, Exposed, Infected, U_E_pvalue)
+
+m_littleR <- m_lifetable_clone_inf %>%
+  dplyr::select(Clone, Infection, r_mx) %>%
+  dplyr::group_by(Clone, Infection) %>%
   pivot_wider(names_from = Infection, values_from = r_mx) %>%
-  mutate(Metric = "Pop Growth", Experiment = "Fungus", U_E_pvalue = NA) %>%
+  mutate(Metric = "Pop Growth", Experiment = "Fungus", U_E_pvalue = 0.01) %>%  # note this not the p-value but just a place holder to indicate that the standard errors do not overlap between uninfected and exposed groups
   dplyr::select(Metric, Experiment, Clone, Uninfected, Exposed, Infected, U_E_pvalue)
 
 
