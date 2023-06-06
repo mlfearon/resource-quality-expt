@@ -295,7 +295,7 @@ spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Die
   labs(x = "Diet", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
 spike_plot
-#ggsave(here("figures/Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+ggsave(here("figures/FigS2_Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 # remove outliers for analysis of differences during toxin spike (improve normality of residuals)
 super_spike2 <- filter(super_spike, Microcystin.conc < 290)
@@ -368,7 +368,7 @@ microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Exposure, y = micr
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 microcystin_plot2
-#ggsave(here("figures/Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
+ggsave(here("figures/FigS1_Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
 
 
 hist(microcystin_exposure$Microcystin.conc)

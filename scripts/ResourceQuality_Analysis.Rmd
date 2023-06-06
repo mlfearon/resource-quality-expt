@@ -2105,9 +2105,9 @@ ggsave(here("figures/MetschBodySize_DietxCloneXInfection_byWeek.tiff"), plot = p
 
 ```{r, Figure S4 for growth rate}
 
-FigureS4 <- ggarrange(m_size, p_size, plot_byWeek_size_metsch, plot_byWeek_size_past, m_growth2, p_growth2, labels = "auto", ncol = 2, nrow = 3, widths = c(3.3,4))
-FigureS4
-ggsave("figures/FigS4_GrowthRate_BodySize.tiff", plot = FigureS4, dpi = 600, width = 8.5, height = 11, units = "in", compression="lzw")
+FigureS5 <- ggarrange(m_size, p_size, plot_byWeek_size_metsch, plot_byWeek_size_past, m_growth2, p_growth2, labels = "auto", ncol = 2, nrow = 3, widths = c(3.3,4))
+FigureS5
+ggsave("figures/FigS5_GrowthRate_BodySize.tiff", plot = FigureS5, dpi = 600, width = 8.5, height = 11, units = "in", compression="lzw")
 
 ```
 
@@ -2425,20 +2425,20 @@ ggsave("figures/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure2, dpi = 600, 
 ```{r, Figure 3 of feeding rate and fecundity for fungus and bacteria experiments}
 
 
-Figure3 <- ggarrange(m_little_r2, p_little_r2, m_survival_fig, p_survival_fig, labels = "auto",
-                      ncol = 2, nrow = 2, widths = c(3.3,4))
+Figure3 <- ggarrange(m_little_r2, p_little_r2, m_little_r3, p_little_r3, m_survival_fig, p_survival_fig, labels = "auto",
+                      ncol = 2, nrow = 3, heights = c(3,3,3), legend = "right", common.legend = T)
 Figure3
-ggsave("figures/Fig3_LittleR_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 8, units = "in", compression="lzw")
+ggsave("figures/Fig3_LittleR_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 9, units = "in", compression="lzw")
+ widths = c(3.3,4)
 
-
-FigureS6 <- ggarrange(m_fecund_tot2, p_fecund_tot2, labels = "auto",
+FigureS4 <- ggarrange(m_fecund_tot2, p_fecund_tot2, labels = "auto",
                       ncol = 2, nrow = 1, legend = "right", common.legend = T)
-ggsave("figures/FigS6_Fecundity.tiff", plot = FigureS6, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
+ggsave("figures/FigS4_Fecundity.tiff", plot = FigureS4, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
 
 
-FigureS4_2 <- ggarrange(m_little_r3, p_little_r3, labels = "auto",
+LittleR_clone_inf <- ggarrange(m_little_r3, p_little_r3, labels = "auto",
                       ncol = 2, nrow = 1)
-ggsave("figures/FigS4_LitteR_ClonexInfectionStatus.tiff", plot = FigureS4_2, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
+ggsave("figures/LitteR_ClonexInfectionStatus.tiff", plot = LittleR_clone_inf, dpi = 600, width = 8.5, height = 3.5, units = "in", compression="lzw")
 
 ```
 
@@ -2712,10 +2712,10 @@ Metabolic rate over the whole experiment differs significantly by diet, clone an
 
 ```{r, Figure S5 for metabolic rates}
 
-FigureS5 <- ggarrange(m_resp_fig2, p_resp_fig2, plot_byWeek_resp_metsch, plot_byWeek_resp_past, labels = "auto",
+FigureS6 <- ggarrange(m_resp_fig2, p_resp_fig2, plot_byWeek_resp_metsch, plot_byWeek_resp_past, labels = "auto",
                       ncol = 2, nrow = 2, widths = c(3.3,4))
-FigureS5
-ggsave("figures/FigS5_MetabolicRate.tiff", plot = FigureS5, dpi = 600, width = 8.5, height = 7, units = "in", compression="lzw")
+FigureS6
+ggsave("figures/FigS6_MetabolicRate.tiff", plot = FigureS6, dpi = 600, width = 8.5, height = 7, units = "in", compression="lzw")
 
 
 ```
