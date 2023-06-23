@@ -224,7 +224,8 @@ p_prev_feed_model <- glmer(InfectionStatus ~ Clearance_rel.Week1 * Clone + (1|Di
 summary(p_prev_feed_model)
 Anova(p_prev_feed_model)
 
-p_prev_feed_model2 <- glmer(Prevalence/100 ~ Mean_Clearance * Clone + (1|Diet), weights = Tested, family = "binomial", data = past_prev_sum)
+# This is presented in Appendix S1.6
+#p_prev_feed_model2 <- glmer(Prevalence/100 ~ Mean_Clearance * Clone + (1|Diet), weights = Tested, family = "binomial", data = past_prev_sum)
 p_prev_feed_model2 <- glmer(InfectionStatus ~ Clearance.Week1 * Clone + (1|Diet) + (1|Block), family = "binomial", data = p_data_prev)
 summary(p_prev_feed_model2)
 Anova(p_prev_feed_model2)
@@ -415,7 +416,8 @@ m_prev_feed_rel_fig
 ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate3.tiff"), plot = m_prev_feed_rel_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
 
 
-m_prev_feed_model2 <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = metsch_prev_sum)
+# These results presented in appendix S1.6
+#m_prev_feed_model2 <- glmer(Prevalence/100 ~ Mean_Clearance_rel * Clone + (1|Diet), weights = Tested, family = "binomial", data = metsch_prev_sum)
 m_prev_feed_model2 <- glmer(InfectionStatus ~ Clearance.Week1 * Clone + (1|Diet) + (1|Block), family = "binomial", glmerControl(optimizer = "bobyqa"), data = m_data_prev)
 summary(m_prev_feed_model2) 
 Anova(m_prev_feed_model2)
@@ -1694,7 +1696,7 @@ p_little_r2 <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   ggtitle("Bacteria Experiment") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1710,8 +1712,8 @@ p_little_r3 <- ggplot(p_lifetable_clone_inf, aes(x = Infection, y = r_mx)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
   facet_wrap(~Clone) +
   scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  ggtitle("Bacteria Experiment") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  #ggtitle("Bacteria Experiment") +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1750,7 +1752,7 @@ m_little_r2 <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
   scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   ggtitle("Fungus Experiment") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1765,8 +1767,8 @@ m_little_r3 <- ggplot(m_lifetable_clone_inf, aes(x = Infection, y = r_mx)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
   facet_wrap(~Clone) +
   scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  ggtitle("Fungus Experiment") +
-  labs(x = "Infection Status", y = bquote("Per Capita Pop. Growth Rate (r"~day^-1*")")) +
+  #ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -2426,7 +2428,7 @@ ggsave("figures/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure2, dpi = 600, 
 
 
 Figure3 <- ggarrange(m_little_r2, p_little_r2, m_little_r3, p_little_r3, m_survival_fig, p_survival_fig, labels = "auto",
-                      ncol = 2, nrow = 3, heights = c(3,3,3), legend = "right", common.legend = T)
+                      ncol = 2, nrow = 3, heights = c(3.2,3,3), legend = "right", common.legend = T)
 Figure3
 ggsave("figures/Fig3_LittleR_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 9, units = "in", compression="lzw")
  widths = c(3.3,4)
