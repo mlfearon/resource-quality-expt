@@ -153,15 +153,15 @@ metsch_prev <- ggpredict(mprevmod2, c("Clone", "Diet"))
 
 
 # figures made with marginal effects (not used in manuscript)
-m_prev_fig <- plot(metsch_prev, dodge = 0.5, show.title = F) +
+m_prev_fig1 <- plot(metsch_prev, dodge = 0.5, show.title = F) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Metsch prevalence by diet x host clone") +
   labs(x = "Host Clone", y = "Fungus Prevalence (%)") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
-m_prev_fig
-ggsave("figures/MetschPrev_DietxClone.tiff", plot = m_prev_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+m_prev_fig1
+ggsave("figures/MetschPrev_DietxClone.tiff", plot = m_prev_fig1, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -186,7 +186,7 @@ metsch_prev_sum <- m_data_prev %>%
 
 ## Figure 1A: Fungus prevalence for each clone and diet treatment (used in manuscript)
 # figures  with calculated prevalence and confidence intervals
-m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
+m_prev_fig <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2, show.legend = F) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
@@ -197,8 +197,8 @@ m_prev_fig3 <- ggplot(metsch_prev_sum, aes(x = Diet, y= Prevalence)) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
-m_prev_fig3
-ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+m_prev_fig
+ggsave("figures/MetschPrevCalcualtions_DietxClone.tiff", plot = m_prev_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -287,15 +287,15 @@ diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
 
 
 # figures made with marginal effects (not used in manuscript)
-p_prev_fig <- plot(past_prev, dodge = 0.5, show.title = F) +
+p_prev_fig1 <- plot(past_prev, dodge = 0.5, show.title = F) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Pasteuria prevalence by diet x host clone") +
   labs(x = "Host Clone", y = "Bacterium Prevalence (%)") +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=9, color="black"))
-p_prev_fig
-ggsave(here("figures/PasteuriaPrev_DietxClone.tiff"), plot = p_prev_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+p_prev_fig1
+ggsave(here("figures/PasteuriaPrev_DietxClone.tiff"), plot = p_prev_fig1, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -321,7 +321,7 @@ past_prev_sum <- p_data_prev %>%
 
 ## Figure 1B: Bacterium prevalence for each clone and diet treatment (used in manuscript)
 # figures  with calculated prevalence and confidence intervals
-p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
+p_prev_fig <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   geom_point(aes(color = Diet), size = 2, show.legend = F) +
   geom_errorbar(aes(ymin = Prev_Lower, ymax = Prev_Upper, color = Diet), width = 0.2, show.legend = F) + 
   scale_color_manual(values = diet_colors) +
@@ -332,8 +332,8 @@ p_prev_fig3 <- ggplot(past_prev_sum, aes(x = Diet, y= Prevalence)) +
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
-p_prev_fig3
-ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig3, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+p_prev_fig
+ggsave(here("figures/PasteuriaPrevCalcualtions_DietxClone.tiff"), plot = p_prev_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 # Results presented in Appendix 
@@ -375,6 +375,291 @@ p_prev_feed_rel_fig <- ggplot(past_prev_sum, aes(x = Mean_Clearance_rel, y= Prev
 p_prev_feed_rel_fig
 ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate2.tiff"), plot = p_prev_feed_rel_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
+
+
+
+
+
+## Parasite exposure and feeding rate --------------------------------------------
+
+
+### Fungus feeding rate analyses
+# Feeding rate during the inoculation period (week 1 of the study)
+
+m_data_feeding <- m_data %>% filter(!is.na(Clearance.Week1))
+hist(m_data_feeding$Clearance.Week1) # wow normal data!! 
+hist(m_data_feeding$Clearance_rel.Week1) # wow normal data!! 
+
+
+mfeedmod <- lmer(Clearance.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
+# removed the three-way interaction, not enough data for the model to run the 3-way interaction
+summary(mfeedmod)
+
+# Table 1: Feeding rate/Parasite exposure rate
+Anova(mfeedmod)
+AIC(mfeedmod)
+plot(mfeedmod)
+qqnorm(resid(mfeedmod))
+qqline(resid(mfeedmod))
+shapiro.test(resid(mfeedmod))
+
+# Appendix Table S3: Fungus experiment feeding rate/exposure rate
+# contrasts of diet effects by each infection status and clones
+mfeedmod_contrasts <- emmeans(mfeedmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mfeedmod_contrasts 
+
+# Appendix Table S4: Fungus experiment feeding rate/exposure rate
+# contrasts of infection status effects by each clone (averaged over all diets)
+mfeedmod_contrasts2 <- emmeans(mfeedmod, specs = pairwise ~ Infection | Clone, type = "response")
+mfeedmod_contrasts2  
+
+# assess the nearly sig interaction between infection and clone
+mfeedmod_contrasts3 <- emmeans(mfeedmod, specs = pairwise ~ Clone | Infection, type = "response")
+mfeedmod_contrasts3
+
+
+# Relative Feeding rate (bodysize controlled) - analysis described in Appendix Section S1.7
+mfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_feeding)
+# removed the three-way interaction, not enough data for the model to run the 3-way interaction
+summary(mfeedmod2)
+
+# Appendix Table S2: Fungus Experiment Relative Feeding Rate/Exposure Rate
+Anova(mfeedmod2) 
+AIC(mfeedmod2)
+plot(mfeedmod2)
+qqnorm(resid(mfeedmod2))
+qqline(resid(mfeedmod2))
+shapiro.test(resid(mfeedmod2))
+
+# contrasts of diet effects by each infection status and clones
+mfeedmod_contrasts4 <- emmeans(mfeedmod2, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mfeedmod_contrasts4   # Mid37 there is a dif between S - M for uninfected and SM - M+ for exposed, and no differences for infected; and for Std uninfected there are dif between S - M, S - M+, and SM - M, for exposed and infected dif between S - M for both
+
+
+# Appendix Table S4: Relative body size corrected feeding rate
+# contrasts of infection status effects by each clone (averaged over all diets)
+mfeedmod_contrasts5 <- emmeans(mfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+mfeedmod_contrasts5      # This result tells us that there is a sig difference between uninfected and exposed for Standard but NOT for Mid37 (same for both feedingand relative feeding)
+
+
+
+
+# Figures of Fungus Feeding rate
+# Marginal effects for feeding rate
+metsch_feed <- ggpredict(mfeedmod, c("Infection", "Diet", "Clone"))
+plot(metsch_feed)
+
+# figure with feeding rate using marginal effect - points are not positioned correctly
+m_feeding_fig1 <- plot(metsch_feed, dodge = 0.6, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Feeding Rate (mL per hr per mm)") +
+  theme_classic()
+m_feeding_fig1
+ggsave("figures/MetschFeedingRate_DietxClonexInfection2.tiff", plot = m_feeding_fig1, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# Figure 1C: Fungus experiment Feeding Rate
+# figure with boxplots and data points (week 1 feeding rate - NOT body size corrected)
+m_feeding_fig <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Infection Status", y = bquote("Feeding Rate (mL per hr)")) +
+  #ggtitle("Fungus Experiment") +
+  theme_classic() + 
+  theme(axis.text.x = element_text(size=9, color = "black"), axis.text.y = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_feeding_fig
+ggsave("figures/MetschFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = m_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# Figures of Fungus Relative Feeding rate (body size corrected)
+# These figures are NOT in the manuscript
+# Marginal effects for body size corrected feeding rate
+metsch_feed <- ggpredict(mfeedmod2, c("Infection", "Diet", "Clone"))
+plot(metsch_feed)
+
+# figure with bodysize corrected feeding rate using marginal effects
+m_rel_feeding_fig1 <- plot(metsch_feed, dodge = 0.6, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
+  theme_classic()
+m_rel_feeding_fig1
+ggsave("figures/MetschFeedingRate_DietxClonexInfection2.tiff", plot = m_rel_feeding_fig1, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# figure with boxplot and data points for bodysize corrected feeding rate
+m_rel_feeding_fig <- ggplot(m_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Parasite Exposure", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_rel_feeding_fig
+
+ggsave("figures/MetschFeedingRate_DietxClonexInfection.tiff", plot = m_rel_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+### Pasteuria feeding rate analyses
+
+p_data_feeding <- p_data %>% filter(!is.na(Clearance.Week1))
+hist(p_data_feeding$Clearance.Week1) # wow normal data!!
+hist(p_data_feeding$Clearance_rel.Week1) # wow normal data!! 
+
+
+# Feeding rate (not bodysize controlled)
+pfeedmod <- lmer(Clearance.Week1 ~ Diet * Infection * Clone + (1|Block), data = p_data_feeding)
+summary(pfeedmod)
+
+# Table 1: Bacterium Experiment Feeding rate/exposure rate
+Anova(pfeedmod)
+AIC(pfeedmod)
+plot(pfeedmod)
+qqnorm(resid(pfeedmod))
+qqline(resid(pfeedmod))         # looks good
+shapiro.test(resid(pfeedmod))   # significant! But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
+
+
+# Appendix Table S5
+# contrasts of diet effects by each infection status (averaged over both clones)
+pfeedmod_contrasts <- emmeans(pfeedmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+pfeedmod_contrasts 
+
+# Appendix Table S4: Bacterium Experiment Feeding rate/exposure rate
+# contrasts of infection status effects by each clone (averaged over all diets)
+pfeedmod_contrasts2 <- emmeans(pfeedmod, specs = pairwise ~ Infection | Clone, type = "response")
+pfeedmod_contrasts2
+
+pfeedmod_infstatus_est <- as.data.frame(pfeedmod_contrasts2)
+pfeedmod_infstatus_est <- filter(pfeedmod_infstatus_est, contrast == ".")
+pfeedmod_infstatus_est$Infection <- factor(pfeedmod_infstatus_est$Infection, levels = c("Uninfected", "Exposed", "Infected"))
+
+
+
+# Relative Feeding rate (bodysize controlled) - analysis described in Appendix Section S1.7
+pfeedmod2 <- lmer(Clearance_rel.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_feeding)
+summary(pfeedmod2)
+
+# Appendix Table S2
+Anova(pfeedmod2)
+AIC(pfeedmod2)
+plot(pfeedmod2)
+qqnorm(resid(pfeedmod2))       # looks good
+qqline(resid(pfeedmod2))
+shapiro.test(resid(pfeedmod2)) # significant! But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
+
+
+pfeedmod3 <- lmer(Clearance_rel.Week1 ~ Diet + Infection + Clone + Diet:Clone +(1|Block), data = p_data_feeding)
+summary(pfeedmod3)
+Anova(pfeedmod3)
+AIC(pfeedmod3)
+plot(pfeedmod3)
+qqnorm(resid(pfeedmod3))     # looks good
+qqline(resid(pfeedmod3))
+shapiro.test(resid(pfeedmod3))  # not significant
+# though this simplifies the model, it makes predicted effects across clone x infection and diet x infection the same
+# prefer to use the pfeedmod2 above over this one
+
+
+# tests contrasts for each factor holding the other two constant in separate tests
+# contrasts of diet effects by each infection status and clone. 
+pfeedmod2_contrasts <- emmeans(pfeedmod2, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+pfeedmod2_contrasts# Mid37 there is a dif between S - M for uninfected and SM - M+ for exposed, and no differences for infected; and for Std uninfected there are dif between S - M, S - M+, and SM - M, for exposed and infected dif between S - M for both
+
+# Appendix Table S4
+# contrasts of infection status effects by each clone (averaged over all diets)
+pfeedmod2_contrasts2 <- emmeans(pfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
+pfeedmod2_contrasts2   # This result tells us that there is a sig difference between uninfected and exposed for Standard but NOT for Mid37 (same for both feeding and relative feeding)
+
+
+
+##### figure with feeding rate (NOT body size corrected) - NOT shown in the manuscript
+past_feed <- ggpredict(pfeedmod, c("Infection", "Diet", "Clone"))
+plot(past_feed)
+
+# figure with feeding rate (not body size corrected)
+p_feeding_fig1 <- plot(past_feed, dodge = 0.6, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Feeding Rate (mL per hr)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding_fig1
+ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding_fig1, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
+# figure for Meg (week 1 feeding rate - NOT body size corrected)
+p_feeding_fig <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Infection Status", y = bquote("Feeding Rate (mL per hr)")) +
+  #ggtitle("Bacteria Experiment") +
+  theme_classic() + 
+  theme(axis.text.x = element_text(size=9, color = "black"), axis.text.y = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding_fig
+
+ggsave("figures/PastFeedingRate_DietxClonexInfection_Week1_NotBodysizeCorrected.tiff", plot = p_feeding_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
+
+##### # figure with feeding rate (body size corrected)
+past_feed2 <- ggpredict(pfeedmod3, c("Infection", "Diet", "Clone"))
+plot(past_feed)
+
+# figure with bodysize corrected feeding rate using marginal effects
+p_feeding_fig2 <- plot(past_feed2, dodge = 0.6, add.data = T, show.title = F) +
+  scale_color_manual(values = diet_colors) +
+  #ggtitle("Relative Feeding Rate (mL per hr per mm)") +
+  labs(x = "Parasite Exposure", y = "Relative Feeding Rate (mL per hr per mm)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding_fig2
+ggsave("figures/PastRelFeedingRate_DietxClonexInfection.tiff", plot = p_feeding_fig2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+# figure with bodysize corrected feeding rate using boxplot and data points
+p_feeding2 <- ggplot(p_data_feeding, aes(x = Infection, y = Clearance_rel.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Growth Rate from Week 1 to 2 by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Infection Status", y = bquote("Relative Feeding Rate (mL per hr per mm)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_feeding2
+
+ggsave("figures/PastFeedingRate_DietxClonexInfection.tiff", plot = p_feeding2, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
 
 
 
@@ -431,7 +716,7 @@ ggsave("figures/MetschMatureSpores_DietxClone.tiff", plot = m_maturespore_fig1, 
 
 # Figure 1E: Fungus Mature spore yield
 # figure with box plots and points
-m_maturespore_fig2 <- ggplot(m_data_maturespores, aes(x = Diet, y = mature_spores)) +
+m_maturespore_fig <- ggplot(m_data_maturespores, aes(x = Diet, y = mature_spores)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
   facet_wrap(~Clone) +
@@ -440,13 +725,12 @@ m_maturespore_fig2 <- ggplot(m_data_maturespores, aes(x = Diet, y = mature_spore
   scale_color_manual(values = c(rep("black", 4))) +
   ylim(0,300000) +
   scale_y_log10(labels = scales::comma) +
-  #ggtitle("Mature Metsch Spore Yield by diet x host clone") +
   labs(x = "Diet Treatment", y = "Fungus Spore Yield (log scaled)") +
   theme_classic()  +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
-m_maturespore_fig2
-ggsave("figures/MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+m_maturespore_fig
+ggsave("figures/MetschMatureSpores_DietxClone2.tiff", plot = m_maturespore_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 # # Results presented in Appendix 
@@ -508,7 +792,7 @@ range(p_data_spores$mature_spores)
 past_maturespores <- ggpredict(pmaturesporemod, c("Clone", "Diet"))
 
 
-# figure fwith marginal effects (not in manuscript)
+# figure with marginal effects (not in manuscript)
 p_maturespore_fig3 <- plot(past_maturespores, dodge = 0.5, add.data = T, show.title = F) +
   scale_color_manual(values = diet_colors) +
   #ggtitle("Mature Pasteuria Spore Yield by diet x host clone") +
@@ -524,7 +808,7 @@ ggsave("figures/PastMatureSpores_DietxClone.tiff", plot = p_maturespore_fig3, dp
 
 # Figure 1F: Bacterium mature spore yield 
 # figure with box plots and points of spore yield
-p_maturespore_fig2 <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spores)) +
+p_maturespore_fig <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spores)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7), show.legend = F) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4, show.legend = F) +
   facet_wrap(~Clone) +
@@ -539,8 +823,8 @@ p_maturespore_fig2 <- ggplot(p_data_spores_mature, aes(x = Diet, y = mature_spor
   theme_classic() +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
-p_maturespore_fig2
-ggsave("figures/PastMatureSpores_DietxClone2.tiff", plot = p_maturespore_fig2, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
+p_maturespore_fig
+ggsave("figures/PastMatureSpores_DietxClone2.tiff", plot = p_maturespore_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
 
@@ -648,7 +932,7 @@ ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot2, dp
 
 ### Full Figure 1 in Manuscript
 
-Figure1 <- ggarrange(m_prev_fig3,p_prev_fig3, m_feeding3, p_feeding3, m_maturespore_fig2, p_maturespore_fig2, labels = "auto",
+Figure1 <- ggarrange(m_prev_fig, p_prev_fig, m_feeding_fig, p_feeding_fig, m_maturespore_fig, p_maturespore_fig, labels = "auto",
                      ncol = 2, nrow = 3, legend = "right", common.legend = T)
 Figure1
 ggsave("figures/manuscript/Fig1_Prev_Exposure_Yield.tiff", plot = Figure1, dpi = 600, width = 7.5, height = 9, units = "in", compression="lzw")
@@ -813,6 +1097,8 @@ mhemocytemod3 <- glmmTMB(Hemocytes ~ Diet + Clone + (1|Unique.code), offset = lo
 # Not enough diet x clone replicates to include the interaction
 # Adding body size made the predicted effects come out very strange, and I did not trust that model. Model is robust without body size
 summary(mhemocytemod3)
+
+# Table 1: Hemocytes per fungus spore
 Anova(mhemocytemod3)
 AIC(mhemocytemod3) # model AIC is better 
 testDispersion(mhemocytemod3)
@@ -849,7 +1135,7 @@ plot(metsch_hemocytesperspore) + ylim(0,15)
 
 # Figure 3C: Hemocytes per attacking fungus spore
 # figure boxoplot and data points
-m_hemocytesperspore_fig3 <- ggplot(m_data_hemocytes, aes(x = Diet, y = HemocytesPerSpore)) +
+m_hemocytesperspore_fig <- ggplot(m_data_hemocytes, aes(x = Diet, y = HemocytesPerSpore)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.7, jitter.width = 0.7), alpha = 0.4) +
   facet_wrap(~Clone) +
@@ -861,14 +1147,17 @@ m_hemocytesperspore_fig3 <- ggplot(m_data_hemocytes, aes(x = Diet, y = Hemocytes
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
-m_hemocytesperspore_fig3
+m_hemocytesperspore_fig
 
-ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig3, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_fig, dpi = 600, width = 5, height = 4, units = "in", compression="lzw")
+
+
+
 
 
 # Full Figure 3 in Manuscript
 
-Figure3 <- ggarrange(m_totgutspores_fig3, sporesize_plot2, m_hemocytesperspore_fig3, labels = "auto",
+Figure3 <- ggarrange(m_totgutspores_fig, sporesize_plot2, m_hemocytesperspore_fig, labels = "auto",
                      ncol = 2, nrow = 2, legend = "right", common.legend = T)
 Figure3
 ggsave("figures/manuscript/Fig3_GutSpores_Hemo_SporeSize.tiff", plot = Figure3, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
