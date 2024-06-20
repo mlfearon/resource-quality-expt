@@ -48,13 +48,13 @@ setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Q
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
 p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
 p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
-p_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
+#p_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 # load Metsch data
 m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
 m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptWeek.csv"), stringsAsFactors = F)
 m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
-m_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Metsch_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
+#m_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Metsch_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 
 # Reorder factors
@@ -87,6 +87,11 @@ overdisp_fun <- function(model) {
   pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
   c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
 }
+
+
+
+# set the color scheme for the Diet treatments
+diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
 
 
 
@@ -231,10 +236,6 @@ m_prev_feed_fig
 ggsave(here("figures/MetschPrevCalcualtions_FeedingRate.tiff"), plot = m_prev_feed_fig, dpi = 600, width = 4.5, height = 3, units = "in", compression="lzw")
 
 
-#### Figure S3 in Appendix
-FigS3 <- ggarrange(m_prev_feed_fig, p_prev_feed_fig, nrow = 1, ncol = 2, labels = "auto", common.legend = T, legend = "right")
-ggsave(here("figures/manuscript/FigS3_Prevalence_FeedingRate.tiff"), plot = FigS3, dpi = 600, width = 8, height = 3.5, units = "in", compression="lzw")
-
 
 # Relative feeding rate (not in manuscript)
 m_prev_feed_rel_fig <- ggplot(metsch_prev_sum, aes(x = Mean_Clearance_rel, y= Prevalence)) +
@@ -282,8 +283,6 @@ pprevmod_contrasts
 # Marginal effects from best model with Abundance on the x axis
 past_prev <- ggpredict(pprevmod, c("Clone", "Diet"))
 
-# set the color scheme for the Diet treatments
-diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
 
 
 # figures made with marginal effects (not used in manuscript)
@@ -376,6 +375,11 @@ p_prev_feed_rel_fig
 ggsave(here("figures/PasteuriaPrevCalcualtions_RelFeedingRate2.tiff"), plot = p_prev_feed_rel_fig, dpi = 600, width = 4, height = 3, units = "in", compression="lzw")
 
 
+
+#### Figure S3 in Appendix
+FigS3 <- ggarrange(m_prev_feed_fig, p_prev_feed_fig, nrow = 1, ncol = 2, labels = "auto", common.legend = T, legend = "right")
+FigS3
+ggsave(here("figures/manuscript/FigS3_Prevalence_FeedingRate.tiff"), plot = FigS3, dpi = 600, width = 8, height = 3.5, units = "in", compression="lzw")
 
 
 
@@ -582,7 +586,8 @@ shapiro.test(resid(pfeedmod3))  # not significant
 pfeedmod2_contrasts <- emmeans(pfeedmod2, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 pfeedmod2_contrasts# Mid37 there is a dif between S - M for uninfected and SM - M+ for exposed, and no differences for infected; and for Std uninfected there are dif between S - M, S - M+, and SM - M, for exposed and infected dif between S - M for both
 
-# Appendix Table S4
+
+# Appendix Table S4: Bacterium Experiment Relative Feeding rate/exposure rate
 # contrasts of infection status effects by each clone (averaged over all diets)
 pfeedmod2_contrasts2 <- emmeans(pfeedmod2, specs = pairwise ~ Infection | Clone, type = "response")
 pfeedmod2_contrasts2   # This result tells us that there is a sig difference between uninfected and exposed for Standard but NOT for Mid37 (same for both feeding and relative feeding)
@@ -912,7 +917,7 @@ psporesize_contrasts <- emmeans(sporesize_mod2, specs = pairwise ~ Diet, type = 
 psporesize_contrasts
 
 
-# Figure 3B: Bacterium spore Area
+# Figure 2B: Bacterium spore Area
 # figure of spores size vs diet
 sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fill = Diet)) +
   geom_boxplot(show.legend = F) +
@@ -966,7 +971,7 @@ mgutsporemod_contrasts <- emmeans(mgutsporemod, specs = pairwise ~ Diet | Clone,
 mgutsporemod_contrasts
 
 
-# Figure 3A: Fungus spores attacking gut
+# Figure 2A: Fungus spores attacking gut
 # figure with boxplot and data points
 m_totgutspores_fig <- ggplot(m_data_gutspore, aes(x = Diet, y = TotalGutSpores)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
@@ -1133,7 +1138,7 @@ metsch_hemocytesperspore <- ggpredict(mhemocytemod3, c("Clone", "Diet"))
 plot(metsch_hemocytesperspore) + ylim(0,15)
 
 
-# Figure 3C: Hemocytes per attacking fungus spore
+# Figure 2C: Hemocytes per attacking fungus spore
 # figure boxoplot and data points
 m_hemocytesperspore_fig <- ggplot(m_data_hemocytes, aes(x = Diet, y = HemocytesPerSpore)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width=0.7)) +
@@ -1155,13 +1160,1199 @@ ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_f
 
 
 
-# Full Figure 3 in Manuscript
+# Full Figure 2 in Manuscript
 
-Figure3 <- ggarrange(m_totgutspores_fig, sporesize_plot2, m_hemocytesperspore_fig, labels = "auto",
+Figure2 <- ggarrange(m_totgutspores_fig, sporesize_plot2, m_hemocytesperspore_fig, labels = "auto",
                      ncol = 2, nrow = 2, legend = "right", common.legend = T)
-Figure3
-ggsave("figures/manuscript/Fig3_GutSpores_Hemo_SporeSize.tiff", plot = Figure3, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
+Figure2
+ggsave("figures/manuscript/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure3, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
 
+
+
+# Host vital rates: impacts of diet and infection --------------------------------
+
+
+## Little r -----------------------------------------------------------------------
+
+### Little r by treatment for Metsch experiment
+
+# Figure 3A: Little r by clone, diet, and infection status
+m_little_r <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5), show.legend = F) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5), show.legend = F) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_little_r
+
+ggsave("figures/MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+# Figure 5A: Little r by clone and diet
+# NEED TO UPDATE MATLAB RUN WITH NEW TREATMENT GROUPINGS TO MAKE THIS FIG
+
+m_little_r2 <- ggplot(m_lifetable_clone_inf, aes(x = Diet, y = r_mx)) +
+  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Diet", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_little_r2
+
+ggsave("figures/MetschLittleR_DietxClone.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+### Little r by treatment for Pasteuria experiment 
+
+
+# Figure 3A: Little r by clone, diet, and infection status
+p_little_r <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
+  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_little_r
+
+ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+# Figure 5B: Little r by clone and diet
+# NEED TO UPDATE MATLAB RUN WITH NEW TREATMENT GROUPINGS TO MAKE THIS FIG
+p_little_r2 <- ggplot(p_lifetable_clone_inf, aes(x = Diet, y = r_mx)) +
+  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
+  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_little_r2
+
+ggsave("figures/PastLittleR_DietxClone.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+## Total Fecundity ----------------------------------------------------------------------
+
+
+### Total Fecundity by treatment for Metsch experiment
+
+m_data_fecund <- m_data %>% 
+  filter(!is.na(Total.Babies) & lifespan.days > 11) %>%  # first babies observed on day 11
+  mutate(Parasite_Treatment = factor(if_else(Parasites == "Metsch", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+hist(m_data$Total.Babies) 
+
+
+
+#mfecundmod <- glmmTMB(Total.Babies ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block) + (1|Unique.code), family = poisson, data = m_data_fecund)  # overdispersed unless include unique code random effect
+#mfecundmod <- glmmTMB(Total.Babies ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), family = nbinom2(), data = m_data_fecund)  #higher AIC than quasipoisson, still had overdispersion
+mfecundmod <- glmmTMB(Total.Babies ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), family = nbinom1(), data = m_data_fecund)   # lower AIC than neg binomial and corrects for overdispersion, use this model
+summary(mfecundmod)
+
+# Table 1: Fungus Total Fecundity 
+Anova(mfecundmod) # model doesn't have enough power for the 3 way interaction
+AIC(mfecundmod)
+testDispersion(mfecundmod)
+testZeroInflation(mfecundmod)
+mfecund_simResid <- simulateResiduals(fittedModel = mfecundmod)
+plot(mfecund_simResid)
+
+# Appendix Table S6
+# contrasts among diets conditional on infection status and clone
+mfecundmod_contrasts <- emmeans(mfecundmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mfecundmod_contrasts
+
+# Appendix Table S4: Fungus Total Fecundity
+# contrasts among infection statuses conditional on clone and averaged across all diets
+mfecundmod_contrasts2 <- emmeans(mfecundmod, specs = pairwise ~ Infection | Clone, type = "response")
+mfecundmod_contrasts2
+
+
+
+# test of microcystin effect on offspring production
+m_data_fecund_toxintest <- filter(m_data_fecund, Diet == "M" | Diet == "M+")
+mfecundmod3 <- glmmTMB(Total.Babies ~ microcystin.avg + Infection + Clone + (1|Block), family = nbinom1(), data = m_data_fecund_toxintest)
+summary(mfecundmod3)
+Anova(mfecundmod3)   # technically rank deficient to handle interactions, so removed all interactions
+overdisp_fun(mfecundmod3)
+AIC(mfecundmod3)
+testDispersion(mfecundmod3)
+testZeroInflation(mfecundmod3)
+mfecund3_simResid <- simulateResiduals(fittedModel = mfecundmod3)
+plot(mfecund3_simResid)
+
+
+# Figure 3C: Fungus Total Fecundity
+m_fecund_tot <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge2(width =0.8), show.legend = F) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #scale_y_log10(labels = scales::comma) +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Metsch Expt") +
+  labs(x = "Infection Status", y = "Total Fecundity") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_tot
+ggsave("figures/MetschTotalFecundity_DietxClonexInfection.tiff", plot = m_fecund_tot, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+# Figure 5C: Fungus Total Fecundity Summary Fig
+parasite_colors <- c("orange", "blue")
+m_fecund_tot_summary <- ggplot(m_data_fecund, aes(x = Diet, y = Total.Babies)) +
+  geom_boxplot(aes(fill=Parasite_Treatment),position=position_dodge2(width =0.8), show.legend = F) +
+  geom_point(aes(color=Parasite_Treatment, shape = Parasite_Treatment), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.6, show.legend = F) +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = parasite_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #scale_y_log10(labels = scales::comma) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Diet", y = "Total Fecundity") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_tot_summary
+ggsave("figures/MetschTotalFecundity_DietxClonexParasiteTrmT.tiff", plot = m_fecund_tot_summary, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+# Figure of Total fecundity vs avg microcystin concentration by diet, clone, infection status (not in manuscript)
+mc_diets <- c("#006837", "#1D91C0")
+m_fecund_tot_micro <- ggplot(m_data_fecund_toxintest, aes(x = microcystin.avg+1, y = Total.Babies+1)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10() +
+  ylim(0.9, 30) + 
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_tot_micro
+ggsave("figures/MetschTotalFecundity_MicrocystinxClonexInfection.tiff", plot = m_fecund_tot_micro, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+### Total Fecundity by treatment for Pasteuria experiment
+
+p_data_fecund <- p_data %>% 
+  filter(!is.na(Total.Babies)  & lifespan.days > 11) %>%  # first babies were observed on day 11 
+  mutate(Parasite_Treatment = factor(if_else(Parasites == "Pasteuria", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+hist(p_data$Total.Babies) 
+
+#pfecundmod <- glmmTMB(Total.Babies ~ Diet * Infection * Clone + (1|Block) + (1|Unique.code), family = poisson, data = p_data_fecund)  # overdispersed unless include unique code random effect
+#pfecundmod <- glmmTMB(Total.Babies ~ Diet * Infection * Clone + (1|Block), family = nbinom1(), data = p_data_fecund)   # higher AIC than neg binomial
+pfecundmod <- glmmTMB(Total.Babies ~ Diet * Infection * Clone + (1|Block), family = nbinom2(), data = p_data_fecund)  #lower AIC than poisson and quasipoisson, use this model
+summary(pfecundmod)
+
+# Table 1: Bacterium Total Fecundity
+Anova(pfecundmod)        
+overdisp_fun(pfecundmod)
+AIC(pfecundmod)
+qqnorm(resid(pfecundmod))
+qqline(resid(pfecundmod))
+testDispersion(pfecundmod)
+testZeroInflation(pfecundmod)
+pfecund_simResid <- simulateResiduals(fittedModel = pfecundmod)
+plot(pfecund_simResid)
+
+# Appendix Table S7
+# contrasts among diets conditional on infection status and clone
+pfecundmod_contrasts <- emmeans(pfecundmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+pfecundmod_contrasts
+
+# Appendix Table S4: Bacterium Total Fecundity
+# contrasts among infection statuses conditional on clone and averaged across all diets
+pfecundmod_contrasts2 <- emmeans(pfecundmod, specs = pairwise ~ Infection | Clone, type = "response")
+pfecundmod_contrasts2
+
+
+
+# test of microcystin effect on offspring production
+p_data_fecund_toxintest <- filter(p_data_fecund, Diet == "M" | Diet == "M+")
+pfecundmod2 <- glmmTMB(Total.Babies ~ microcystin.avg * Infection * Clone + (1|Block), family = nbinom2(), data = p_data_fecund_toxintest)
+summary(pfecundmod2)
+Anova(pfecundmod2)          # microcystin concentration did not impact offspring production
+overdisp_fun(pfecundmod2)
+AIC(pfecundmod2)
+qqnorm(resid(pfecundmod2))
+qqline(resid(pfecundmod2))
+testDispersion(pfecundmod2)
+testZeroInflation(pfecundmod2)
+pfecund2_simResid <- simulateResiduals(fittedModel = pfecundmod2)
+plot(pfecund2_simResid)
+
+
+
+# Figure 3D: Fungus Total Fecundity
+p_fecund_tot <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge2(width=0.8)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #scale_y_log10(labels = scales::comma, breaks = c(1,3,10,30)) +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  labs(x = "Infection Status", y = "Total Fecundity") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_fecund_tot
+ggsave("figures/PastTotalFecundity_DietxClonexInfection.tiff", plot = p_fecund_tot, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+# Figure 5D: Bacterium Total Fecundity Summary Fig
+p_fecund_tot_summary <- ggplot(p_data_fecund, aes(x = Diet, y = Total.Babies)) +
+  geom_boxplot(aes(fill=Parasite_Treatment),position=position_dodge2(width =0.8), show.legend = T) +
+  geom_point(aes(color=Parasite_Treatment, shape = Parasite_Treatment), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.6, show.legend = T) +
+  facet_wrap(~Clone) +
+  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
+  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = parasite_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #scale_y_log10(labels = scales::comma) +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Diet", y = "Total Fecundity") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_tot_summary
+ggsave("figures/PastTotalFecundity_DietxClonexParasiteTrmT.tiff", plot = p_fecund_tot_summary, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+# Figure of Total fecundity vs avg microcystin concentration by diet, clone, infection status (not in manuscript)
+mc_diets <- c("#006837", "#1D91C0")
+p_fecund_tot_micro <- ggplot(p_data_fecund_toxintest, aes(x = microcystin.avg+1, y = Total.Babies+1)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_grid(Clone~Infection) +
+  scale_color_discrete(limits = c("M", "M+")) +
+  scale_color_manual(values = mc_diets) +
+  scale_y_log10(labels = scales::comma) +
+  scale_x_log10() +
+  #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  labs(x = "Average Microcystin Concentration (ug/L) log+1", y = "Total Fecundity (log + 1 scaled)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_tot_micro
+ggsave("figures/PastTotalFecundity_MicrocystinxClonexInfection.tiff", plot = p_fecund_tot_micro, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+  
+
+
+
+
+
+## Survival ----------------------------------------------------------------------
+
+
+### Metsch survival analyses
+
+m_data$Diet2 = recode_factor(m_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data$Diet))
+m_data$Diet2 <- factor(m_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+m_data <- mutate(m_data, Parasite_Treatment = factor(if_else(Parasites == "Metsch", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+
+length(m_data$SurvObj)
+table(m_data$Block)
+
+# Make a figure of survival curves for each clone and infection status
+m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
+
+m_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection, data = m_data, conf.type = "log-log")
+m_km.by.diet_infstatus
+
+summary(m_km.by.diet_infstatus)
+
+# Figure 3E: Fungus expt survival plot by diet, clone, and infection status
+m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+  #labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"), legend.position = "none")
+ggsave("figures/MetschSurvival.tiff", plot = m_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
+
+# Same figure as above with p-values
+m_survival_fig2 <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+  labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+
+
+
+# Appendix Table S8: Fungus experiment hazard ratios
+## Analysis with both clones
+m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
+cox.m_diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = m_data)
+summary(cox.m_diet_infstatus_clone)
+
+#Likelihood ratio test
+anova(cox.m_diet_infstatus_clone)
+cox.m_diet_infstatus_clone$n
+
+# Reported Walk Chisquare in Table S8
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.m_diet_infstatus_clone, c("Diet250:50 SM", "Diet2M", "Diet2M+"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("Diet250:50 SM"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("Diet2M"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("Diet2M+"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("InfectionExposed", "InfectionInfected"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("InfectionExposed"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("InfectionInfected"))
+linearHypothesis(cox.m_diet_infstatus_clone, c("CloneStandard "))
+
+
+# forest plot for presentation
+metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
+metsch_cox
+ggsave("figures/MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
+
+
+## Survival model with parasite treatment instead of infection status
+m_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = m_data, conf.type = "log-log")
+m_km.by.diet_parasitetrmt
+
+summary(m_km.by.diet_parasitetrmt)
+
+# Figure 5C: Fungus expt survival plot by diet, clone, and infection status
+m_survival_summary <- ggsurvplot_facet(m_km.by.diet_parasitetrmt, data = m_data, xlab = "Days", facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
+  #labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"), legend.position = "none")
+m_survival_summary
+ggsave("figures/MetschSurvival_ParasiteTrmt.tiff", plot = m_survival_summary, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
+
+
+
+
+# split data by clone to conduct separate survival analyses for each clone
+m_data_std <- m_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+m_data_mid <- m_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+
+
+# Mid37 survival in the Metsch experiment
+
+m_data_mid$SurvObj <- with(m_data_mid, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_mid <- survfit(SurvObj ~ Diet + Parasites, data = m_data_mid, conf.type = "log-log")
+km.by.diet_infstatus_mid <- survfit(SurvObj ~ Diet + Infection, data = m_data_mid, conf.type = "log-log")
+
+ggsurvplot(km.by.diet_parasite_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
+
+# Figure SX: Fungus expt survival plot by diet and parasite treatment for each clone
+m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+  #labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"), legend.position = "none")
+ggsave("figures/MetschSurvival.tiff", plot = m_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
+
+
+# Cox proportional hazards model
+cox.m_diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = m_data_mid)
+cox.m_diet_parasite_mid
+cox.m_diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = m_data_mid)
+cox.m_diet_infstatus_mid
+cox.m_diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = m_data_mid, singular.ok = T)   # Use this for the mid37 specific model
+summary(cox.m_diet_infstatus_mid2)
+Anova(cox.m_diet_infstatus_mid2)
+
+# forest plot
+ggforest(cox.m_diet_parasite_mid, data = m_data_mid)
+ggforest(cox.m_diet_infstatus_mid, data = m_data_mid)
+ggforest(cox.m_diet_infstatus_mid2, data = m_data_mid)  # use this for the mid37 specific model
+
+
+
+
+# Standard survival in the Metsch experiment 
+
+m_data_std$SurvObj <- with(m_data_std, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_std <- survfit(SurvObj ~ Diet, data = m_data_std, conf.type = "log-log")
+km.by.diet_parasite_std <- survfit(SurvObj ~ Diet + Parasites, data = m_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std <- survfit(SurvObj ~ Diet + Infection, data = m_data_std, conf.type = "log-log")
+
+#pairwise survdiff
+res <- pairwise_survdiff(Surv(lifespan.days, Status) ~ Diet + Infection,
+                         data = m_data_std)
+res
+
+ggsurvplot(km.by.diet_std, data = m_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_parasite_std, data = m_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std, data = m_data_std, pval = TRUE, xlab = "Days")
+
+
+
+
+# Cox proportional hazards model
+cox.m_diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = m_data_std)
+cox.m_diet_parasite_std
+cox.m_diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = m_data_std)
+summary(cox.m_diet_infstatus_std)
+cox.m_diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = m_data_std)   # Use this for the standard specific model
+summary(cox.m_diet_infstatus_std2)
+
+
+
+# forest plot
+ggforest(cox.m_diet_parasite_std, data = m_data_std)
+ggforest(cox.m_diet_infstatus_std, data = m_data_std)
+ggforest(cox.m_diet_infstatus_std2, data = m_data_std)  # Use this for the standard specific model
+
+
+
+
+
+
+
+
+
+
+### Pasteuria survival analyses
+
+
+p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(p_data$Diet2))
+p_data$Diet2 <- factor(p_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+p_data <- mutate(p_data, Parasite_Treatment = factor(if_else(Parasites == "Pasteuria", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+
+table(p_data$Parasites)
+
+# Make a figure of survial curves for each clone and infection status
+p_data$SurvObj <- with(p_data, Surv(lifespan.days, Status))
+
+p_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection + Clone, data = p_data, conf.type = "log-log")
+p_km.by.diet_infstatus
+
+# Figure 3F: Bacterium expt survival plot by diet, clone, and infection status
+p_survival_fig <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+  labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_survival_fig
+ggsave("figures/PasteuriaSurvival.tiff", plot = p_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
+
+# same figure as above with p-values
+p_survival_fig2 <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_data, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors) +
+  labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+
+
+# Appendix Table S8: Fungus experiment hazard ratios
+## Analysis with both clones
+cox.diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = p_data)
+summary(cox.diet_infstatus_clone)
+
+
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.diet_infstatus_clone, c("Diet250:50 SM", "Diet2M", "Diet2M+"))
+linearHypothesis(cox.diet_infstatus_clone, c("Diet250:50 SM"))
+linearHypothesis(cox.diet_infstatus_clone, c("Diet2M"))
+linearHypothesis(cox.diet_infstatus_clone, c("Diet2M+"))
+linearHypothesis(cox.diet_infstatus_clone, c("InfectionExposed", "InfectionInfected"))
+linearHypothesis(cox.diet_infstatus_clone, c("InfectionExposed"))
+linearHypothesis(cox.diet_infstatus_clone, c("InfectionInfected"))
+linearHypothesis(cox.diet_infstatus_clone, c("CloneStandard "))
+
+#Likelihood ratio test
+anova(cox.diet_infstatus_clone)
+
+# forest plot for presentation
+past_cox <- ggforest(cox.diet_infstatus_clone, data = p_data, cpositions = c(0.02, 0.15, 0.35))
+past_cox
+ggsave("figures/PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
+
+# NOTE: the forest plot has a problem plotting the reference if it starts with the same letter as another factor in the same variable (e.g. S and SM), but the analysis runs correctly. I have fixed it by changing the name of the SM diet to 50:50 SM.
+
+
+
+
+## survival model for diet by parasite treatment
+p_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = p_data, conf.type = "log-log")
+p_km.by.diet_parasitetrmt
+
+summary(m_km.by.diet_parasitetrmt)
+
+# Figure 5D: Bacterium expt survival plot by diet, clone, and infection status
+p_survival_summary <- ggsurvplot_facet(p_km.by.diet_parasitetrmt, data = p_data, xlab = "Days", facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
+  #labs(color = "Diet") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"), legend.position = "none")
+p_survival_summary
+ggsave("figures/PastSurvival_ParasiteTrmt.tiff", plot = p_survival_summary, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
+
+
+
+
+
+
+
+# split data by clone to run separate survival analyses for each clone
+p_data_std <- p_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+p_data_mid <- p_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+
+
+
+# Standard survival in the Pasteuria experiment
+  
+# Kaplan-Meier models estimate the survival probability and the long-rank test. 
+
+
+p_data_std$SurvObj <- with(p_data_std, Surv(lifespan.days, Status))
+
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_std <- survfit(SurvObj ~ Diet + Parasites, data = p_data_std, conf.type = "log-log")
+km.by.diet_parasite_std
+km.by.diet_infstatus_std <- survfit(SurvObj ~ Diet + Infection, data = p_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std
+km.by.diet_infstatus_std2 <- survfit(SurvObj ~ Diet2 + Infection, data = p_data_std, conf.type = "log-log")
+km.by.diet_infstatus_std2
+
+ggsurvplot(km.by.diet_parasite_std, data = p_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std, data = p_data_std, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_std2, data = p_data_std, pval = TRUE, xlab = "Days")
+
+
+# Cox proportional hazards model calculates the risk of death and respective hazard ratios (HR). HR < 1 indicates an increased risk of death, and HR < 1 indicates a decreased risk of death.
+
+
+
+# Cox proportional hazards model
+cox.diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = p_data_std)
+cox.diet_parasite_std
+cox.diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = p_data_std)
+summary(cox.diet_infstatus_std)
+cox.diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_std)  ## Use this one for the Standard specific results
+summary(cox.diet_infstatus_std2)
+
+cox.diet_treatments_std <- coxph(SurvObj ~ Treatment_Combo, data = p_data_std)
+summary(cox.diet_treatments_std)   # model doesn't work well probably because there is low sample size in some treatment combos, and all animals have the same outcome for S inf
+
+
+# forest plot
+ggforest(cox.diet_parasite_std, data = p_data_std)
+ggforest(cox.diet_infstatus_std, data = p_data_std)
+ggforest(cox.diet_infstatus_std2, data = p_data_std)  # Use this one for the Standard specific results
+ggforest(cox.diet_treatments_std, data = p_data_std)  # doesn't plot result
+
+
+
+
+# Mid37 survival in the Pasteuria experiment
+  
+p_data_mid$SurvObj <- with(p_data_mid, Surv(lifespan.days, Status))
+
+# Kaplan-Meier estimator with "log-log" confidence interval
+km.by.diet_parasite_mid <- survfit(SurvObj ~ Diet + Parasites, data = p_data_mid, conf.type = "log-log")
+km.by.diet_infstatus_mid <- survfit(SurvObj ~ Diet + Infection, data = p_data_mid, conf.type = "log-log")
+
+ggsurvplot(km.by.diet_parasite_mid, data = p_data_mid, pval = TRUE, xlab = "Days")
+ggsurvplot(km.by.diet_infstatus_mid, data = p_data_mid, pval = TRUE, xlab = "Days")
+
+
+
+# Cox proportional hazards model
+cox.diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = p_data_mid)
+cox.diet_parasite_mid
+cox.diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = p_data_mid)
+cox.diet_infstatus_mid
+cox.diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_mid)  # Use this one for the Mid37 specific results
+summary(cox.diet_infstatus_mid2)
+
+# forest plot
+ggforest(cox.diet_parasite_mid, data = p_data_mid)
+ggforest(cox.diet_infstatus_mid, data = p_data_mid)
+ggforest(cox.diet_infstatus_mid2, data = p_data_mid)  # Use this one for the Mid37 specific results
+
+
+# May need to make a treatment category for Diet x parasite or Diet x Infection Status to be able to see the interaction between the treatments more clearly. Including an interaction term in the Cox model doesn't seem to be working when I try that...
+
+# Interestingly, pasteuria exposed animals suffered more mortality than then infected animals in Mid37s.
+
+
+# Figure 3
+Figure3 <- ggarrange(m_little_r, p_little_r, m_fecund_tot, p_fecund_tot, m_survival_fig, p_survival_fig, labels = "auto",
+                     ncol = 2, nrow = 3, heights = c(3.2,3,3), legend = "right", common.legend = T)
+Figure3
+ggsave("figures/manuscript/Fig3_LittleR_Fecundity_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 9, units = "in", compression="lzw")
+widths = c(3.3,4)
+
+
+# Figure 5: Summary figure
+Figure5 <- ggarrange(m_fecund_tot_summary, p_fecund_tot_summary, m_survival_summary, p_survival_summary, labels = "auto",
+                     ncol = 2, nrow = 2, heights = c(3.2,3,3), legend = "right", common.legend = T)
+Figure5
+ggsave("figures/manuscript/Fig5_Summary_Fecundity_Survival.tiff", plot = Figure5, dpi = 600, width = 8.5, height = 7, units = "in", compression="lzw")
+widths = c(3.3,4)
+
+
+
+### Lifespan figures [NOT CLEANED YET]
+
+# Metsch lifespan
+
+
+m_data_lifespan <- m_data %>% filter(Include_Lifespan == "Y")
+hist(m_data_lifespan$lifespan.days)
+
+
+mlifemod <- lmer(lifespan.days ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), data = m_data_lifespan)  # model did not have enough power to include the three-way interaction
+mlifemod <- glmmTMB(lifespan.days ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block) + (1|Unique.code), family = poisson(), data = m_data_lifespan)
+summary(mlifemod)
+Anova(mlifemod)   # use this for the manuscript
+AIC(mlifemod)
+plot(mlifemod)
+qqnorm(resid(mlifemod))  # looks terrible
+qqline(resid(mlifemod))
+shapiro.test(resid(mlifemod)) # very sig
+leveneTest(lifespan.days ~ Diet * Infection * Clone, data = m_data_lifespan)  # very sig
+check_model(mlifemod)
+testDispersion(mlifemod)
+testZeroInflation(mlifemod)
+mlife_simResid <- simulateResiduals(fittedModel = mlifemod)
+plot(mlife_simResid)
+
+
+mlifemod_contrasts <- emmeans(mlifemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mlifemod_contrasts
+
+
+mlifemod_contrasts2 <- emmeans(mlifemod, specs = pairwise ~ Infection | Clone, type = "response")
+mlifemod_contrasts2
+
+
+mlifemod_contrasts3 <- emmeans(mlifemod, specs = pairwise ~ Diet, type = "response")
+mlifemod_contrasts3
+
+
+
+# figure for presentation
+m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Parasite Exposure", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_lifespan
+
+ggsave("figures/MetschLifespan_DietxClonexInfection.tiff", plot = m_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+# does fecundity data explain differences in lifespan?
+m_fecund_lifespan <- ggplot(m_data_lifespan, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_lifespan
+
+# same plot as above but only for S treatment
+m_data_lifespan_S <- filter(m_data_lifespan, Diet == "S" | Diet == "SM")
+m_fecund_lifespan_S <- ggplot(m_data_lifespan_S, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+m_fecund_lifespan_S
+
+
+
+
+
+
+
+
+# Pasteuria lifespan
+
+p_data_lifespan <- p_data %>% filter(Include_Lifespan == "Y")
+hist(p_data_lifespan$lifespan.days)
+
+
+plifemod <- lmer(lifespan.days ~ Diet * Infection * Clone +(1|Block), data = p_data_lifespan)
+#plifemod <- glmmTMB(lifespan.days ~ Diet * Infection * Clone +(1|Block), family = nbinom1(), data = p_data_lifespan)
+summary(plifemod)
+Anova(plifemod)   # use this for the manuscript
+AIC(plifemod)
+plot(plifemod)
+qqnorm(resid(plifemod))  # looks ok
+qqline(resid(plifemod))
+shapiro.test(resid(plifemod)) # not sig
+leveneTest(lifespan.days ~ Diet * Infection * Clone, data = p_data_lifespan)  # not sig
+check_model(plifemod)
+#testDispersion(plifemod)
+#testZeroInflation(plifemod)
+#plife_simResid <- simulateResiduals(fittedModel = plifemod)
+#plot(plife_simResid)
+
+
+plifemod_contrasts <- emmeans(plifemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+plifemod_contrasts
+
+
+plifemod_contrasts2 <- emmeans(plifemod, specs = pairwise ~ Infection | Clone, type = "response")
+plifemod_contrasts2
+
+
+plifemod_contrasts3 <- emmeans(plifemod, specs = pairwise ~ Diet, type = "response")
+plifemod_contrasts3
+
+
+# figure for presentation
+p_lifespan <- ggplot(p_data_lifespan, aes(x = Infection, y = Lifespan)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Bacteria Experiment") +
+  labs(x = "Parasite Exposure", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_lifespan
+
+ggsave("figures/PastLifespan_DietxClonexInfection.tiff", plot = p_lifespan, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+# does fecundity data explain differences in lifespan?
+p_fecund_lifespan <- ggplot(p_data_lifespan, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_lifespan
+
+# same plot as above but only for S treatment
+p_data_lifespan_S <- filter(p_data_lifespan, Diet == "S")
+p_fecund_lifespan_S <- ggplot(p_data_lifespan_S, aes(x = Total.Babies+1, y = Lifespan)) +
+  geom_point(aes(color=Diet), size=2, alpha = 0.6) +
+  geom_smooth(method = "lm", color = "black") +
+  facet_wrap(Clone~Infection) +
+  scale_color_manual(values = diet_colors) +
+  scale_x_log10() +
+  labs(x = "Total Fecundity", y = "Lifespan") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=9, color="black"))
+p_fecund_lifespan_S
+
+
+
+
+
+
+
+
+
+
+
+## Body size during exposure and Growth Rate ----------------------------------------------------
+
+### Body size during exposure ------------------------------------------------------
+
+
+## Body size differences during Week 1 (parasite exposure) for Fungus expt
+
+
+m_data_size <- m_data %>% filter(!is.na(Length_Week1))
+hist(m_data_size$Length_Week1) # wow normal data!!
+
+msizemod <- lmer(log(Length_Week1) ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone  + Infection:Clone +(1|Block), data = m_data_size)
+# Model had problems when all interactions and random effect included, but none of the interactions are significant
+# so I removed the three-way interaction and kept the random effect
+summary(msizemod)
+
+# Appendix Table S2
+Anova(msizemod)   # Use this model for the manuscript
+AIC(msizemod)
+plot(msizemod)
+qqnorm(resid(msizemod))        # looks great
+qqline(resid(msizemod))
+shapiro.test(resid(msizemod)) 
+
+msizemod_contrasts <- emmeans(msizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+msizemod_contrasts
+
+msizemod_contrasts2 <- emmeans(msizemod, specs = pairwise ~ Infection | Clone, type = "response")
+msizemod_contrasts2
+
+# difference in size between clones
+msizemod_contrasts3 <- emmeans(msizemod, specs = pairwise ~ Clone, type = "response")
+msizemod_contrasts3
+
+
+
+# Figure S4A: Fungus Expt Body Size during inoculation period
+m_size <- ggplot(m_data_size, aes(x = Infection, y = Length_Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Body Size During Inoculation Period ("* mu* "m)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_size
+ggsave("figures/MetschBodySize_DietxClonexInfection.tiff", plot = m_size, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+## manipulated data to get body size over time by week
+m_longdata_size_sum <- m_longdata %>%
+  filter(!is.na(WeeklyLength)) %>%
+  group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(WeeklyLength),
+                   size.mean = mean(WeeklyLength, na.rm = T),
+                   size.sd   = sd(WeeklyLength, na.rm = T),
+                   size.se   = size.sd / sqrt(N)) %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+m_longdata_size_sum$Week <- as.factor(m_longdata_size_sum$Week)
+m_longdata_size_sum$Diet <- factor(m_longdata_size_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+
+# Figure 4A: Fungus expt Body size by week
+plot_byWeek_size_metsch <- ggplot(data = m_longdata_size_sum, aes(x = Week, y = size.mean, group = Treatment, shape = Diet)) +
+  geom_errorbar(aes(x=Week, ymin=size.mean-size.se, ymax=size.mean+size.se,color=Diet), width=0.3, show.legend = F) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1, show.legend = F) +
+  geom_point(aes(color=Diet), size=2.5, alpha = 0.8, show.legend = F) +
+  facet_grid(Clone~Infection) +
+  ylim(600, 2000) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = 600, ymax = 2000,
+           alpha = .2,fill = "gray") +
+  ggtitle("Fungus Experiment") +
+  labs(x = "Week of Experiment", y = bquote("Body Size ("* mu* "m)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+plot_byWeek_size_metsch
+ggsave(here("figures/MetschBodySize_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_size_metsch, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+
+
+
+
+
+
+## Body size differences during Week 1 (parasite exposure) for Bacterium expt
+
+
+p_data_size <- p_data %>% filter(!is.na(Length_Week1), Length_Week1 > 765)  # remove 3 low outliers that made the residual distribution not normal and were much lower than all other animals
+hist(p_data_size$Length_Week1) # wow normal data!!
+
+library(EnvStats)
+outlier_test_bodysize <- rosnerTest(p_data_size$Length_Week1, k = 10)
+outlier_test_bodysize$all.stats
+
+
+psizemod <- lmer(log(Length_Week1) ~ Diet * Infection * Clone +(1|Block), data = p_data_size)
+summary(psizemod)
+
+# Appendix Table S2
+Anova(psizemod)   # Use this model for the manuscript
+AIC(psizemod)
+plot(psizemod)
+qqnorm(resid(psizemod))   # looks ok
+qqline(resid(psizemod))
+shapiro.test(resid(psizemod)) # not sig, but 0.079
+
+
+psizemod_contrasts <- emmeans(psizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+psizemod_contrasts
+
+
+psizemod_contrasts2 <- emmeans(psizemod, specs = pairwise ~ Infection | Clone, type = "response")
+psizemod_contrasts2
+
+# difference in size between clones
+psizemod_contrasts3 <- emmeans(psizemod, specs = pairwise ~ Clone, type = "response")
+psizemod_contrasts3
+
+psizemod_contrasts4 <- emmeans(psizemod, specs = pairwise ~ Diet, type = "response")
+psizemod_contrasts4
+
+
+# Figure S4B: Bacterium Expt Body Size during inoculation period
+p_size <- ggplot(p_data_size, aes(x = Infection, y = Length_Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Infection Status", y = bquote("Body Size During Inoculation Period ("* mu* "m)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_size
+ggsave("figures/PastBodySize_DietxClonexInfection.tiff", plot = p_size, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+## manipulated data to get body size over time by week
+p_longdata_size_sum <- p_longdata %>%
+  filter(!is.na(WeeklyLength)) %>%
+  group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(WeeklyLength),
+                   size.mean = mean(WeeklyLength, na.rm = T),
+                   size.sd   = sd(WeeklyLength, na.rm = T),
+                   size.se   = size.sd / sqrt(N)) %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+p_longdata_size_sum$Week <- as.factor(p_longdata_size_sum$Week)
+p_longdata_size_sum$Diet <- factor(p_longdata_size_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+
+# Figure 4B: Bacterium expt Body size by week
+plot_byWeek_size_past <- ggplot(data = p_longdata_size_sum, aes(x = Week, y = size.mean, group = Treatment, shape = Diet)) +
+  geom_errorbar(aes(x=Week, ymin=size.mean-size.se, ymax=size.mean+size.se,color=Diet), width=0.3) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1) +
+  geom_point(aes(color=Diet), size=2.5, alpha = 0.8) +
+  facet_grid(Clone~Infection) +
+  ylim(600, 2000) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = 600, ymax = 2000,
+           alpha = .2,fill = "gray") +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Week of Experiment", y = bquote("Body Size ("* mu* "m)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+plot_byWeek_size_past
+ggsave(here("figures/PastBodySize_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_size_past, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+
+
+
+
+
+# Figure 4 
+Figure4 <- ggarrange(plot_byWeek_size_metsch, plot_byWeek_size_past, labels = "auto", ncol = 2, nrow = 1, widths = c(3.3,4))
+Figure4
+ggsave("figures/manuscript/Fig4_BodySize_byWeek.tiff", plot = Figure4, dpi = 600, width = 8.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+
+### Growth rate -----------------------------------------------------------------
+
+### Growth rate between week 1 and 2 for Fungus experiment
+
+m_data_growth <- m_data %>% filter(!is.na(GrowthRate))
+hist(m_data_growth$GrowthRate) # wow normal data!! 
+
+mgrowthmod <- lmer(GrowthRate ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone  + Infection:Clone +(1|Block), data = m_data_growth)
+# Model had problems when all interactions and random effect included, but none of the interactions are significant
+# so I removed the three-way interaction and kept the random effect
+summary(mgrowthmod)
+
+# Appendix Table S2
+Anova(mgrowthmod)   # Use this model for the manuscript
+AIC(mgrowthmod)
+plot(mgrowthmod)
+qqnorm(resid(mgrowthmod))
+qqline(resid(mgrowthmod))
+shapiro.test(resid(mgrowthmod)) # not sig, but 0.074
+
+mgrowthmod_contrasts <- emmeans(mgrowthmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mgrowthmod_contrasts
+
+# Appendix Table S4: Fungus Expt body size growth rate
+mgrowthmod_contrasts2 <- emmeans(mgrowthmod, specs = pairwise ~ Infection | Clone, type = "response")
+mgrowthmod_contrasts2
+
+# check if there is a sig interaction for infection x clone when only including uninfected and exposed animals
+m_data_growth_noInf <- filter(m_data_growth, Infection != "Infected")
+mgrowthmod2 <- lmer(GrowthRate ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone  + Infection:Clone +(1|Block), data = m_data_growth_noInf)
+summary(mgrowthmod2)
+Anova(mgrowthmod2)
+AIC(mgrowthmod2)
+plot(mgrowthmod2)
+qqnorm(resid(mgrowthmod2))
+qqline(resid(mgrowthmod2))
+shapiro.test(resid(mgrowthmod2))  # significant, not the best fit
+
+mgrowthmod_contrasts3 <- emmeans(mgrowthmod2, specs = pairwise ~ Infection | Clone, type = "response")
+mgrowthmod_contrasts3
+
+
+
+# Figure S4C: Growth rate between week 1 and 2 for Fungus experiment
+m_growth <- ggplot(m_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Fungus Experiment") +
+  labs(x = "Infection Status", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_growth
+ggsave("figures/MetschGrowthRate_DietxClonexInfection.tiff", plot = m_growth, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+### Growth rate between week 1 and 2 for Bacterium experiment
+
+p_data_growth <- p_data %>% filter(!is.na(GrowthRate))
+hist(p_data_growth$GrowthRate)  # wow normal data!! 
+
+pgrowthmod <- lmer(GrowthRate ~ Diet * Infection * Clone + (1|Block), data = p_data_growth)
+summary(pgrowthmod)   # Block is singular
+
+# Appendix Table S2
+Anova(pgrowthmod)
+AIC(pgrowthmod)
+plot(pgrowthmod)
+qqnorm(resid(pgrowthmod))   # looks good
+qqline(resid(pgrowthmod))
+shapiro.test(resid(pgrowthmod)) # not sig
+
+
+pgrowthmod_contrasts <- emmeans(pgrowthmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+pgrowthmod_contrasts
+
+# Appendix Table S4
+pgrowthmod_contrasts2 <- emmeans(pgrowthmod, specs = pairwise ~ Infection | Clone, type = "response")
+pgrowthmod_contrasts2
+
+pgrowthmod_contrasts3 <- emmeans(pgrowthmod, specs = pairwise ~ Clone, type = "response")
+pgrowthmod_contrasts3
+
+
+
+# Figure S4C: Growth rate between week 1 and 2 for Bacterium experiment
+p_growth <- ggplot(p_data_growth, aes(x = Infection, y = GrowthRate)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  #ggtitle("Bacteria Experiment") +
+  labs(x = "Infection Status", y = bquote("Body Size Growth Rate ("* mu* "m" ~day^-1*")")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_growth
+ggsave("figures/PastGrowthRate_DietxClonexInfection.tiff", plot = p_growth, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
+
+
+
+
+
+# Figure S4
+FigureS4 <- ggarrange(m_size, p_size, m_growth, p_growth, labels = "auto", ncol = 2, nrow = 2, widths = c(3.3,4))
+FigureS4
+ggsave("figures/manuscript/FigS4_GrowthRate_BodySize.tiff", plot = FigureS4, dpi = 600, width = 8.5, height = 8, units = "in", compression="lzw")
+
+
+
+
+# Metabolic Rate -------------------------------------------------------------------
+
+
+
+
+
+# Analysis of microcystin-LR  concentrations among treatments and between experiments --------------------
+
+
+# add analyses here at the end of the main text results
 
 
 
