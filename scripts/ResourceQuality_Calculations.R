@@ -292,10 +292,10 @@ spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Die
   facet_wrap(~Day, labeller = label_both) +
   scale_fill_manual(values = diet_colors_micro) +
   #ggtitle("Microcystin spiked concentrations, Day 5 and 8") +
-  labs(x = "Diet", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
+  labs(x = "Diet", y = bquote("log average microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
 spike_plot
-ggsave(here("figures/FigS2_Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+ggsave(here("figures/manuscript/FigS2_Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 # remove outliers for analysis of differences during toxin spike (improve normality of residuals)
 super_spike2 <- filter(super_spike, Microcystin.conc < 290)
@@ -331,7 +331,7 @@ microcystin_plot <- ggplot(microcystin_exposure, aes(x = Parasite, y = Microcyst
   scale_fill_manual(values = diet_colors) +
   scale_shape_manual(values=c(15,16,17,18)) +
   ggtitle("Microcystin concentrations during exposure, Day 8") +
-  labs(x = "Parasite Treatments", y = "log Microcystin concentation (ug/L)") +
+  labs(x = "Parasite Treatments", y = "log microcystin concentation (ug/L)") +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 microcystin_plot
@@ -346,7 +346,7 @@ microcystin_exposure.sum <- microcystin_exposure %>%
                    microcystin.sd   = sd(Microcystin.conc, na.rm = T),
                    microcystin.se   = microcystin.sd / sqrt(N))
 microcystin_exposure.sum$Exposure <- as.factor(dplyr::recode(microcystin_exposure.sum$Parasites, Metsch = "Parasite", Pasteuria = "Parasite"))
-microcystin_exposure.sum$Experiment <- as.factor(dplyr::recode(microcystin_exposure.sum$Experiment, Metsch = "Fungus", Pasteuria = "Bacteria"))
+microcystin_exposure.sum$Experiment <- as.factor(dplyr::recode(microcystin_exposure.sum$Experiment, Metsch = "Fungus", Pasteuria = "Bacterium"))
 microcystin_exposure.sum
 write.csv(microcystin_exposure.sum, "tables/MicrocystinConc_DuringExposure.csv", quote = F, row.names=FALSE)
 microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero (to be able to log transform the y axis in the figure below)
@@ -362,13 +362,13 @@ microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Exposure, y = micr
   scale_color_manual(values = diet_colors) +
   #scale_shape_manual(values=c(15,16,17,18)) +
   #ggtitle("Microcystin concentrations during exposure, Day 8") +
-  labs(x = "Parasite Treatments", y = bquote("log Average Microcystin concentation (" ~mu *"g/L)")) +
+  labs(x = "Parasite Treatments", y = bquote("log average microcystin concentation (" ~mu *"g/L)")) +
   scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 microcystin_plot2
-ggsave(here("figures/FigS1_Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
+ggsave(here("figures/manuscript/FigS1_Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
 
 
 hist(microcystin_exposure$Microcystin.conc)
@@ -382,15 +382,6 @@ plot(m_conc_mod2)
 qqnorm(resid(m_conc_mod2))   # falls off the bottom a bit
 qqline(resid(m_conc_mod2))
 shapiro.test(resid(m_conc_mod2))
-library(performance)
-check_model(m_conc_mod2)  # normality of residuals could be better...but otherwise not too bad
-
-# don't use this model
-#m_conc_mod2 <- glmmTMB(Microcystin.conc ~ Experiment * Diet, family = Gamma(), data = microcystin_exposure) # this also has problems
-testDispersion(m_conc_mod2)
-testZeroInflation(m_conc_mod2)
-micro_simResid <- simulateResiduals(fittedModel = m_conc_mod2)
-plot(micro_simResid)  # not a perfect fit, but better than the linear model...
 
 
 treatment_difs2 <- emmeans(m_conc_mod2, pairwise ~ Diet | Experiment, type = "response")
