@@ -1,17 +1,16 @@
 # Resource Quality Experiment Analysis
 
 # Code Written by: Michelle L Fearon
-# Last updated: 4/24/2024
+# Last updated: 7/4/2024
 # Last update by: Michelle L Fearon
 
 
 # Terminology Used
 
-      # Bacterium = Pasteruia ramosa
-      # Fungus = Metschnikowia bicuspidata
-
-
-
+      # Bacterium = Pasteuria ramosa
+            # data sets for Pasteuria (Bacteria) are labeled with a "p"
+      # Fungus = Metschnikowia bicuspidata (Metsch)
+            # data sets for Metsch (Fungus) are labeled with a "m"
 
 
 
@@ -1842,30 +1841,21 @@ widths = c(3.3,4)
 
 
 
-### Lifespan figures [NOT CLEANED YET]
+### Lifespan [ANALYESES NOT INCLUDED IN MANUSCRIUPT DUE TO POOR MODEL FIT]
 
 # Metsch lifespan
-
-
 m_data_lifespan <- m_data %>% filter(Include_Lifespan == "Y")
 hist(m_data_lifespan$lifespan.days)
 
 
-mlifemod <- lmer(lifespan.days ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), data = m_data_lifespan)  # model did not have enough power to include the three-way interaction
 mlifemod <- glmmTMB(lifespan.days ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block) + (1|Unique.code), family = poisson(), data = m_data_lifespan)
-summary(mlifemod)
-Anova(mlifemod)   # use this for the manuscript
+summary(mlifemod) # model did not have enough power to include the three-way interaction
+Anova(mlifemod)
 AIC(mlifemod)
-plot(mlifemod)
-qqnorm(resid(mlifemod))  # looks terrible
-qqline(resid(mlifemod))
-shapiro.test(resid(mlifemod)) # very sig
-leveneTest(lifespan.days ~ Diet * Infection * Clone, data = m_data_lifespan)  # very sig
-check_model(mlifemod)
 testDispersion(mlifemod)
 testZeroInflation(mlifemod)
 mlife_simResid <- simulateResiduals(fittedModel = mlifemod)
-plot(mlife_simResid)
+plot(mlife_simResid)  # this model has some problems. Not a good fit. Use the survival analyses instead.
 
 
 mlifemod_contrasts <- emmeans(mlifemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
@@ -1913,7 +1903,7 @@ m_fecund_lifespan <- ggplot(m_data_lifespan, aes(x = Total.Babies+1, y = Lifespa
         axis.title.x = element_text(size=9, color="black"))
 m_fecund_lifespan
 
-# same plot as above but only for S treatment
+# same plot as above but only for S  and SM treatments
 m_data_lifespan_S <- filter(m_data_lifespan, Diet == "S" | Diet == "SM")
 m_fecund_lifespan_S <- ggplot(m_data_lifespan_S, aes(x = Total.Babies+1, y = Lifespan)) +
   geom_point(aes(color=Diet), size=2, alpha = 0.6) +
@@ -1940,21 +1930,14 @@ p_data_lifespan <- p_data %>% filter(Include_Lifespan == "Y")
 hist(p_data_lifespan$lifespan.days)
 
 
-plifemod <- lmer(lifespan.days ~ Diet * Infection * Clone +(1|Block), data = p_data_lifespan)
-#plifemod <- glmmTMB(lifespan.days ~ Diet * Infection * Clone +(1|Block), family = nbinom1(), data = p_data_lifespan)
+plifemod <- glmmTMB(lifespan.days ~ Diet * Infection * Clone +(1|Block), family = nbinom1(), data = p_data_lifespan)
 summary(plifemod)
 Anova(plifemod)   # use this for the manuscript
 AIC(plifemod)
-plot(plifemod)
-qqnorm(resid(plifemod))  # looks ok
-qqline(resid(plifemod))
-shapiro.test(resid(plifemod)) # not sig
-leveneTest(lifespan.days ~ Diet * Infection * Clone, data = p_data_lifespan)  # not sig
-check_model(plifemod)
-#testDispersion(plifemod)
-#testZeroInflation(plifemod)
-#plife_simResid <- simulateResiduals(fittedModel = plifemod)
-#plot(plife_simResid)
+testDispersion(plifemod)
+testZeroInflation(plifemod)
+plife_simResid <- simulateResiduals(fittedModel = plifemod)
+plot(plife_simResid) # this model has some problems. Not a good fit. Use the survival analyses instead.
 
 
 plifemod_contrasts <- emmeans(plifemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
@@ -2022,18 +2005,12 @@ p_fecund_lifespan_S
 
 
 
-
-
-
-
 ## Body size during exposure and Growth Rate ----------------------------------------------------
 
 ### Body size during exposure ------------------------------------------------------
 
 
 ## Body size differences during Week 1 (parasite exposure) for Fungus expt
-
-
 m_data_size <- m_data %>% filter(!is.na(Length_Week1))
 hist(m_data_size$Length_Week1) # wow normal data!!
 
@@ -2344,6 +2321,215 @@ ggsave("figures/manuscript/FigS4_GrowthRate_BodySize.tiff", plot = FigureS4, dpi
 
 
 # Metabolic Rate -------------------------------------------------------------------
+
+
+## Metsch metabolic rate analyses
+m_data_resp <- m_data %>% dplyr::filter(!is.na(metabolic.rate.Week1), metabolic.rate.Week1 < 0.006)  # remove two outliers that cause extra right skew in the data, removing improves qqplot fit and resid plot
+hist(as.numeric(m_data_resp$metabolic.rate.Week1)) # More right skewed than I would like
+range(m_data_resp$metabolic.rate.Week1)
+library(EnvStats)
+outlier_test_metabolic <- rosnerTest(m_data_resp$metabolic.rate.Week, k = 4)
+outlier_test_metabolic$all.stats
+
+
+# Metabolic rate during week 1 (exposure period) only
+mrespmod <- lmer(metabolic.rate.Week1 ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone +(1|Block), data = m_data_resp)
+summary(mrespmod)
+
+# Appendix Table S2
+Anova(mrespmod)     # use this for the manuscript
+AIC(mrespmod)
+plot(mrespmod)
+qqnorm(resid(mrespmod)) # looks pretty good
+qqline(resid(mrespmod))
+shapiro.test(resid(mrespmod))   # significant, p = 0.043, But doesn't look too severe from the qqnorm plots (see https://stats.stackexchange.com/questions/32957/testing-normality-assumptions-for-linear-mixed-models-and-mixed-repeated-glm-a)
+
+mrespmod_contrasts <- emmeans(mrespmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+mrespmod_contrasts
+
+# Appendix Table S4
+mrespmod_contrasts2 <- emmeans(mrespmod, specs = pairwise ~ Infection | Clone, type = "response")
+mrespmod_contrasts2
+
+mrespmod_contrasts3 <- emmeans(mrespmod, specs = pairwise ~ Clone, type = "response")
+mrespmod_contrasts3
+
+mrespmod_contrasts4 <- emmeans(mrespmod, specs = pairwise ~ Diet, type = "response")
+mrespmod_contrasts4
+
+
+
+
+# Figure S5A: Metabolic rate in week 1 for Fungus experiment
+m_resp_fig <- ggplot(m_data_resp, aes(x = Infection, y = metabolic.rate.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9), show.legend = F) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4, show.legend = F) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  labs(x = "Infection Status", y = bquote("Metabolic Rate (J/hr)")) +
+  ggtitle("Fungus Experiment") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+m_resp_fig
+ggsave("figures/MetschMetabolicRate_DietxClonexInfection_Week1.tiff", plot = m_resp_fig, dpi = 600, width = 5.25, height = 4, units = "in", compression="lzw")
+
+
+# Metabolic rate over whole experiment (time series)
+# Figure only, model did not fit well
+
+# Use long data set for time series data of metabolic rate
+m_longdata_resp <- m_longdata %>% dplyr::filter(!is.na(metabolic.rate))
+hist(as.numeric(m_longdata_resp$metabolic.rate)) # more normal than above, though a bit right skewed
+range(m_longdata_resp$metabolic.rate)
+
+
+m_longdata_resp$Week <- as.factor(m_longdata_resp$Week)
+m_longdata_resp$Diet <- factor(m_longdata_resp$Diet, levels = c("S", "SM", "M", "M+"))
+m_longdata_resp_sum <- m_longdata_resp %>%
+  ungroup() %>% dplyr::group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(metabolic.rate),
+                   resp.mean = mean(metabolic.rate, na.rm = T),
+                   resp.sd   = sd(metabolic.rate, na.rm = T),
+                   resp.se   = resp.sd / sqrt(N), .groups = "keep") %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+m_longdata_resp_sum$Week <- as.factor(m_longdata_resp_sum$Week)
+m_longdata_resp_sum$Diet <- factor(m_longdata_resp_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+
+# Figure S5C: Plot of metabolism over time by week of the Fungus experiment
+plot_byWeek_resp_metsch <- ggplot(data = m_longdata_resp_sum, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2, show.legend = F) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1, show.legend = F) +
+  geom_point(aes(color=Diet), size=2.5, alpha = 0.8, show.legend = F) +
+  facet_grid(Clone~Infection) +
+  ylim(-0.002, 0.01) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.01,
+           alpha = .2,fill = "gray") +
+  #ggtitle("Metsch Experiment Metabolic Rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+plot_byWeek_resp_metsch
+ggsave(here("figures/MetschMetabolism_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_resp_metsch, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+
+
+
+
+### Pasteuria metabolic rate analyses 
+
+p_data_resp <- p_data %>% dplyr::filter(!is.na(metabolic.rate.Week1))
+hist(as.numeric(p_data_resp$metabolic.rate.Week1)) # pretty close to normal, a tad right skewed
+range(p_data_resp$metabolic.rate.Week1)
+
+# Metabolic rate during week 1 (exposure period) only
+prespmod <- lmer(metabolic.rate.Week1 ~ Diet * Infection * Clone +(1|Block), data = p_data_resp)
+summary(prespmod)
+
+# Appendix Table S2
+Anova(prespmod)   # use this for the manuscript
+AIC(prespmod)
+plot(prespmod)
+qqnorm(resid(prespmod))  # looks good
+qqline(resid(prespmod))
+shapiro.test(resid(prespmod)) # not sig
+
+
+prespmod_contrasts <- emmeans(prespmod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
+prespmod_contrasts
+
+# Appendix Table S4
+prespmod_contrasts2 <- emmeans(prespmod, specs = pairwise ~ Infection | Clone, type = "response")
+prespmod_contrasts2
+
+prespmod_contrasts3 <- emmeans(prespmod, specs = pairwise ~ Diet, type = "response")
+prespmod_contrasts3
+
+
+
+
+
+# Figure S5B: Metabolic rate in week 1 for Bacterium experiment
+p_resp_fig <- ggplot(p_data_resp, aes(x = Infection, y = metabolic.rate.Week1)) +
+  geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
+  geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
+  facet_wrap(~Clone) +
+  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp", "Inf")) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Bacterium Experiment") +
+  labs(x = "Infection Status", y = bquote("Metabolic Rate (J/hr)")) +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+p_resp_fig
+ggsave("figures/PastMetabolicRate_DietxClonexInfection_Week1.tiff", plot = p_resp_fig, dpi = 600, width = 5.25, height = 4, units = "in", compression="lzw")
+
+
+# Metabolic rate over whole experiment (time series)
+# Figure only, model did not fit well
+
+# Use long data set for time series data of metabolic rate
+p_longdata_resp <- p_longdata %>% dplyr::filter(!is.na(metabolic.rate))
+hist(as.numeric(p_longdata_resp$metabolic.rate)) # a bit right skewed
+range(p_longdata_resp$metabolic.rate)
+
+
+p_longdata_resp_sum <- p_longdata_resp %>%
+  group_by(Diet, Infection, Clone, Week) %>%
+  dplyr::summarize(N  = length(metabolic.rate),
+                   resp.mean = mean(metabolic.rate, na.rm = T),
+                   resp.sd   = sd(metabolic.rate, na.rm = T),
+                   resp.se   = resp.sd / sqrt(N)) %>%
+  mutate(Treatment = paste0(Diet, "_", Infection, "_", Clone))
+p_longdata_resp_sum$Week <- as.factor(p_longdata_resp_sum$Week)
+p_longdata_resp_sum$Diet <- factor(p_longdata_resp_sum$Diet, levels = c("S", "SM", "M", "M+"))
+
+
+# Figure S5D: Plot of metabolism over time by week of the Bacterium experiment
+plot_byWeek_resp_past <- ggplot(data = p_longdata_resp_sum, aes(x = Week, y = resp.mean, group = Treatment, shape = Diet)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
+  geom_errorbar(aes(x=Week, ymin=resp.mean-resp.se, ymax=resp.mean+resp.se,color=Diet), width=0.2) + 
+  geom_line(aes(color=Diet, group = Treatment), linewidth=1) +
+  geom_point(aes(color=Diet), size=2.5, alpha = 0.8) +
+  facet_grid(Clone~Infection) +
+  ylim(-0.002, 0.01) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  annotate("rect", xmin = 0.9, xmax = 1.1, ymin = -0.001, ymax = 0.01,
+           alpha = .2,fill = "gray") +
+  #ggtitle("Past Experiment Metabolic Rate") +
+  labs(x = "Week of Experiment", y = "Metabolic Rate (J/hr)") +
+  theme_classic() + 
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+plot_byWeek_resp_past
+ggsave(here("figures/PastMetabolism_DietxCloneXInfection_byWeek.tiff"), plot = plot_byWeek_resp_past, dpi = 300, width = 7, height = 6, units = "in", compression="lzw")
+
+
+
+
+
+
+
+
+
+FigureS5 <- ggarrange(m_resp_fig, p_resp_fig, plot_byWeek_resp_metsch, plot_byWeek_resp_past, labels = "auto",
+                      ncol = 2, nrow = 2, widths = c(3.3,4))
+FigureS5
+ggsave("figures/manuscript/FigS5_MetabolicRate.tiff", plot = FigureS5, dpi = 600, width = 8.5, height = 7, units = "in", compression="lzw")
+
+
 
 
 
