@@ -41,19 +41,17 @@ library(here)
 # set the path to the script relative to the project root directory
 here::i_am("scripts/ResourceQuality_Analysis_cleanMLF.R")
 #setwd("/Users/duffymeg/Dropbox (University of Michigan)/Manuscripts/FearonResourceQuality/2024/resource-quality-expt-main")
-setwd("C:/Users/mlfearon/OneDrive - Umich/PROJECTS/MHMP Daphnia Duffy/Resource Quality/Data and Code/resource-quality-expt")
+
 
 # load Pasteuria data
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
 p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
 p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
-#p_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 # load Metsch data
 m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
 m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptWeek.csv"), stringsAsFactors = F)
 m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
-#m_lifetable_clone_inf <- read.csv(here("data/ResourceQuality_Metsch_LifeTable_clone_x_infstatus_Results.csv"), stringsAsFactors = F)
 
 
 # Reorder factors
@@ -1547,7 +1545,7 @@ linearHypothesis(cox.m_diet_infstatus_clone, c("InfectionInfected"))
 linearHypothesis(cox.m_diet_infstatus_clone, c("CloneStandard "))
 
 
-# forest plot for presentation
+# forest plot for fungus by diet inf status and clone
 metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
 metsch_cox
 ggsave("figures/MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
@@ -1706,10 +1704,10 @@ linearHypothesis(cox.diet_infstatus_clone, c("InfectionExposed"))
 linearHypothesis(cox.diet_infstatus_clone, c("InfectionInfected"))
 linearHypothesis(cox.diet_infstatus_clone, c("CloneStandard "))
 
-#Likelihood ratio test
+# Likelihood ratio test
 anova(cox.diet_infstatus_clone)
 
-# forest plot for presentation
+# forest plot for bacterium diet inf status and clone
 past_cox <- ggforest(cox.diet_infstatus_clone, data = p_data, cpositions = c(0.02, 0.15, 0.35))
 past_cox
 ggsave("figures/PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
@@ -1833,11 +1831,11 @@ widths = c(3.3,4)
 
 
 # Figure 5: Summary figure
-Figure5 <- ggarrange(m_fecund_tot_summary, p_fecund_tot_summary, m_survival_summary, p_survival_summary, labels = "auto",
-                     ncol = 2, nrow = 2, heights = c(3.2,3,3), legend = "right", common.legend = T)
+Figure5 <- ggarrange(m_fecund_tot_summary, p_fecund_tot_summary, labels = "auto",
+                     ncol = 2, nrow = 1, heights = c(3.2,3,3), legend = "right", common.legend = T)
 Figure5
-ggsave("figures/manuscript/Fig5_Summary_Fecundity_Survival.tiff", plot = Figure5, dpi = 600, width = 8.5, height = 7, units = "in", compression="lzw")
-widths = c(3.3,4)
+ggsave("figures/manuscript/Fig5_Summary_Fecundity.tiff", plot = Figure5, dpi = 600, width = 8.5, height = 4, units = "in", compression="lzw")
+
 
 
 
@@ -1871,7 +1869,7 @@ mlifemod_contrasts3
 
 
 
-# figure for presentation
+
 m_lifespan <- ggplot(m_data_lifespan, aes(x = Infection, y = Lifespan)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=2, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
@@ -1952,7 +1950,7 @@ plifemod_contrasts3 <- emmeans(plifemod, specs = pairwise ~ Diet, type = "respon
 plifemod_contrasts3
 
 
-# figure for presentation
+
 p_lifespan <- ggplot(p_data_lifespan, aes(x = Infection, y = Lifespan)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge(width =0.9)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.9, jitter.width = 0.2), alpha = 0.4) +
@@ -2030,6 +2028,7 @@ shapiro.test(resid(msizemod))
 msizemod_contrasts <- emmeans(msizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 msizemod_contrasts
 
+# Appendix Table S4
 msizemod_contrasts2 <- emmeans(msizemod, specs = pairwise ~ Infection | Clone, type = "response")
 msizemod_contrasts2
 
@@ -2122,7 +2121,7 @@ shapiro.test(resid(psizemod)) # not sig, but 0.079
 psizemod_contrasts <- emmeans(psizemod, specs = pairwise ~ Diet | Infection + Clone, type = "response")
 psizemod_contrasts
 
-
+# Appendix Table S4
 psizemod_contrasts2 <- emmeans(psizemod, specs = pairwise ~ Infection | Clone, type = "response")
 psizemod_contrasts2
 
@@ -2537,8 +2536,143 @@ ggsave("figures/manuscript/FigS5_MetabolicRate.tiff", plot = FigureS5, dpi = 600
 
 # Analysis of microcystin-LR  concentrations among treatments and between experiments --------------------
 
+# Appendix Section S1.1
 
-# add analyses here at the end of the main text results
+#### Microcystin data (both experiments) - read in data and update order of factors
+microcystin <- read.csv("data/Microcystin/Microcystin_ELISA_Samples.csv", stringsAsFactors = F)
+head(microcystin)
+microcystin$Diet <- as.factor(microcystin$Diet)
+microcystin$Diet <- factor(microcystin$Diet, levels = c("S", "SM", "M", "M+"))
+microcystin$Parasites <- as.factor(dplyr::recode(microcystin$Parasite, Uninf = "Uninfected"))
+microcystin$Infection <- as.factor(dplyr::recode(microcystin$Infection.Status, Uninf = "Uninfected"))
+microcystin$Clone <- as.factor(dplyr::recode(microcystin$Clone, MID = "Mid37", STD = "Standard"))
+microcystin$Rep <- as.factor(microcystin$Rep)
 
 
+
+
+
+
+# look at microcystin concentration across all treatments during parasite exposure (day 8) only
+microcystin_exposure <- microcystin %>%
+  filter(Day == 8 & !is.na(Microcystin.conc))
+
+
+
+hist(microcystin_exposure$Microcystin.conc)
+# adjust zero values to be very low but non-zero to be able to run model
+microcystin_exposure$Microcystin.conc[ microcystin_exposure$Microcystin.conc == 0] <- 0.01
+
+m_conc_mod2 <- lm(log(Microcystin.conc+1) ~ Experiment * Diet,data = microcystin_exposure)  # use this model
+summary(m_conc_mod2)
+Anova(m_conc_mod2)   # reported in Appendix Section S1.1
+plot(m_conc_mod2)
+qqnorm(resid(m_conc_mod2))   # falls off the bottom a bit
+qqline(resid(m_conc_mod2))
+shapiro.test(resid(m_conc_mod2))
+
+
+treatment_difs2 <- emmeans(m_conc_mod2, pairwise ~ Diet | Experiment, type = "response")
+treatment_difs2  
+# no significant differences between S, SM, and M diets within either Past or Metsch experiments
+# M+ diet has sig higher Microcystin concentrations compared to all other diets in both experiments
+
+experiment_difs <- emmeans(m_conc_mod2, pairwise ~ Experiment | Diet, type = "response")
+experiment_difs  
+# no significant differences between concentrations across the experiment at each diet treatment
+
+
+
+
+# fig with boxplots and raw data points for microcystin concentations at day 8 (Not shown in manuscript or appendix)
+microcystin_plot <- ggplot(microcystin_exposure, aes(x = Parasite, y = Microcystin.conc+0.001, fill = Diet)) +
+  geom_boxplot(position=position_dodge()) +
+  geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
+  facet_grid(Experiment~Clone, labeller = label_both) +
+  scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_fill_manual(values = diet_colors) +
+  scale_shape_manual(values=c(15,16,17,18)) +
+  ggtitle("Microcystin concentrations during exposure, Day 8") +
+  labs(x = "Parasite Treatments", y = "log microcystin concentation (ug/L)") +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+microcystin_plot
+#ggsave(here("figures/Microcystin_exposure_at_Day8.tiff"), plot = microcystin_plot, dpi = 300, width = 8, height = 6, units = "in", compression="lzw")
+
+
+# calculate average microcystin concentration per diet,clone, parasite treatment in each experiment
+microcystin_exposure.sum <- microcystin_exposure %>%
+  group_by(Experiment, Diet, Clone, Parasites) %>%
+  dplyr::summarize(N  = length(Microcystin.conc), 
+                   microcystin.avg = mean(Microcystin.conc, na.rm = T),
+                   microcystin.sd   = sd(Microcystin.conc, na.rm = T),
+                   microcystin.se   = microcystin.sd / sqrt(N))
+microcystin_exposure.sum$Exposure <- as.factor(dplyr::recode(microcystin_exposure.sum$Parasites, Metsch = "Parasite", Pasteuria = "Parasite"))
+microcystin_exposure.sum$Experiment <- as.factor(dplyr::recode(microcystin_exposure.sum$Experiment, Metsch = "Fungus", Pasteuria = "Bacterium"))
+microcystin_exposure.sum
+write.csv(microcystin_exposure.sum, "tables/MicrocystinConc_DuringExposure.csv", quote = F, row.names=FALSE)
+microcystin_exposure.sum[ 22, "microcystin.avg"] <- 0.01 # alter single value where average is zero (to be able to log transform the y axis in the figure below)
+
+# Figure S1: Avg Microcystin during parasite exposure (day 8)
+microcystin_plot2 <- ggplot(microcystin_exposure.sum, aes(x = Exposure, y = microcystin.avg)) +
+  geom_point(aes(color = Diet), position=position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin=microcystin.avg-microcystin.se, ymax=microcystin.avg+microcystin.se,color=Diet), width=0.3, position=position_dodge(width = 0.5)) + 
+  #geom_jitter(aes(shape = Diet), size = 2, alpha = 0.5, position=position_jitterdodge()) +
+  facet_grid(Experiment~Clone, labeller = label_both) +
+  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
+  #scale_shape_discrete(limits = c("S", "SM", "M", "M+")) +
+  scale_color_manual(values = diet_colors) +
+  #scale_shape_manual(values=c(15,16,17,18)) +
+  #ggtitle("Microcystin concentrations during exposure, Day 8") +
+  labs(x = "Parasite Treatments", y = bquote("log average microcystin concentation (" ~mu *"g/L)")) +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+microcystin_plot2
+ggsave(here("figures/manuscript/FigS1_Microcystin_exposure_average_at_Day8.tiff"), plot = microcystin_plot2, dpi = 300, width = 4, height = 5, units = "in", compression="lzw")
+
+
+
+
+
+# Analysis of the effects of the super toxin spike at day 5 of experiment
+# in comparison to during exposure (day 8)
+super_spike <- microcystin %>%
+  filter(Day == 5 | Day == 8) %>%
+  filter(Diet == "M" | Diet == "M+") %>%
+  filter(Experiment == "Pasteuria") %>%
+  filter(!is.na(Microcystin.conc))
+# diet color palette
+diet_colors_micro <- c("#006837", "#1D91C0")
+super_spike$Day <- factor(super_spike$Day)
+
+# Fig S2: comparison of the super spike concentrations to those during exposure in M and M+ treatments
+spike_plot <- ggplot(super_spike, aes(x = Diet, y = Microcystin.conc, fill = Diet)) +
+  geom_boxplot() +
+  geom_jitter(size = 2, alpha = 0.5, width = 0.2) +
+  facet_wrap(~Day, labeller = label_both) +
+  scale_fill_manual(values = diet_colors_micro) +
+  #ggtitle("Microcystin spiked concentrations, Day 5 and 8") +
+  labs(x = "Diet", y = bquote("log average microcystin concentation (" ~mu *"g/L)")) +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0), labels = c(0.001, 0.01, 0.1, 1.0, 10.0, 100.0))
+spike_plot
+ggsave(here("figures/manuscript/FigS2_Microcystin_super_spike_at_Day5.tiff"), plot = spike_plot, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+
+# remove outliers for analysis of differences during toxin spike (improve normality of residuals)
+super_spike2 <- filter(super_spike, Microcystin.conc < 290)
+super_spike2 <- filter(super_spike2, Microcystin.conc < 3 | Microcystin.conc > 5 )
+
+m_conc_mod <- lm(log(Microcystin.conc) ~ Day*Diet, data = super_spike2)
+summary(m_conc_mod)
+Anova(m_conc_mod)  # reported in Appendix Section S1.1
+plot(m_conc_mod)
+qqnorm(resid(m_conc_mod))   # falls off the bottom a bit
+qqline(resid(m_conc_mod))
+shapiro.test(resid(m_conc_mod))  # not significant
+treatment_difs <- emmeans(m_conc_mod, pairwise ~ Diet * Day, type = "response")
+treatment_difs   # reported in Appendix Section S1.1
+# no sig diff between M treatments on days 5 and 8.
+# sig differences between M and M+ on day 5, M and M+ on day 8, and M+ on days 5 and 8
 
