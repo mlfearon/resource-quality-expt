@@ -951,6 +951,11 @@ m_data_gutspore <- m_data %>% filter(Block == 5 & Infection != "Uninfected")
 # only include animals in block 5 that were checked for gut spores and remove 3 animals that did not get exposed to parasites (STD SM, M, and M+ rep 20 for all, b/c ran out of spores for exposure)
 hist(m_data_gutspore$TotalGutSpores)
 
+# calculate N animals per treatment that died due to procedure to check for gut spores
+M_gutspore_mortality <- m_data_gutspore %>%
+  filter(Lifespan <= 9) %>%
+  count(Diet, Clone)
+
 
 ### Analysis of Fungus spores attacking the gut
 mgutsporemod <- glmmTMB(TotalGutSpores ~ Diet * Clone, family = poisson, data = m_data_gutspore)  # lowest AIC, best model use this one
@@ -1266,6 +1271,12 @@ m_data_fecund <- m_data %>%
 hist(m_data$Total.Babies) 
 
 
+# calculate N animals that were excluded 
+m_data_fecund_exluded <- m_data %>% 
+  filter(is.na(Total.Babies) | lifespan.days <= 11) %>% # first babies observed on day 11
+  count(Diet, Parasites, Clone, Block)
+
+m_total_n_excluded <- sum(m_data_fecund_exluded$n)
 
 #mfecundmod <- glmmTMB(Total.Babies ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block) + (1|Unique.code), family = poisson, data = m_data_fecund)  # overdispersed unless include unique code random effect
 #mfecundmod <- glmmTMB(Total.Babies ~ Diet + Infection + Clone + Diet:Infection + Diet:Clone + Infection:Clone + (1|Block), family = nbinom2(), data = m_data_fecund)  #higher AIC than quasipoisson, still had overdispersion
@@ -1375,6 +1386,15 @@ p_data_fecund <- p_data %>%
   filter(!is.na(Total.Babies)  & lifespan.days > 11) %>%  # first babies were observed on day 11 
   mutate(Parasite_Treatment = factor(if_else(Parasites == "Pasteuria", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
 hist(p_data$Total.Babies) 
+
+
+# calculate N animals that were excluded 
+p_data_fecund_exluded <- p_data %>% 
+  filter(is.na(Total.Babies) | lifespan.days <= 11) %>% # first babies observed on day 11
+  count(Diet, Parasites, Clone, Block)
+
+p_total_n_excluded <- sum(p_data_fecund_exluded$n)
+
 
 #pfecundmod <- glmmTMB(Total.Babies ~ Diet * Infection * Clone + (1|Block) + (1|Unique.code), family = poisson, data = p_data_fecund)  # overdispersed unless include unique code random effect
 #pfecundmod <- glmmTMB(Total.Babies ~ Diet * Infection * Clone + (1|Block), family = nbinom1(), data = p_data_fecund)   # higher AIC than neg binomial
@@ -1491,23 +1511,32 @@ ggsave("figures/PastTotalFecundity_MicrocystinxClonexInfection.tiff", plot = p_f
 
 ### Metsch survival analyses
 
-m_data$Diet2 = recode_factor(m_data$Diet, 'SM' = "50:50 SM", .default = levels(m_data$Diet))
-m_data$Diet2 <- factor(m_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
-m_data <- mutate(m_data, Parasite_Treatment = factor(if_else(Parasites == "Metsch", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+m_survival_df <- m_data %>%
+  filter(lifespan.days > 11)
 
-length(m_data$SurvObj)
-table(m_data$Block)
+m_survival_df$Diet2 = recode_factor(m_survival_df$Diet, 'SM' = "50:50 SM", .default = levels(m_data$Diet))
+m_survival_df$Diet2 <- factor(m_survival_df$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+m_survival_df <- mutate(m_survival_df, Parasite_Treatment = factor(if_else(Parasites == "Metsch", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+
+length(m_survival_df$SurvObj)
+table(m_survival_df$Block)
+
+# Calculate the number of animals censored at end of expt and early deaths
+m_censored <- m_survival_df %>%
+  filter(Censored == "censored") %>%
+  count(Lifespan)
+
 
 # Make a figure of survival curves for each clone and infection status
-m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
+m_survival_df$SurvObj <- with(m_survival_df, Surv(lifespan.days, Status))
 
-m_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection, data = m_data, conf.type = "log-log")
+m_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection, data = m_survival_df, conf.type = "log-log")
 m_km.by.diet_infstatus
 
 summary(m_km.by.diet_infstatus)
 
 # Figure 3E: Fungus expt survival plot by diet, clone, and infection status
-m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_survival_df, xlab = "Days", xlim = c(0,25), facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
   #labs(color = "Diet") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -1515,7 +1544,7 @@ m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, xlab =
 ggsave("figures/MetschSurvival.tiff", plot = m_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
 
 # Same figure as above with p-values
-m_survival_fig2 <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+m_survival_fig2 <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_survival_df, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
   labs(color = "Diet") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -1525,15 +1554,15 @@ m_survival_fig2 <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, pval 
 
 # Appendix Table S8: Fungus experiment hazard ratios
 ## Analysis with both clones
-m_data$SurvObj <- with(m_data, Surv(lifespan.days, Status))
-cox.m_diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = m_data)
+m_survival_df$SurvObj <- with(m_survival_df, Surv(lifespan.days, Status))
+cox.m_diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = m_survival_df)
 summary(cox.m_diet_infstatus_clone)
 
 #Likelihood ratio test
 anova(cox.m_diet_infstatus_clone)
 cox.m_diet_infstatus_clone$n
 
-# Reported Walk Chisquare in Table S8
+# Reported Wald Chisquare in Table S8
 # Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
 linearHypothesis(cox.m_diet_infstatus_clone, c("Diet250:50 SM", "Diet2M", "Diet2M+"))
 linearHypothesis(cox.m_diet_infstatus_clone, c("Diet250:50 SM"))
@@ -1546,19 +1575,19 @@ linearHypothesis(cox.m_diet_infstatus_clone, c("CloneStandard "))
 
 
 # forest plot for fungus by diet inf status and clone
-metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_data, cpositions = c(0.02, 0.15, 0.35))
+metsch_cox <- ggforest(cox.m_diet_infstatus_clone, data = m_survival_df, cpositions = c(0.02, 0.15, 0.35))
 metsch_cox
 ggsave("figures/MetschCoxHazard_DietxClonexInfection.tiff", plot = metsch_cox, dpi = 600, width = 5.5, height = 4, units = "in", compression="lzw")
 
 
 ## Survival model with parasite treatment instead of infection status
-m_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = m_data, conf.type = "log-log")
+m_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = m_survival_df, conf.type = "log-log")
 m_km.by.diet_parasitetrmt
 
 summary(m_km.by.diet_parasitetrmt)
 
-# Figure 5C: Fungus expt survival plot by diet, clone, and infection status
-m_survival_summary <- ggsurvplot_facet(m_km.by.diet_parasitetrmt, data = m_data, xlab = "Days", facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
+# Fungus expt survival plot by diet, clone, and infection status (not included in manuscript)
+m_survival_summary <- ggsurvplot_facet(m_km.by.diet_parasitetrmt, data = m_survival_df, xlab = "Days", xlim = c(0,25), facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
   #labs(color = "Diet") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -1570,8 +1599,8 @@ ggsave("figures/MetschSurvival_ParasiteTrmt.tiff", plot = m_survival_summary, dp
 
 
 # split data by clone to conduct separate survival analyses for each clone
-m_data_std <- m_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
-m_data_mid <- m_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+m_data_std <- m_survival_df %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+m_data_mid <- m_survival_df %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
 
 
 # Mid37 survival in the Metsch experiment
@@ -1585,23 +1614,26 @@ km.by.diet_infstatus_mid <- survfit(SurvObj ~ Diet + Infection, data = m_data_mi
 ggsurvplot(km.by.diet_parasite_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
 ggsurvplot(km.by.diet_infstatus_mid, data = m_data_mid, pval = TRUE, xlab = "Days")
 
-# Figure SX: Fungus expt survival plot by diet and parasite treatment for each clone
-m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
-  #labs(color = "Diet") +
-  theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=11, color="black"), legend.position = "none")
-ggsave("figures/MetschSurvival.tiff", plot = m_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
-
 
 # Cox proportional hazards model
 cox.m_diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = m_data_mid)
 cox.m_diet_parasite_mid
 cox.m_diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = m_data_mid)
 cox.m_diet_infstatus_mid
+
+# Appendix Table S9: Fungus experiment Mid37 hazard ratios
 cox.m_diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = m_data_mid, singular.ok = T)   # Use this for the mid37 specific model
 summary(cox.m_diet_infstatus_mid2)
 Anova(cox.m_diet_infstatus_mid2)
+
+
+# Reported Wald Chisquare in Table S9 for Fungus experiment Mid37
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.m_diet_infstatus_mid2, c("Diet250:50 SM"))
+linearHypothesis(cox.m_diet_infstatus_mid2, c("Diet2M"))
+linearHypothesis(cox.m_diet_infstatus_mid2, c("Diet2M+"))
+linearHypothesis(cox.m_diet_infstatus_mid2, c("InfectionExposed"))
+linearHypothesis(cox.m_diet_infstatus_mid2, c("InfectionInfected"))
 
 # forest plot
 ggforest(cox.m_diet_parasite_mid, data = m_data_mid)
@@ -1637,10 +1669,18 @@ cox.m_diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = m_data_std)
 cox.m_diet_parasite_std
 cox.m_diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = m_data_std)
 summary(cox.m_diet_infstatus_std)
+
+# Appendix Table S9: Fungus experiment Standard hazard ratios
 cox.m_diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = m_data_std)   # Use this for the standard specific model
 summary(cox.m_diet_infstatus_std2)
 
-
+# Reported Wald Chisquare in Table S9 for Fungus experiment Standard
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.m_diet_infstatus_std2, c("Diet250:50 SM"))
+linearHypothesis(cox.m_diet_infstatus_std2, c("Diet2M"))
+linearHypothesis(cox.m_diet_infstatus_std2, c("Diet2M+"))
+linearHypothesis(cox.m_diet_infstatus_std2, c("InfectionExposed"))
+linearHypothesis(cox.m_diet_infstatus_std2, c("InfectionInfected"))
 
 # forest plot
 ggforest(cox.m_diet_parasite_std, data = m_data_std)
@@ -1658,22 +1698,32 @@ ggforest(cox.m_diet_infstatus_std2, data = m_data_std)  # Use this for the stand
 
 ### Pasteuria survival analyses
 
+p_survival_df <- p_data %>%
+  filter(lifespan.days > 11)
 
-p_data$Diet2 = recode_factor(p_data$Diet, 'SM' = "50:50 SM", .default = levels(p_data$Diet2))
-p_data$Diet2 <- factor(p_data$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
-p_data <- mutate(p_data, Parasite_Treatment = factor(if_else(Parasites == "Pasteuria", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
+p_survival_df$Diet2 = recode_factor(p_survival_df$Diet, 'SM' = "50:50 SM", .default = levels(p_survival_df$Diet2))
+p_survival_df$Diet2 <- factor(p_survival_df$Diet2, levels = c("S", "50:50 SM", "M", "M+"))
+p_survival_df <- mutate(p_survival_df, Parasite_Treatment = factor(if_else(Parasites == "Pasteuria", "Inoculated", "Uninoculated"), levels = c("Uninoculated", "Inoculated")))
 
-table(p_data$Parasites)
+table(p_survival_df$Parasites)
+
+# Calculate the number of animals censored at end of expt and early deaths
+p_censored <- p_survival_df %>%
+  filter(Censored == "censored") %>%
+  count(Lifespan)
+
+
 
 # Make a figure of survial curves for each clone and infection status
-p_data$SurvObj <- with(p_data, Surv(lifespan.days, Status))
+p_survival_df$SurvObj <- with(p_survival_df, Surv(lifespan.days, Status))
 
-p_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection + Clone, data = p_data, conf.type = "log-log")
+p_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection + Clone, data = p_survival_df, conf.type = "log-log")
 p_km.by.diet_infstatus
 
 # Figure 3F: Bacterium expt survival plot by diet, clone, and infection status
-p_survival_fig <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_data, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
+p_survival_fig <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_survival_df, xlab = "Days", xlim = c(0,42), facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
   labs(color = "Diet") +
+  scale_x_continuous(expand = c(0,0), limits = c(0, 40), breaks = c(0, 10, 20, 30, 40)) +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
@@ -1681,16 +1731,16 @@ p_survival_fig
 ggsave("figures/PasteuriaSurvival.tiff", plot = p_survival_fig, dpi = 600, width = 4, height = 4.5, units = "in", compression="lzw")
 
 # same figure as above with p-values
-p_survival_fig2 <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_data, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors) +
+p_survival_fig2 <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_survival_df, pval = TRUE, xlab = "Days", facet.by = c("Infection", "Clone"), palette = diet_colors) +
   labs(color = "Diet") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
         axis.title.x = element_text(size=11, color="black"))
 
 
-# Appendix Table S8: Fungus experiment hazard ratios
+# Appendix Table S8: Bacterium experiment hazard ratios
 ## Analysis with both clones
-cox.diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = p_data)
+cox.diet_infstatus_clone <- coxph(SurvObj ~ Diet2 + Infection + Clone, data = p_survival_df)
 summary(cox.diet_infstatus_clone)
 
 
@@ -1708,7 +1758,7 @@ linearHypothesis(cox.diet_infstatus_clone, c("CloneStandard "))
 anova(cox.diet_infstatus_clone)
 
 # forest plot for bacterium diet inf status and clone
-past_cox <- ggforest(cox.diet_infstatus_clone, data = p_data, cpositions = c(0.02, 0.15, 0.35))
+past_cox <- ggforest(cox.diet_infstatus_clone, data = p_survival_df, cpositions = c(0.02, 0.15, 0.35))
 past_cox
 ggsave("figures/PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi = 600, width = 6, height = 4, units = "in", compression="lzw")
 
@@ -1718,13 +1768,13 @@ ggsave("figures/PastCoxHazard_DietxClonexInfection.tiff", plot = past_cox, dpi =
 
 
 ## survival model for diet by parasite treatment
-p_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = p_data, conf.type = "log-log")
+p_km.by.diet_parasitetrmt <- survfit(SurvObj ~ Diet + Parasite_Treatment, data = p_survival_df, conf.type = "log-log")
 p_km.by.diet_parasitetrmt
 
 summary(m_km.by.diet_parasitetrmt)
 
-# Figure 5D: Bacterium expt survival plot by diet, clone, and infection status
-p_survival_summary <- ggsurvplot_facet(p_km.by.diet_parasitetrmt, data = p_data, xlab = "Days", facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
+# Bacterium expt survival plot by diet, clone, and infection status (figure not shown in manuscript)
+p_survival_summary <- ggsurvplot_facet(p_km.by.diet_parasitetrmt, data = p_survival_df, xlab = "Days", xlim = c(0,40), facet.by = c("Diet", "Clone"), palette = parasite_colors, short.panel.labs = T) +
   #labs(color = "Diet") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -1739,8 +1789,8 @@ ggsave("figures/PastSurvival_ParasiteTrmt.tiff", plot = p_survival_summary, dpi 
 
 
 # split data by clone to run separate survival analyses for each clone
-p_data_std <- p_data %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
-p_data_mid <- p_data %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+p_data_std <- p_survival_df %>% filter(Clone == "Standard") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
+p_data_mid <- p_survival_df %>% filter(Clone == "Mid37") %>% mutate(Treatment_Combo = paste(Diet, Infection, sep = "_"))
 
 
 
@@ -1774,12 +1824,18 @@ cox.diet_parasite_std <- coxph(SurvObj ~ Diet + Parasites, data = p_data_std)
 cox.diet_parasite_std
 cox.diet_infstatus_std <- coxph(SurvObj ~ Diet + Infection, data = p_data_std)
 summary(cox.diet_infstatus_std)
+
+# Appendix Table S9: Bacterium experiment Standard hazard ratios
 cox.diet_infstatus_std2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_std)  ## Use this one for the Standard specific results
 summary(cox.diet_infstatus_std2)
 
-cox.diet_treatments_std <- coxph(SurvObj ~ Treatment_Combo, data = p_data_std)
-summary(cox.diet_treatments_std)   # model doesn't work well probably because there is low sample size in some treatment combos, and all animals have the same outcome for S inf
-
+# Reported Wald Chisquare in Table S9 for Bacterium experiment Standard
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.diet_infstatus_std2, c("Diet250:50 SM"))
+linearHypothesis(cox.diet_infstatus_std2, c("Diet2M"))
+linearHypothesis(cox.diet_infstatus_std2, c("Diet2M+"))
+linearHypothesis(cox.diet_infstatus_std2, c("InfectionExposed"))
+linearHypothesis(cox.diet_infstatus_std2, c("InfectionInfected"))
 
 # forest plot
 ggforest(cox.diet_parasite_std, data = p_data_std)
@@ -1808,8 +1864,18 @@ cox.diet_parasite_mid <- coxph(SurvObj ~ Diet + Parasites, data = p_data_mid)
 cox.diet_parasite_mid
 cox.diet_infstatus_mid <- coxph(SurvObj ~ Diet + Infection, data = p_data_mid)
 cox.diet_infstatus_mid
+
+# Appendix Table S9: Bacterium experiment Mid37 hazard ratios
 cox.diet_infstatus_mid2 <- coxph(SurvObj ~ Diet2 + Infection, data = p_data_mid)  # Use this one for the Mid37 specific results
 summary(cox.diet_infstatus_mid2)
+
+# Reported Wald Chisquare in Table S9 for Bacterium experiment Mid37
+# Wald test for each parameter (null hypothesis is that the factor is not associated with survival outcome)
+linearHypothesis(cox.diet_infstatus_mid2, c("Diet250:50 SM"))
+linearHypothesis(cox.diet_infstatus_mid2, c("Diet2M"))
+linearHypothesis(cox.diet_infstatus_mid2, c("Diet2M+"))
+linearHypothesis(cox.diet_infstatus_mid2, c("InfectionExposed"))
+linearHypothesis(cox.diet_infstatus_mid2, c("InfectionInfected"))
 
 # forest plot
 ggforest(cox.diet_parasite_mid, data = p_data_mid)
@@ -1817,9 +1883,6 @@ ggforest(cox.diet_infstatus_mid, data = p_data_mid)
 ggforest(cox.diet_infstatus_mid2, data = p_data_mid)  # Use this one for the Mid37 specific results
 
 
-# May need to make a treatment category for Diet x parasite or Diet x Infection Status to be able to see the interaction between the treatments more clearly. Including an interaction term in the Cox model doesn't seem to be working when I try that...
-
-# Interestingly, pasteuria exposed animals suffered more mortality than then infected animals in Mid37s.
 
 
 # Figure 3
@@ -1827,7 +1890,7 @@ Figure3 <- ggarrange(m_little_r, p_little_r, m_fecund_tot, p_fecund_tot, m_survi
                      ncol = 2, nrow = 3, heights = c(3.2,3,3), legend = "right", common.legend = T)
 Figure3
 ggsave("figures/manuscript/Fig3_LittleR_Fecundity_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 9, units = "in", compression="lzw")
-widths = c(3.3,4)
+
 
 
 # Figure 5: Summary figure
