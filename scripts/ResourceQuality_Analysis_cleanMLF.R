@@ -1,12 +1,15 @@
 # Resource Quality Experiment Analysis
 
+# This code runs all of the analyses included in the main text and appendix of Fearon et al.
+# "Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites"
+# submitted to Ecological Monographs.
+
 # Code Written by: Michelle L Fearon
-# Last updated: 7/4/2024
+# Last updated: 7/7/2024
 # Last update by: Michelle L Fearon
 
 
 # Terminology Used
-
       # Bacterium = Pasteuria ramosa
             # data sets for Pasteuria (Bacteria) are labeled with a "p"
       # Fungus = Metschnikowia bicuspidata (Metsch)
@@ -46,12 +49,12 @@ here::i_am("scripts/ResourceQuality_Analysis_cleanMLF.R")
 # load Pasteuria data
 p_data <- read.csv(here("data/ResourceQuality_Pasteuria_Full.csv"), stringsAsFactors = F)
 p_longdata <- read.csv(here("data/ResourceQuality_Pasteuria_Full_ByExptWeek.csv"), stringsAsFactors = F)
-p_lifetable <- read.csv(here("data/ResourceQuality_Pasteuria_LifeTableResults.csv"), stringsAsFactors = F)
+
 
 # load Metsch data
 m_data <- read.csv(here("data/ResourceQuality_Metsch_Full.csv"), stringsAsFactors = F)
 m_longdata <- read.csv(here("data/ResourceQuality_Metsch_Full_ByExptWeek.csv"), stringsAsFactors = F)
-m_lifetable <- read.csv(here("data/ResourceQuality_Metsch_LifeTableResults.csv"), stringsAsFactors = F)
+
 
 
 # Reorder factors
@@ -60,18 +63,12 @@ p_data$Infection <- factor(p_data$Infection, levels = c("Uninfected", "Exposed",
 p_data$Parasites <- factor(p_data$Parasites, levels = c("Uninfected", "Pasteuria"))
 p_longdata$Diet <- factor(p_longdata$Diet, levels = c("S", "SM", "M", "M+"))
 p_longdata$Infection <- factor(p_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
-p_lifetable$Diet <- factor(p_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
-p_lifetable$Infection <- factor(p_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
-p_lifetable_clone_inf$Infection <- factor(p_lifetable_clone_inf$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
 m_data$Diet <- factor(m_data$Diet, levels = c("S", "SM", "M", "M+"))
 m_data$Infection <- factor(m_data$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 m_data$Parasites <- factor(m_data$Parasites, levels = c("Uninfected", "Metsch"))
 m_longdata$Diet <- factor(m_longdata$Diet, levels = c("S", "SM", "M", "M+"))
 m_longdata$Infection <- factor(m_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
-m_lifetable$Diet <- factor(m_lifetable$Diet, levels = c("S", "SM", "M", "M+"))
-m_lifetable$Infection <- factor(m_lifetable$Infection, levels = c("Uninfected", "Exposed", "Infected"))
-m_lifetable_clone_inf$Infection <- factor(m_lifetable_clone_inf$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
 
 # Overdispersion parameter estimation function from Ben Bolker: http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#testing-for-overdispersioncomputing-overdispersion-factor
@@ -1181,92 +1178,6 @@ ggsave("figures/manuscript/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure3, 
 
 
 # Host vital rates: impacts of diet and infection --------------------------------
-
-
-## Little r -----------------------------------------------------------------------
-
-### Little r by treatment for Metsch experiment
-
-# Figure 3A: Little r by clone, diet, and infection status
-m_little_r <- ggplot(m_lifetable, aes(x = Infection, y = r_mx)) +
-  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5), show.legend = F) +
-  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5), show.legend = F) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
-  facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
-  scale_color_manual(values = diet_colors) +
-  ggtitle("Fungus Experiment") +
-  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
-  theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=11, color="black"))
-m_little_r
-
-ggsave("figures/MetschLittleR_DietxClonexInfection.tiff", plot = m_little_r, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
-
-# Figure 5A: Little r by clone and diet
-# NEED TO UPDATE MATLAB RUN WITH NEW TREATMENT GROUPINGS TO MAKE THIS FIG
-
-m_little_r2 <- ggplot(m_lifetable_clone_inf, aes(x = Diet, y = r_mx)) +
-  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
-  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
-  facet_wrap(~Clone) +
-  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  ggtitle("Fungus Experiment") +
-  labs(x = "Diet", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
-  theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=11, color="black"))
-m_little_r2
-
-ggsave("figures/MetschLittleR_DietxClone.tiff", plot = m_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
-
-
-
-
-
-### Little r by treatment for Pasteuria experiment 
-
-
-# Figure 3A: Little r by clone, diet, and infection status
-p_little_r <- ggplot(p_lifetable, aes(x = Infection, y = r_mx)) +
-  geom_point(aes(color=Diet), size=2, position=position_dodge(width=0.5)) +
-  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx, color=Diet), width = 0.3,  position=position_dodge(width=0.5)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
-  facet_wrap(~Clone) +
-  scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  scale_color_discrete(limits = c("S", "SM", "M", "M+")) +
-  scale_color_manual(values = diet_colors) +
-  ggtitle("Bacterium Experiment") +
-  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
-  theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=11, color="black"))
-p_little_r
-
-ggsave("figures/PastLittleR_DietxClonexInfection.tiff", plot = p_little_r, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
-
-
-# Figure 5B: Little r by clone and diet
-# NEED TO UPDATE MATLAB RUN WITH NEW TREATMENT GROUPINGS TO MAKE THIS FIG
-p_little_r2 <- ggplot(p_lifetable_clone_inf, aes(x = Diet, y = r_mx)) +
-  geom_point(aes(), size=2, position=position_dodge(width=0.5), show.legend = F) +
-  geom_errorbar(aes(ymin = r_mx-Std.error_r_mx, ymax=r_mx+Std.error_r_mx), width = 0.2,  position=position_dodge(width=0.5), show.legend = F) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
-  facet_wrap(~Clone) +
-  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  ggtitle("Bacterium Experiment") +
-  labs(x = "Infection Status", y = bquote("Pop. Growth Rate (r"~day^-1*")")) +
-  theme_classic() + 
-  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
-        axis.title.x = element_text(size=11, color="black"))
-p_little_r2
-
-ggsave("figures/PastLittleR_DietxClone.tiff", plot = p_little_r2, dpi = 600, width = 6.5, height = 4, units = "in", compression="lzw")
-
-
 
 
 ## Total Fecundity ----------------------------------------------------------------------
