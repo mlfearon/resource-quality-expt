@@ -101,6 +101,10 @@ m_data_prev <- m_data %>% filter(!is.na(InfectionStatus) & Parasites == "Metsch"
 
 m_data_prev$Block <- as.factor(m_data_prev$Block)
 
+m_N_per_treatment_lifespand <- m_data %>%
+  count(Diet, Parasites, Clone, Block, lifespan.days) %>%
+  arrange(Diet, Parasites, Clone, lifespan.days)
+
 mprevmod <- glmer(InfectionStatus ~ Diet * Clone + (1|Block), family = binomial, data = m_data_prev)
 # Note: left off the block random effect here since it seemed to cause a problem with the model... 
 summary(mprevmod)
@@ -257,6 +261,11 @@ ggsave(here("figures/MetschPrevCalcualtions_RelFeedingRate3.tiff"), plot = m_pre
 
 # remove animals that died during exposure and remove uninfected treatments
 p_data_prev <- p_data %>% filter(!is.na(InfectionStatus) & Parasites == "Pasteuria") 
+
+
+p_N_per_treatment_lifespand <- p_data %>%
+  count(Diet, Parasites, Clone, Block, lifespan.days) %>%
+  arrange(Diet, Parasites, Clone, lifespan.days)
 
 pprevmod <- glm(InfectionStatus ~ Diet * Clone, family = binomial, data = p_data_prev)
 # Note: left off the block random effect here since it seemed to cause a problem with the model.
@@ -1886,10 +1895,10 @@ ggforest(cox.diet_infstatus_mid2, data = p_data_mid)  # Use this one for the Mid
 
 
 # Figure 3
-Figure3 <- ggarrange(m_little_r, p_little_r, m_fecund_tot, p_fecund_tot, m_survival_fig, p_survival_fig, labels = "auto",
-                     ncol = 2, nrow = 3, heights = c(3.2,3,3), legend = "right", common.legend = T)
+Figure3 <- ggarrange(m_fecund_tot, p_fecund_tot, m_survival_fig, p_survival_fig, labels = "auto",
+                     ncol = 2, nrow = 2, heights = c(3,3), legend = "right", common.legend = T)
 Figure3
-ggsave("figures/manuscript/Fig3_LittleR_Fecundity_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 9, units = "in", compression="lzw")
+ggsave("figures/manuscript/Fig3_Fecundity_Survival.tiff", plot = Figure3, dpi = 600, width = 8, height = 6, units = "in", compression="lzw")
 
 
 
