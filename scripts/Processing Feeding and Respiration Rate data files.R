@@ -1,9 +1,15 @@
 # Processing Feeding rate and Respiration Rate data files
 
-# Code written by: Michelle Fearon
-# Last updated: May 23, 2023
+# Code associated with Fearon et al. "Resource Quality Differentially Impacts Daphnia 
+# Interactions with Two Parasites" submitted to Ecological Monographs.
 
-# load libraries
+# This code reads in and completes all data cleaning and calculations for the feeding rate 
+# and respiration (metabolism) data.
+
+# Code written by: Michelle Fearon
+# Last updated: July 7, 2024
+
+# load libraries ---------------------------------------------------------------
 library(ggplot2)
 library(gridExtra)
 library(grid)
@@ -24,10 +30,8 @@ library(here)
 here::i_am("scripts/Processing Feeding and Respiration Rate data files.R")
 
 
-################################################
-# Feeding Rate
-################################################
 
+# Feeding Rate ---------------------------------------------------------------------
 
 # returns the file names as a character vector
 file_paths <- fs::dir_ls(path = "./data/FeedingRate/")
@@ -45,7 +49,7 @@ FeedingRate <- file_paths %>%
   extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
   select(Well:Plate)
 
-#View(FeedingRate)
+
 
 # recode block, day and plate to numbers
 FeedingRate$Block <- dplyr::recode(FeedingRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
@@ -147,9 +151,8 @@ outlier_test_Mtoxin$all.stats
 boxplot(FeedingRate$chlorophyll ~ FeedingRate$Diet)
       
 
-###################### REMOVED ONLY THE MOST EXTRME OUTLIERS -- NEED TO DECIDE ON HOW MANY OTHERS TO REMOVE FROM THE TESTS ABOVE!
 
-# remove  10 outliers from treatment data
+# remove  10 outliers from treatment data with extreme values
 #FeedingRate <- as.data.frame(FeedingRate)
 dim(FeedingRate)
 FeedingRate[ FeedingRate$Diet == "S" & FeedingRate$chlorophyll == 73, "chlorophyll"] <- NA
@@ -214,7 +217,6 @@ outlier_test_nodaph_M_toxin$all.stats
 
 # remove daphnia that died during feeding rate trial
 FeedingRate_died <- filter(FeedingRate, Died.After.Feed == "Y")
-#View(FeedingRate_died)
 FeedingRate <- filter(FeedingRate, Died.After.Feed != "Y")
 dim(FeedingRate)
 
@@ -253,8 +255,6 @@ FeedingRateCalc_NoAlgae <- filter(FeedingRateCalc, Clone == "NoAlgae")
 FeedingRateCalc_Treatment <- filter(FeedingRateCalc, Clone != "NoDaphnia", Clone != "NoAlgae")
 
 
-#View(FeedingRateCalc_Treatment)
-class(FeedingRateCalc_Treatment$Day)
 FeedingRateCalc_Treatment$Rep <- as.integer(FeedingRateCalc_Treatment$Rep)
 
 
@@ -272,7 +272,7 @@ bodysize_past_long <- bodysize_past %>%
   pivot_longer(length_7:length_38, names_to = "Day", names_prefix = "length_", values_to = "Length") %>%
   filter(!is.na(Length), Day != 38) %>%  # remove days when there are no bodysize measurements, remove last date where there are no corresponding feeding rate
   select(!Unique.code)
-#View(bodysize_past_long)
+
 
 
 bodysize_metsch_long <- bodysize_metsch %>%
@@ -338,8 +338,8 @@ FeedingRateCalc_Treatment <- FeedingRateCalc_Treatment %>%
 
 
 
-##################################
-# Calculate feeding rate (per ml, per hr)
+
+## Calculate feeding rate (per ml, per hr) ---------------------------------------
     # ln (mean no daphnia control/ mean remaining food in sample) * (Volume 10 mL/ length of time of the assay in hr)
 
 
@@ -363,19 +363,17 @@ ggplot(data = FeedingRateCalc_Treatment, aes( x= Diet, y = Clearance, color = Pa
   geom_hline(yintercept = -0.4, color = "red", linetype = "dashed") 
 boxplot(FeedingRateCalc_Treatment$Clearance ~ FeedingRateCalc_Treatment$Diet)
 
-
+## Save CSV file for future analyses -----------------------------------------------
 write.csv(FeedingRateCalc_Treatment, "data/ResourceQuality_FeedingRateCalc.csv", quote = F, row.names=FALSE)
 
-hist(FeedingRateCalc_Treatment$chlorophyll.sd)
-hist(FeedingRateCalc_Treatment$chlorophyll.nodaphnia.sd)
 
-filter(FeedingRateCalc_Treatment, chlorophyll.nodaphnia.sd > 7)
 
+## Figures of feeding rate for each treatment over the experiment ---------------
 
 # diet color palette
 diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
 
-## Plot of Algae clearance and relative clearnace over time by week
+## Plot of Algae clearance and relative clearance over time by week
 FeedingRateCalc_Sum.clean <- FeedingRateCalc_Treatment %>%
   group_by(Diet, Parasites, Clone, Week, Treatment, Experiment) %>%
   summarize(N  = length(Clearance),
@@ -388,8 +386,7 @@ FeedingRateCalc_Sum.clean <- FeedingRateCalc_Treatment %>%
 FeedingRateCalc_Sum.clean$Week <- as.factor(FeedingRateCalc_Sum.clean$Week)
 FeedingRateCalc_Sum.clean$Diet <- factor(FeedingRateCalc_Sum.clean$Diet, levels = c("S", "SM", "M", "M+"))
 
-View(FeedingRateCalc_Sum.clean_past)
-str(FeedingRateCalc_Sum.clean_past)
+
 # split figures by past and metsch experiments
 FeedingRateCalc_Sum.clean_past <- as.data.frame(filter(FeedingRateCalc_Sum.clean, Experiment == "Past"))
 FeedingRateCalc_Sum.clean_metsch <- filter(FeedingRateCalc_Sum.clean, Experiment == "Metsch")
@@ -400,7 +397,6 @@ plot_byWeek_feed_past <- ggplot(data = FeedingRateCalc_Sum.clean_past, aes(x = W
   geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
   geom_point(aes(color=Diet), size=3, alpha = 0.8) +
   facet_grid(Clone~Parasites) +
-  #ylim(-0.001, 0.009) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   scale_shape_manual(values=c(15,16,17,18)) +
@@ -419,7 +415,6 @@ plot_byWeek_feed_metsch <- ggplot(data = FeedingRateCalc_Sum.clean_metsch, aes(x
   geom_line(aes(color=Diet, group = Treatment), linewidth=1.5) +
   geom_point(aes(color=Diet), size=3, alpha = 0.8) +
   facet_grid(Clone~Parasites) +
-  #ylim(-0.001, 0.009) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_color_manual(values = diet_colors) +
   scale_shape_manual(values=c(15,16,17,18)) +
@@ -479,9 +474,13 @@ FeedingRelative_fig <- grid_arrange_shared_legend(plot_byWeek_feedrel_past, plot
 ggsave(here("figures/RelativeFeeding_byExpt.tiff"), plot = FeedingRelative_fig, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
 
-################################################
-# Respiration Rate
-################################################
+
+
+
+
+
+# Respiration Rate -------------------------------------------------------------------
+
 
 # read in metadata for respiration rate trials
 # need to join meta data to the feeding rate data
@@ -492,12 +491,9 @@ RespRateCalc <- bind_rows(past_resp_meta, metsch_resp_meta)
 unique(RespRateCalc$Parasites)
 unique(RespRateCalc$Clone)
 unique(RespRateCalc$Diet)
-### Need to convert all Oxygen files from excel to csv, remove first 12 rows and last 7 columns (27-32).
-## I tried to do this in a fancy way, and I was able to select just the oxygen files, but ran into problems with the 
-## excel file type and some of the weird symbols that were in the header of the excel file prevented it from downloading
-## Anyways I got frustrated and just did it by hand in the end... try again another day
-      # code to select just the Oxygen docs, problem is with reading in the docs as they are due to special symbols in the header
 
+
+# code to select just the Oxygen docs
 # returns the file names as a character vector
 file_paths2 <- fs::dir_ls(path = "./data/RespirationRate/Oxygen_Sat/", regexp = ('(Oxygen)(.csv)$')) # need to select just the oxygen docs
 length(file_paths2)
@@ -505,7 +501,7 @@ length(file_paths2)
 
 # read in all files in the directory, remove first row, add block, day and plate metadata for each data set, combine all rows
 RespRate <- file_paths2 %>%
-  map( function(path) {
+  map(function(path) {
     read_csv(path, skip=0, col_types = "cncccccccccccccccccccccccc")} %>% # read in all files and remove the first row
       mutate(Name = str_remove_all(path, "./data/RespirationRate/Oxygen_Sat/"))) %>% # add file name to each row
   bind_rows %>% # bind all rows together
@@ -514,7 +510,7 @@ RespRate <- file_paths2 %>%
   #extract(Well, into=c("Row", "Column"), regex = "(^[[:alpha:]])([[:digit:]]+)", convert = TRUE, remove = FALSE) %>% # separate well row and column info
   select(Block:Plate, Date.Time:D6)
 
-#View(RespRate)
+
 
 # recode block, day and plate to numbers
 RespRate$Block <- dplyr::recode(RespRate$Block, Block1 = 1, Block2 = 2, Block3 = 3, Block4 = 4)
@@ -529,7 +525,7 @@ RespRate$Date.Time <- as.POSIXct(RespRate$Date.Time, tz = "EST", format = "%d.%m
 RespRate <- RespRate %>% 
   mutate_if(is.character,stringr::str_replace_all, pattern = "No Sensor",replacement = "NA") %>%
   mutate(across(where(is.character), as.numeric))
-str(RespRate)
+
 
 # add week to dataset based on day of experiment
 RespRate$ID <- 1:length(RespRate$Block)
@@ -667,7 +663,7 @@ for(i in block){
       # 𝛽O2 = oxygen capacitance of air-saturated water at 20°C = 6.40 (Cameron, 1986) in mg/L (I think)   
       
       ################## NOTE: my samples appear to be run with an internal temp of 21.75 to 22.5°C, 
-      ################# so maybe need to change this number for my calculations to be more accurate?
+      ################# so need to change this number for my calculations to be more accurate
               # 6.15 at 22°C (volume solubility of O2) mL O2 per L of water (Cameron, 1986) 
       
     }
@@ -682,12 +678,12 @@ RespRateCalc <- RespRateCalc %>%
 # where RQ, the respiratory quotient, is the ratio of VCO2 to VO2, which can be assumed to be 0.8 when not measured (Lighton 2008)
 # Problem is that calculates to 20.1312. 
 # to get 20.08, the RQ would need to 0.79
-View(RespRateCalc)
+
 
 # Set the Diet factor order
 RespRateCalc$Diet <- factor(RespRateCalc$Diet, levels = c("S", "SM", "M", "M+"))
 
-# save CSV file
+## save CSV file -------------------------------------------------------------------
 write.csv(RespRateCalc, here("data/ResourceQuality_RespirationRateCalc.csv"), quote = F, row.names=FALSE)
 
 
@@ -698,9 +694,8 @@ Dead_animals <- filter(RespRateCalc, Died.After.Resp == "Y")
       # 3 of the 12 animals marked in the Metsch experiment have negative values for metabolic rate
 
 
-##############################
-# check the Oxygen saturation per hr slope calculation for a few extreme values, 
-##############################
+
+## check the Oxygen saturation per hr slope calculation for a few extreme values ------------- 
 
 # Block 1 day 15 plate 1 S Blank B2 - positive rate
 test1 <- RespRate %>% filter(Block == 1, Day == 15, Plate == 1) %>% as.data.frame()
@@ -773,9 +768,8 @@ outputRankLocRegPlot(daphniaRegs_test7) # yes, very negative slope but fits the 
 
 
 
-###############################
-# Initial figures to explore the respiration data
-##############################
+## Initial figures to explore the respiration data --------------------------------
+
 
 # function to make a grid plot with a shared legend
 grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, position = c("bottom", "right")) {
@@ -1160,9 +1154,3 @@ blankplot_byWeek2 <- ggplot(data = Blank_data_NoOutliers, aes(x = Week, y = O2.s
   theme_classic()
 blankplot_byWeek2
 ggsave(here("figures/RespBlanks_byWeek_Block_plate_NoOutliers.tiff"), plot = blankplot_byWeek2, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
-
-
-a <- emmeans(mod, specs = pairwise ~ Block | Week, type = "response")
-
-mod2 <- aov(O2.sat.per.hr ~ Block*Week, data = Blank_data)
-summary(mod2)

@@ -1,23 +1,33 @@
+# Resource Quality Calculations and combining data sets
+
+# Code associated with Fearon et al. "Resource Quality Differentially Impacts Daphnia 
+# Interactions with Two Parasites" submitted to Ecological Monographs.
+
 # This code combines all sources of experimental data into single data sets for the Resource Quality with Pasteuria and Metschnikowia experiments
 # Both short and long (by experimental day) versions of the data are created for use in different analyses.
 
 # Code written by: Michelle Fearon
-# Last updated: July 4, 2024
+# Last updated: July 7, 2024
 
-# load libraries
+# Terminology Used
+    # Bacterium = Pasteuria ramosa
+    # Fungus = Metschnikowia bicuspidata (Metsch)
+
+
+
+# load libraries ------------------------------------------------------------------
 library(tidyr)
 library(dplyr)
 library(lubridate)
-#library to do survival analyses
-library(survival)
-#library to make survival curves
-library(rms)
-library(survminer)
+library(survival) #library to do survival analyses
+library(rms) #library to make survival curves
+library(survminer)  #library to do survival analyses
 library(emmeans)
 library(ggplot2)
 library(car)
 library(olsrr)
 library(DHARMa)
+library(performance)
 library(glmmTMB)
 library(here)
 
@@ -25,11 +35,13 @@ library(here)
 # set the path to the script relative to the project root directory
 here::i_am("scripts/ResourceQuality_Calculations.R")
 
-########################################
-### Load Pasteuria data:
-########################################
 
-#### lifespan, offspring, infection prevalence
+
+
+# Pasteuria (Bacterium) data --------------------------------------------------------
+
+
+## lifespan, offspring, infection prevalence ---------------------------------------
 offspring_past <- read.csv("data/ResourceQuality_Pasteuria_Survival_Offspring.csv", stringsAsFactors = F)
 head(offspring_past)
 
@@ -113,7 +125,7 @@ offspring_past_short <- offspring_past %>%
 
 
 
-### bodysize data
+## bodysize data ------------------------------------------------------------------
 bodysize_past <- read.csv("data/ResourceQuality_Pasteuria_Bodysize.csv", stringsAsFactors = F)
 head(bodysize_past)
 bodysize_past$Diet <- as.factor(bodysize_past$Diet)
@@ -170,7 +182,7 @@ bodysize_past_short <- bodysize_past %>%
 
 
 
-### spore yield data
+## spore yield data ----------------------------------------------------------------
 spores_past <- read.csv("data/ResourceQuality_Pasteuria_SporeCounts.csv", stringsAsFactors = F)
 head(spores_past)
 spores_past$Diet <- as.factor(spores_past$Diet)
@@ -192,7 +204,7 @@ spores_past_short <- spores_past %>%
 #View(spores_past_short)
 
 
-### Spore size
+## Spore size ---------------------------------------------------------------------
 sporesize_past <- read.csv("data/ResourceQuality_Pasteuria_SporeSize.csv", stringsAsFactors = F)
 head(sporesize_past)
 sporesize_past$Diet <- as.factor(sporesize_past$Diet)
@@ -214,7 +226,7 @@ hist(sporesize_past_sum$AvgSporeSize)
 
 
 
-### feeding rate data
+## feeding rate data -------------------------------------------------------------
 feed_data <- read.csv("data/ResourceQuality_FeedingRateCalc.csv", stringsAsFactors = F)  
 head(feed_data)
 feed_data$Diet <- as.factor(feed_data$Diet)
@@ -237,7 +249,7 @@ feed_past_data_short <- feed_data %>%
 
 
 
-#### respiration data 
+## respiration data ----------------------------------------------------------------
 resp_data <- read.csv("data/ResourceQuality_RespirationRateCalc.csv", stringsAsFactors = F)  
 head(resp_data)
 resp_data$Diet <- as.factor(resp_data$Diet)
@@ -260,7 +272,7 @@ resp_past_data_short <- resp_data %>%
 
 
 
-#### Microcystin data (both experiments)
+## Microcystin data (both experiments) -------------------------------------------
 microcystin <- read.csv("data/Microcystin/Microcystin_ELISA_Samples.csv", stringsAsFactors = F)
 head(microcystin)
 microcystin$Diet <- as.factor(microcystin$Diet)
@@ -321,7 +333,7 @@ past_microcystin <- microcystin_exposure.sum3 %>%
 
 
 
-##### Join short data sets together
+## Join bacterium short data sets together ------------------------------------
 past_data_short <- full_join(offspring_past_short, bodysize_past_short)
 past_data_short <- full_join(past_data_short, spores_past_short)
 past_data_short <- full_join(past_data_short, sporesize_past_sum)
@@ -333,19 +345,8 @@ dim(past_data_short)  # should have 160 rows, 1 for each animal in the study
 write.csv(past_data_short, "data/ResourceQuality_Pasteuria_Full.csv", quote = F, row.names=FALSE)
 
 
-# calculate sample sizes for water samples at each date
-# past_summary <- past_data_short %>%
-#   filter(Lifespan >= 17) %>%
-#   group_by(Diet, Clone, Infection) %>%
-#   summarise(sample.size.total = n())
-# 
-# #View(past_summary)
-# write.csv(past_summary, "data/ResourceQuality_Pasteuria_Samplesize_Day17.csv", quote = F, row.names=FALSE)
-# 
-# past_summary
 
-
-#### Join long data sets together
+## Join bacterium long data sets together -------------------------------------
 past_data_longWeek <- full_join(offspring_past_longWeek, bodysize_past_longWeek)
 past_data_longWeek <- full_join(past_data_longWeek, feed_past_data_long)
 past_data_longWeek <- full_join(past_data_longWeek, resp_past_data_long)
@@ -361,11 +362,11 @@ write.csv(past_data_longWeek, "data/ResourceQuality_Pasteuria_Full_ByExptWeek.cs
 
   
 ########################################
-### Load Metsch data:
-########################################
+# Metsch (Fungus) data --------------------------------------------------------------
 
 
-#### lifespan, offspring, infection prevalence
+
+#### lifespan, offspring, infection prevalence ---------------------------------------
 offspring_metsch <- read.csv("data/ResourceQuality_Metsch_Survival_Offspring.csv", stringsAsFactors = F)
 head(offspring_metsch)
 
@@ -451,7 +452,7 @@ offspring_metsch_short <- offspring_metsch %>%
 
 
 
-### bodysize data
+## bodysize data ----------------------------------------------------------------
 bodysize_metsch <- read.csv("data/ResourceQuality_Metsch_Bodysize.csv", stringsAsFactors = F)
 head(bodysize_metsch)
 bodysize_metsch$Diet <- as.factor(bodysize_metsch$Diet)
@@ -504,7 +505,7 @@ bodysize_metsch_short <- bodysize_metsch %>%
 
 
 
-# Metsch gut spore data
+## Metsch gut spore data -----------------------------------------------------------
 gutspore_metsch <- read.csv("data/ResourceQuality_Metsch_GutSpores.csv", stringsAsFactors = F)
 head(gutspore_metsch)
 gutspore_metsch$Diet <- as.factor(gutspore_metsch$Diet)
@@ -525,7 +526,7 @@ gutspore_metsch <- gutspore_metsch %>%
 
 
 
-### spore yield data
+## spore yield data -----------------------------------------------------------------
 spores_metsch <- read.csv("data/ResourceQuality_Metsch_SporeCounts.csv", stringsAsFactors = F)
 head(spores_metsch)
 spores_metsch$Diet <- as.factor(spores_metsch$Diet)
@@ -550,7 +551,7 @@ spores_metsch_short <- spores_metsch %>%
 View(spores_metsch_short)
 
 
-### feeding rate data
+## feeding rate data -------------------------------------------------------------
         # data was loaded in above, just need to filter by Metsch experiment 
 
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
@@ -564,7 +565,7 @@ feed_metsch_data_short <- feed_data %>%
   dplyr::rename(Clearance.Week1 = Clearance, Clearance_rel.Week1 = Clearance_rel)
 
 
-#### respiration data 
+## respiration data ----------------------------------------------------------------
       # data was loaded in above, just need to filter by Metsch experiment 
 unique(resp_data$Experiment)
 # filter by experiment, and remove dead animals and blanks, generate short and long versions of data
@@ -580,9 +581,7 @@ resp_metsch_data_short <- resp_data %>%
 
 
 
-#### Microcystin data
-
-      # see above in the Pasteuria section for figures and calculations of averages per treatment
+## Microcystin data -------------------------------------------------------------
 metsch_microcystin <- microcystin_exposure.sum3 %>% 
   filter(Experiment == "Metsch") %>%
   ungroup() %>%
@@ -590,7 +589,11 @@ metsch_microcystin <- microcystin_exposure.sum3 %>%
 unique(metsch_microcystin$Clone)
 View(metsch_microcystin)
 
-##### Join short data sets together
+
+
+
+
+## Join fungus short data sets together --------------------------------------------------
 metsch_data_short <- full_join(offspring_metsch_short, bodysize_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, spores_metsch_short)
 metsch_data_short <- full_join(metsch_data_short, gutspore_metsch)
@@ -604,19 +607,7 @@ write.csv(metsch_data_short, "data/ResourceQuality_Metsch_Full.csv", quote = F, 
 View(metsch_data_short)
 
 
-# calculate sample sizes for water samples at each date
-# metsch_data_short$Rep2 <- as.integer(metsch_data_short$Rep)
-# 
-# metsch_summary <- metsch_data_short %>%
-#   filter(Rep2 < 11, Lifespan > 6) %>%
-#   group_by(Diet, Clone, Infection) %>%
-#   summarise(sample.size.total = n())
-
-#View(metsch_summary)
-#write.csv(metsch_summary, "ResourceQuality_Metsch_Samplesize_Day6.csv", quote = F, row.names=FALSE)
-
-
-#### Join long data sets together
+## Join fungus long data sets together -----------------------------------------------------
 metsch_data_longWeek <- full_join(offspring_metsch_longWeek, bodysize_metsch_longWeek)
 metsch_data_longWeek <- full_join(metsch_data_longWeek, feed_metsch_data_long)
 metsch_data_longWeek <- full_join(metsch_data_longWeek, resp_metsch_data_long)
