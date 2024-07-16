@@ -7,7 +7,7 @@
 # and respiration (metabolism) data.
 
 # Code written by: Michelle Fearon
-# Last updated: July 7, 2024
+# Last updated: July 15, 2024
 
 # load libraries ---------------------------------------------------------------
 library(ggplot2)
@@ -19,9 +19,11 @@ library(lubridate)
 library(EnvStats)
 library(emmeans)
 library(fs)
+library(devtools)
 #install_github('colin-olito/LoLinR')
 # https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html  # how to use this package link
 library(LoLinR)
+library(ds4psy)
 library(here)
 
 
@@ -29,6 +31,9 @@ library(here)
 # set the path to the script relative to the project root directory
 here::i_am("scripts/Processing Feeding and Respiration Rate data files.R")
 
+
+# source functions
+source(here("scripts/functions.R"))
 
 
 # Feeding Rate ---------------------------------------------------------------------
@@ -555,7 +560,6 @@ RespRate <- filter(RespRate, Time.Min < 141)
 
 # Samples from block 3, Day 22 plates 1-4 were samples on 1 min intervals instead of 2 min intervals
 # Need to thin this data to match with all other plates in the data set
-library(ds4psy)
 RespRate_Block3Day22 <- RespRate %>% filter(Block == 3, Day == 22) %>% as.data.frame()
 head(RespRate_Block3Day22)
 dim(RespRate_Block3Day22)
@@ -574,7 +578,7 @@ RespRate <- rbind(RespRate, RespRate_Block3Day22_thinned)
 dim(RespRate)  # should be 4525 rows(4242+283)
 
 
-# remove 3 outlier blanks from the data set 
+# remove 3 outlier blanks from the data set (tested on the full data in lines 746 to 771)
 RespRate[ RespRate$Block == 1 & RespRate$Day == 29 & RespRate$Plate == 2, "D1"] <- NA
 RespRate[ RespRate$Block == 4 & RespRate$Day == 14 & RespRate$Plate == 4, "B6"] <- NA
 RespRate[ RespRate$Block == 3 & RespRate$Day == 15 & RespRate$Plate == 3, "C5"] <- NA
@@ -611,7 +615,7 @@ RespRateCalc %>%
 
 
 
-### Loop takes a VERY long time to run ###
+### Loop takes a VERY long time to run (~45 min) ###
 
 for(i in block){
   thisblock <- filter(RespRate, Block == i) # filter data by each block
@@ -739,7 +743,7 @@ outputRankLocRegPlot(daphniaRegs_test5) # Very BAD fit compared to other animals
         # since there are NAs in part of the time series, the rankLocReg function in the loop does not calculate
         # a slope, so it is already an NA in the calculated metabolic rates
 
-# Block 3 day 15 plate 3 M Blank C5 - check extreme blank control (-8.58 slope)
+# Block 3 day 15 plate 3 M Blank C5 - check extreme blank control (-8.58 slope) - produces error because already removed from data above in lines 581-584
 test4 <- RespRate %>% filter(Block == 3, Day == 15, Plate == 3) %>% as.data.frame()
 daphniaRegs_test4a  <-  rankLocReg(xall=test4$Time.Min, yall=test4$C5, alpha=0.3, 
                                   method="pc", verbose=TRUE) 
@@ -748,7 +752,7 @@ plot(daphniaRegs_test4a, rank = 1)       # L% is the best fit
 outputRankLocRegPlot(daphniaRegs_test4a) # yes, very negative slope but fits the data well, not an error
         # range of measurements is much lower than all other blanks, but similar to some other wells nearby  
 
-# Block 4 day 14 plate 4 M+ Blank B6 - check extreme blank control (-5.82 slope)
+# Block 4 day 14 plate 4 M+ Blank B6 - check extreme blank control (-5.82 slope) - produces error because already removed from data above in lines 581-584
 test6 <- RespRate %>% filter(Block == 4, Day == 14, Plate == 4) %>% as.data.frame()
 daphniaRegs_test6  <-  rankLocReg(xall=test6$Time.Min, yall=test6$B6, alpha=0.3, 
                                   method="pc", verbose=TRUE) 
@@ -757,7 +761,7 @@ plot(daphniaRegs_test6, rank = 1)       # L% is the best fit
 outputRankLocRegPlot(daphniaRegs_test6) # yes, very negative slope but fits the data well, not an error
 # range of measurements is much lower than all other wells 
 
-# Block 1 day 29 plate 2 SM Blank D1 - check extreme blank control (-4.68 slope)
+# Block 1 day 29 plate 2 SM Blank D1 - check extreme blank control (-4.68 slope) - produces error because already removed from data above in lines 581-584
 test7 <- RespRate %>% filter(Block == 1, Day == 29, Plate == 2) %>% as.data.frame()
 daphniaRegs_test7  <-  rankLocReg(xall=test7$Time.Min, yall=test7$D1, alpha=0.3, 
                                   method="pc", verbose=TRUE) 
@@ -769,37 +773,6 @@ outputRankLocRegPlot(daphniaRegs_test7) # yes, very negative slope but fits the 
 
 
 ## Initial figures to explore the respiration data --------------------------------
-
-
-# function to make a grid plot with a shared legend
-grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, position = c("bottom", "right")) {
-  
-  plots <- list(...)
-  position <- match.arg(position)
-  g <- ggplotGrob(plots[[1]] + theme(legend.position = position))$grobs
-  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-  lheight <- sum(legend$height)
-  lwidth <- sum(legend$width)
-  gl <- lapply(plots, function(x) x + theme(legend.position="none"))
-  gl <- c(gl, ncol = ncol, nrow = nrow)
-  
-  combined <- switch(position,
-                     "bottom" = arrangeGrob(do.call(arrangeGrob, gl),
-                                            legend,
-                                            ncol = 1,
-                                            heights = unit.c(unit(1, "npc") - lheight, lheight)),
-                     "right" = arrangeGrob(do.call(arrangeGrob, gl),
-                                           legend,
-                                           ncol = 2,
-                                           widths = unit.c(unit(1, "npc") - lwidth, lwidth)))
-  
-  grid.newpage()
-  grid.draw(combined)
-  
-  # return gtable invisibly
-  invisible(combined)
-  
-}
 
 
 # diet color palette
@@ -1070,87 +1043,3 @@ blankplot_byWeek <- ggplot(data = Blank_data, aes(x = Week, y = O2.sat.per.hr, g
 blankplot_byWeek
 ggsave(here("figures/RespBlanks_byWeek_Block_plate.tiff"), plot = blankplot_byWeek, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")
 
-# read in the full data set without anything removed
-data <- read.csv(here("data/ResourceQuality_RespirationRateCalc.csv"))
-data_blank <- filter(data, Parasites == "Blank")
-
-# Split the blank data by block
-Blank_data_block1 <- filter(data_blank, Block == "1")
-Blank_data_block2 <- filter(data_blank, Block == "2")
-Blank_data_block3 <- filter(data_blank, Block == "3")
-Blank_data_block4 <- filter(data_blank, Block == "4")
-
-# test for outliers in each block
-# block 1
-outlier_test_block1 <- rosnerTest(Blank_data_block1$O2.sat.per.hr, k = 5)
-outlier_test_block1$all.stats
-      # one outlier = -4.7015417
-Blank_data_block1[ Blank_data_block1$O2.sat.per.hr < -4, ]
-
-# block 2
-outlier_test_block2 <- rosnerTest(Blank_data_block2$O2.sat.per.hr, k = 5)
-outlier_test_block2$all.stats
-      # no outliers
-
-# block 3
-outlier_test_block3 <- rosnerTest(Blank_data_block3$O2.sat.per.hr, k = 5)
-outlier_test_block3$all.stats
-      # one outlier = -8.621880
-Blank_data_block3[ Blank_data_block3$O2.sat.per.hr < -8, ]
-
-# block 4
-outlier_test_block4 <- rosnerTest(Blank_data_block4$O2.sat.per.hr, k = 5)
-outlier_test_block4$all.stats
-# one outlier = -5.851114 
-Blank_data_block4[ Blank_data_block4$O2.sat.per.hr < -5, ]
-
-
-
-# Split the blank data by experiment
-Blank_data_past <- filter(Blank_data, Experiment == "Past")
-Blank_data_metsch <- filter(Blank_data, Experiment == "Metsch")
-
-# test for outliers in the Past blank data
-outlier_test_past <- rosnerTest(Blank_data_past$O2.sat.per.hr, k = 5)
-outlier_test_past$all.stats
-          # one outlier
-
-# test for outliers in the Metsch blank data
-outlier_test_metsch <- rosnerTest(Blank_data_metsch$O2.sat.per.hr, k = 5)
-outlier_test_metsch$all.stats
-        # one outlier
-
-# test for outliers in the whole blank data set
-outlier_test <- rosnerTest(Blank_data$O2.sat.per.hr, k = 5)
-outlier_test$all.stats
-      # three values are considered outliers in the blank O2 saturation data
-
-# filter out outliers from blank data
-Blank_data_NoOutliers <- filter(Blank_data, O2.sat.per.hr > -5.2)
-
-# identify the outlier points to remove ahead of the loop above
-Blank_data_Outliers <- filter(Blank_data, O2.sat.per.hr < -5.2)
-
-# model of all blank data - sig diff in Diet*Week and Block*Week
-mod <- aov(O2.sat.per.hr ~ Diet*Block*Week, data = Blank_data)
-summary(mod)
-
-# model of blank data without outliers - all interactions are significant now...
-mod2 <- aov(O2.sat.per.hr ~ Diet*Block*Week, data = Blank_data_NoOutliers)
-summary(mod2)
-
-# plot of blank data without outliers
-blankplot_byWeek2 <- ggplot(data = Blank_data_NoOutliers, aes(x = Week, y = O2.sat.per.hr, group = Diet, shape = Diet)) +
-  geom_hline(yintercept = 0, linetype = "dotted", colour = "gray") +
-  #geom_errorbar(aes(x=Week, ymin=O2.mean-O2.se, ymax=O2.mean+O2.se,color=Diet), width=0.2) + 
-  #geom_line(aes(color=Diet, group = Diet), linewidth=2) +
-  geom_jitter(aes(color=Diet), size=3, alpha = 0.8, width = 0.2) +
-  facet_wrap(~Block) +
-  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
-  scale_color_manual(values = diet_colors) +
-  scale_shape_manual(values=c(15,16,17,18)) +
-  ggtitle("Plot of CONTROLS O2 saturation/hr by week and diet, No Outliers") +
-  labs(x = "Week of Experiment", y = "Oxygen Saturation Per hour (%/hr)") +
-  theme_classic()
-blankplot_byWeek2
-ggsave(here("figures/RespBlanks_byWeek_Block_plate_NoOutliers.tiff"), plot = blankplot_byWeek2, dpi = 300, width = 9, height = 6, units = "in", compression="lzw")

@@ -5,7 +5,7 @@
 # submitted to Ecological Monographs.
 
 # Code Written by: Michelle L Fearon
-# Last updated: 7/7/2024
+# Last updated: 7/15/2024
 # Last update by: Michelle L Fearon
 
 
@@ -71,18 +71,8 @@ m_longdata$Diet <- factor(m_longdata$Diet, levels = c("S", "SM", "M", "M+"))
 m_longdata$Infection <- factor(m_longdata$Infection, levels = c("Uninfected", "Exposed", "Infected"))
 
 
-# Overdispersion parameter estimation function from Ben Bolker: http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#testing-for-overdispersioncomputing-overdispersion-factor
-# Comment additions from http://ase.tufts.edu/gsc/gradresources/guidetomixedmodelsinr/mixed%20model%20guide.html
-overdisp_fun <- function(model) {
-  rdf <- df.residual(model)
-  rp <- residuals(model,type="pearson")
-  Pearson.chisq <- sum(rp^2)
-  prat <- Pearson.chisq/rdf
-  pval <- pchisq(Pearson.chisq, df=rdf, lower.tail=FALSE)
-  c(chisq=Pearson.chisq,ratio=prat,rdf=rdf,p=pval)
-}
-
-
+# source functions
+source(here("scripts/functions.R"))
 
 # set the color scheme for the Diet treatments
 diet_colors <- c("#ADDD8E", "#41AB5D", "#006837", "#1D91C0")
@@ -882,7 +872,7 @@ summary(sporesize_mod)
 Anova(sporesize_mod)
 AIC(sporesize_mod)
 qqnorm(resid(sporesize_mod))
-qqline(resid(sporesize_mod)) # looks ok, not the best   #### NOTE FROM MAD: This isn't running for me (it worked for Michelle 4/24)
+qqline(resid(sporesize_mod)) # looks ok, not the best 
 ols_test_normality(sporesize_mod)  # shapiro-wilk is not significant, normal distribution should be fine
 ols_test_breusch_pagan(sporesize_mod)
 ols_plot_resid_fit(sporesize_mod)
@@ -911,7 +901,7 @@ summary(sporesize_mod2)
 Anova(sporesize_mod2) # reported results
 AIC(sporesize_mod2)
 qqnorm(resid(sporesize_mod2))
-qqline(resid(sporesize_mod2)) # looks ok, not the best   #### NOTE FROM MAD: This isn't running for me (it worked for Michelle 4/24)
+qqline(resid(sporesize_mod2)) # looks ok, not the best
 ols_test_normality(sporesize_mod2)  # shapiro-wilk is not significant, normal distribution should be fine
 ols_test_breusch_pagan(sporesize_mod2)
 ols_plot_resid_fit(sporesize_mod2)
@@ -935,6 +925,9 @@ sporesize_plot2 <- ggplot(p_data_spores_size, aes(x = Diet, y = AvgSporeSize, fi
         axis.title.x = element_text(size=11, color="black"))
 sporesize_plot2
 ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot2, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
+
+
+corr.test(p_data_spores_size$AvgSporeSize, p_data_spores_size$mature_spores)
 
 
 
@@ -1236,7 +1229,7 @@ mfecund3_simResid <- simulateResiduals(fittedModel = mfecundmod3)
 plot(mfecund3_simResid)
 
 
-# Figure 3C: Fungus Total Fecundity
+# Figure 3A: Fungus Total Fecundity
 m_fecund_tot <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge2(width =0.8), show.legend = F) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4, show.legend = F) +
@@ -1245,6 +1238,7 @@ m_fecund_tot <- ggplot(m_data_fecund, aes(x = Infection, y = Total.Babies)) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
+  ggtitle("Fungus Experiment") +
   #scale_y_log10(labels = scales::comma) +
   #ggtitle("Total Fecundity by infection status x diet x host clone for Metsch Expt") +
   labs(x = "Infection Status", y = "Total Fecundity") +
@@ -1360,7 +1354,7 @@ plot(pfecund2_simResid)
 
 
 
-# Figure 3D: Fungus Total Fecundity
+# Figure 3B: Bacterium Total Fecundity
 p_fecund_tot <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies)) +
   geom_boxplot(aes(fill=Diet),position=position_dodge2(width=0.8)) +
   geom_point(aes(color=Diet), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.4) +
@@ -1369,8 +1363,7 @@ p_fecund_tot <- ggplot(p_data_fecund, aes(x = Infection, y = Total.Babies)) +
   scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = diet_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  #scale_y_log10(labels = scales::comma, breaks = c(1,3,10,30)) +
-  #ggtitle("Total Fecundity by infection status x diet x host clone for Past Expt") +
+  ggtitle("Bacterium Experiment") +
   labs(x = "Infection Status", y = "Total Fecundity") +
   theme_classic() + 
   theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
@@ -1385,11 +1378,8 @@ p_fecund_tot_summary <- ggplot(p_data_fecund, aes(x = Diet, y = Total.Babies)) +
   geom_boxplot(aes(fill=Parasite_Treatment),position=position_dodge2(width =0.8), show.legend = T) +
   geom_point(aes(color=Parasite_Treatment, shape = Parasite_Treatment), size=1.5, position=position_jitterdodge(dodge.width=0.8, jitter.width = 0.25), alpha = 0.6, show.legend = T) +
   facet_wrap(~Clone) +
-  #scale_x_discrete(limits = c("Uninfected", "Exposed", "Infected"), labels = c("Uninf", "Exp","Inf")) +
-  #scale_fill_discrete(limits = c("S", "SM", "M", "M+")) +
   scale_fill_manual(values = parasite_colors) +
   scale_color_manual(values = c(rep("black", 4))) +
-  #scale_y_log10(labels = scales::comma) +
   ggtitle("Bacterium Experiment") +
   labs(x = "Diet", y = "Total Fecundity") +
   theme_classic() + 

@@ -7,7 +7,7 @@
 # Both short and long (by experimental day) versions of the data are created for use in different analyses.
 
 # Code written by: Michelle Fearon
-# Last updated: July 7, 2024
+# Last updated: July 15, 2024
 
 # Terminology Used
     # Bacterium = Pasteuria ramosa
@@ -34,7 +34,6 @@ library(here)
 
 # set the path to the script relative to the project root directory
 here::i_am("scripts/ResourceQuality_Calculations.R")
-
 
 
 
