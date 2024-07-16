@@ -927,7 +927,24 @@ sporesize_plot2
 ggsave(here("figures/Pasteuria_sporesize_diet.tiff"), plot = sporesize_plot2, dpi = 300, width = 5, height = 4, units = "in", compression="lzw")
 
 
-corr.test(p_data_spores_size$AvgSporeSize, p_data_spores_size$mature_spores)
+# There is NO strong correlation between spore size and number of mature spores
+cor.test(p_data_spores_size$AvgSporeSize, p_data_spores_size$mature_spores)
+cor.test(p_data_spores_size$AvgSporeSize, log(p_data_spores_size$mature_spores))
+
+sporesize_yield_plot <- ggplot(p_data_spores_size, aes(x = mature_spores, y = AvgSporeSize)) +
+  #geom_boxplot(show.legend = F) +
+  geom_jitter(aes(color = Diet), size = 2, width = 0.2, show.legend = F) +
+  geom_smooth(method = lm, color = "black") +
+  scale_color_manual(values = diet_colors) +
+  labs(x = "Mature Bacterium Spore Yield (log scale)", y = bquote("Mean Bacterium Spore Area " ~ (mu *m^2))) +
+  scale_x_log10(labels = scales::comma, breaks = c(100, 1000, 10000,100000,1000000)) +
+  #annotate(geom = "text", x = 3.5, y = 23, label = "p = 0.039") +
+  #annotate(geom = "text", x = c(1,2,3,4), y = c(24.5,21,21,21), label = c("a", "ab", "ab", "b")) +
+  ggtitle("Bacterium Experiment") +
+  theme_classic()  +
+  theme(axis.text = element_text(size=9, color = "black"), axis.title.y = element_text(size=11, color="black"), 
+        axis.title.x = element_text(size=11, color="black"))
+sporesize_yield_plot
 
 
 
