@@ -1180,7 +1180,7 @@ ggsave("figures/HemocytesPerSpore_DietxClone.tiff", plot = m_hemocytesperspore_f
 Figure2 <- ggarrange(m_totgutspores_fig, sporesize_plot2, m_hemocytesperspore_fig, labels = "auto",
                      ncol = 2, nrow = 2, legend = "right", common.legend = T)
 Figure2
-ggsave("figures/manuscript/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure3, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
+ggsave("figures/manuscript/Fig2_GutSpores_Hemo_SporeSize.tiff", plot = Figure2, dpi = 600, width = 7, height = 7, units = "in", compression="lzw")
 
 
 
@@ -1459,7 +1459,7 @@ m_km.by.diet_infstatus
 
 summary(m_km.by.diet_infstatus)
 
-# Figure 3E: Fungus expt survival plot by diet, clone, and infection status
+# Figure 3C: Fungus expt survival plot by diet, clone, and infection status
 m_survival_fig <- ggsurvplot_facet(m_km.by.diet_infstatus, data = m_survival_df, xlab = "Days", xlim = c(0,25), facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
   #labs(color = "Diet") +
   theme_classic() + 
@@ -1638,13 +1638,13 @@ p_censored <- p_survival_df %>%
 
 
 
-# Make a figure of survial curves for each clone and infection status
+# Make a figure of survival curves for each clone and infection status
 p_survival_df$SurvObj <- with(p_survival_df, Surv(lifespan.days, Status))
 
 p_km.by.diet_infstatus <- survfit(SurvObj ~ Diet + Infection + Clone, data = p_survival_df, conf.type = "log-log")
 p_km.by.diet_infstatus
 
-# Figure 3F: Bacterium expt survival plot by diet, clone, and infection status
+# Figure 3D: Bacterium expt survival plot by diet, clone, and infection status
 p_survival_fig <- ggsurvplot_facet(p_km.by.diet_infstatus, data = p_survival_df, xlab = "Days", xlim = c(0,42), facet.by = c("Infection", "Clone"), palette = diet_colors, short.panel.labs = T) +
   labs(color = "Diet") +
   scale_x_continuous(expand = c(0,0), limits = c(0, 40), breaks = c(0, 10, 20, 30, 40)) +
