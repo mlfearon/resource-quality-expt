@@ -1,6 +1,13 @@
 # resource-quality-expt
 
-Data and code for Fearon et al. "Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites" submitted to Ecological Monographs.
+## Manuscript Citation
+Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. 2025. "Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". Accepted at EcoSphere.
+
+### Preprint
+Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. "Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". bioRxiv 2024.07.31.605800; doi: https://doi.org/10.1101/2024.07.31.605800
+
+## Data and code citation
+Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. "Data and Code from: Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". Zenodo. 
 
 This project includes experiments testing a resource quality gradient on Mid37 and Standard clones of Daphnia dentifera when infected with either Metschnikowia bicuspidata fungus or Pasteuria ramosa bacterium.
 
