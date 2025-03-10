@@ -7,7 +7,9 @@ Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kir
 Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. "Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". bioRxiv 2024.07.31.605800; doi: https://doi.org/10.1101/2024.07.31.605800
 
 ## Data and code citation
-Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. "Data and Code from: Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". Zenodo. 
+Michelle L. Fearon, Kristel F. Sánchez, Syuan-Jyun Sun, Siobhan K. Calhoun, Kira J. Monell, Varun Ravichandran, Meghan A. Duffy. "Data and Code from: Resource Quality Differentially Impacts Daphnia Interactions with Two Parasites". Zenodo. [![DOI](https://zenodo.org/badge/563436368.svg)](https://doi.org/10.5281/zenodo.15001624)
+
+Michelle Fearon Scales. (2025). mlfearon/resource-quality-expt: v1.0.0 (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.15001625
 
 This project includes experiments testing a resource quality gradient on Mid37 and Standard clones of Daphnia dentifera when infected with either Metschnikowia bicuspidata fungus or Pasteuria ramosa bacterium.
 
